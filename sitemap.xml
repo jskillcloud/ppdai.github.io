@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://yoursite.com/categories/index.html</loc>
+    
+    <lastmod>2018-02-01T12:25:20.538Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/index.html</loc>
+    
+    <lastmod>2018-02-01T12:25:17.314Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/hire/index.html</loc>
+    
+    <lastmod>2018-02-01T09:24:03.235Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/about/index.html</loc>
+    
+    <lastmod>2018-02-01T09:16:59.594Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/01/19/20180119_2/</loc>
+    
+    <lastmod>2018-02-01T07:07:32.827Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/01/12/20180112/</loc>
+    
+    <lastmod>2018-01-31T09:39:18.221Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/01/19/20180119_1/</loc>
+    
+    <lastmod>2018-01-30T07:05:15.999Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/01/13/20180113/</loc>
+    
+    <lastmod>2018-01-14T09:36:00.000Z</lastmod>
+    
+  </url>
+  
+</urlset>
