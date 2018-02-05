@@ -3,6 +3,168 @@
   
     
     <entry>
+      <title><![CDATA[java8 reactor模式的实现之CompletableFuture]]></title>
+      <url>/2018/02/02/CompleteableFuture/</url>
+      <content type="html"><![CDATA[<p>java8中新增加了java.util.concurrent.CompletableFuture类，作用类似RxJava。</p>
+<p>实际开发中，我们经常需要达成以下目的：</p>
+<ul>
+<li>将两个异步计算合并为一个——这两个异步计算之间相互独立，同时第二个又依赖于第一个的结果。</li>
+<li>等待 Future 集合中的所有任务都完成。</li>
+<li>仅等待 Future 集合中最快结束的任务完成（有可能因为它们试图通过不同的方式计算同一个值），并返回它的结果。</li>
+<li>通过编程方式完成一个 Future 任务的执行（即以手工设定异步操作结果的方式）。</li>
+<li>应对 Future 的完成事件（即当 Future 的完成事件发生时会收到通知，并能使用 Future 计算的结果进行下一步的操作，不只是简单地阻塞等待操作的结果）</li>
+</ul>
+<p>新的CompletableFuture将使得这些成为可能。</p>
+<a id="more"></a>
+<h2 id="工厂构建"><a href="#工厂构建" class="headerlink" title="工厂构建"></a>工厂构建</h2><ul>
+<li><p>runAsync , supplyAsync</p>
+<blockquote>
+<p>静态方法，创建一个CompletableFuture，runAsync没有返回值，supplyAsync有返回值</p>
+</blockquote>
+</li>
+<li><p>completedFuture</p>
+<blockquote>
+<p>静态方法，创建一个已经完成的CompletableFuture</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="等待完成"><a href="#等待完成" class="headerlink" title="等待完成"></a>等待完成</h2><ul>
+<li><p>get</p>
+<blockquote>
+<p>等待完成，并获取结果</p>
+</blockquote>
+</li>
+<li><p>join</p>
+<blockquote>
+<p>将异步执行的线程join过来，跟get类似，等待完成，但是是不返回结果</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="设置状态"><a href="#设置状态" class="headerlink" title="设置状态"></a>设置状态</h2><ul>
+<li><p>complete,completeExceptionally</p>
+<blockquote>
+<p>设置CompletableFuture为完成，用指定的对象返回</p>
+</blockquote>
+</li>
+<li><p>obtrudeValue,obtrudeException</p>
+<blockquote>
+<p>强制返回/抛异常</p>
+</blockquote>
+</li>
+<li><p>cancel</p>
+<blockquote>
+<p>取消</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="根据状态操作"><a href="#根据状态操作" class="headerlink" title="根据状态操作"></a>根据状态操作</h2><ul>
+<li><p>whenComplete</p>
+<blockquote>
+<p>当本 CompletableFuture 执行完成后使用 BiConsumer 函数返回一个新的CompletableFuture， BiConsumer 第一个参数为返回值，第二个参数为异常</p>
+</blockquote>
+</li>
+<li><p>handle</p>
+<blockquote>
+<p>当本CompletableFuture 执行完成后执行 BiConsumer 的函数，BiFunction第一个参数为返回值，第二个参数为异常，需要返回</p>
+</blockquote>
+</li>
+<li><p>exceptionally</p>
+<blockquote>
+<p>当本CompletableFuture执行异常时，使用Function返回一个新的CompletableFuture</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="状态判断"><a href="#状态判断" class="headerlink" title="状态判断"></a>状态判断</h2><ul>
+<li>isDone,isCompletedExceptionally,isCancelled<blockquote>
+<p>返回是否完成/异常/取消</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="逻辑转换，单个"><a href="#逻辑转换，单个" class="headerlink" title="逻辑转换，单个"></a>逻辑转换，单个</h2><ul>
+<li><p>thenApply,thenApplyAsync</p>
+<blockquote>
+<p>CompletableFuture正常结束后，使用Function函数应用一个新的CompletableFuture，Function函数有返回值</p>
+</blockquote>
+</li>
+<li><p>thenAccept</p>
+<blockquote>
+<p>CompletableFuture正常结束后，使用Consumer函数应用一个新的CompletableFuture，Consumer函数没有返回值</p>
+</blockquote>
+</li>
+<li><p>thenRun</p>
+<blockquote>
+<p>CompletableFuture正常结束后，使用Runnable函数应用一个新的CompletableFuture，Runnable函数没有输入值和返回值</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="逻辑转换，两个"><a href="#逻辑转换，两个" class="headerlink" title="逻辑转换，两个"></a>逻辑转换，两个</h1><ul>
+<li><p>thenAcceptBoth</p>
+<blockquote>
+<p>当本CompletableFuture和给定的CompletableFuture正常完成后，执行BiFunction函数并返回，BiFunction的输入参数为两个CompletableFuture的返回值</p>
+</blockquote>
+</li>
+<li><p>thenCombine</p>
+<blockquote>
+<p>当本CompletableFuture和给定的CompletableFuture正常完成后，使用BiFunction函数生成一个新的CompletableFuture，BiFunction的输入参数为两个CompletableFuture的返回值。<br>两个CompletableFuture执行完后再执行指定函数</p>
+</blockquote>
+</li>
+<li><p>thenCompose</p>
+<blockquote>
+<p>当本CompletableFuture完成后，将返回结果作为参数传递给Function函数，此Function函数返回一个新的CompletableFuture。<br>第一个CompletableFuture执行完后，结果传递给第二个CompletableFuture，返回第二个CompletableFuture</p>
+</blockquote>
+</li>
+<li><p>applyToEither</p>
+<blockquote>
+<p>本 CompletableFuture 或者给定的CompletableFuture，任意一个做完后，使用Function生成一个新的CompletableFuture并返回</p>
+</blockquote>
+</li>
+<li><p>acceptEither</p>
+<blockquote>
+<p>本 CompletableFuture 或者给定的CompletableFuture，任意一个做完后，使用Consumer生成一个新的CompletableFuture并返回</p>
+</blockquote>
+</li>
+<li><p>runAfterEither</p>
+<blockquote>
+<p>本 CompletableFuture 或者给定的 CompletableFuture，任意一个做完后，使用Runnable生成一个新的CompletableFuture并返回</p>
+</blockquote>
+</li>
+<li><p>runAfterBoth</p>
+<blockquote>
+<p>本CompletableFuture和给定的CompletableFuture，都完成后，使用Runnable生成一个新的CompletableFuture并返回</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="逻辑转换，多个"><a href="#逻辑转换，多个" class="headerlink" title="逻辑转换，多个"></a>逻辑转换，多个</h2><ul>
+<li><p>allOf</p>
+<blockquote>
+<p>静态方法，返回一个新的CompletableFuture，当所有的CompletableFuture都完成后才完成</p>
+</blockquote>
+</li>
+<li><p>anyOf</p>
+<blockquote>
+<p>静态方法，返回一个新的CompletableFuture，任意一个CompletableFuture都完成后就完成</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h1><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> class CompletableFutureTest &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> sleep(<span class="built_in">int</span> s) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            TimeUnit.SECONDS.sleep(s);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test1() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture = <span class="keyword">new</span> CompletableFuture&lt;&gt;();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//告诉completableFuture任务已经完成</span></span><br><span class="line">            completableFuture.complete(<span class="string">"result"</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//获取任务结果，如果没有完成会一直阻塞等待</span></span><br><span class="line">        <span class="keyword">String</span> result = completableFuture.<span class="built_in">get</span>();</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"计算结果:"</span> + result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test2() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture = <span class="keyword">new</span> CompletableFuture&lt;&gt;();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">                System.out.<span class="built_in">println</span>(<span class="string">"task doing..."</span>);</span><br><span class="line">                sleep(<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"抛异常了"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                <span class="comment">//告诉completableFuture任务发生异常了</span></span><br><span class="line">                completableFuture.completeExceptionally(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//获取任务结果，如果没有完成会一直阻塞等待</span></span><br><span class="line">        <span class="keyword">String</span> result = completableFuture.<span class="built_in">get</span>();</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"计算结果:"</span> + result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test3() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">//supplyAsync内部使用ForkJoinPool线程池执行任务</span></span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"result"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"计算结果:"</span> + completableFuture.<span class="built_in">get</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test4() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture1 = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task1 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"result1"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture2 = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task2 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"result2"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;<span class="keyword">Object</span>&gt; anyResult = CompletableFuture.anyOf(completableFuture1, completableFuture2);</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"第一个完成的任务结果:"</span> + anyResult.<span class="built_in">get</span>());</span><br><span class="line">        CompletableFuture&lt;Void&gt; allResult = CompletableFuture.allOf(completableFuture1, completableFuture2);</span><br><span class="line">        <span class="comment">//阻塞等待所有任务执行完成</span></span><br><span class="line">        allResult.<span class="built_in">join</span>();</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"所有任务执行完成"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test5() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture1 = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task1 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"result1"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//等第一个任务完成后，将任务结果传给参数result，执行后面的任务并返回一个代表任务的completableFuture</span></span><br><span class="line">        CompletableFuture&lt;<span class="keyword">String</span>&gt; completableFuture2 = completableFuture1.thenCompose(result -&gt; CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task2 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"result2"</span>;</span><br><span class="line">        &#125;));</span><br><span class="line"></span><br><span class="line">        System.out.<span class="built_in">println</span>(completableFuture2.<span class="built_in">get</span>());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test6() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;Integer&gt; completableFuture1 = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task1 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">100</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将第一个任务与第二个任务组合一起执行，都执行完成后，将两个任务的结果合并</span></span><br><span class="line">        CompletableFuture&lt;Integer&gt; completableFuture2 = completableFuture1.thenCombine(</span><br><span class="line">                <span class="comment">//第二个任务</span></span><br><span class="line">                CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">                    <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">                    System.out.<span class="built_in">println</span>(<span class="string">"task2 doing..."</span>);</span><br><span class="line">                    sleep(<span class="number">1</span>);</span><br><span class="line">                    <span class="comment">//返回结果</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="number">2000</span>;</span><br><span class="line">                &#125;),</span><br><span class="line">                <span class="comment">//合并函数</span></span><br><span class="line">                (result1, result2) -&gt; result1 + result2);</span><br><span class="line"></span><br><span class="line">        System.out.<span class="built_in">println</span>(completableFuture2.<span class="built_in">get</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> test7() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;Integer&gt; completableFuture1 = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task1 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">100</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//注册完成事件</span></span><br><span class="line">        completableFuture1.thenAccept(result -&gt; System.out.<span class="built_in">println</span>(<span class="string">"task1 done,result:"</span> + result));</span><br><span class="line">        <span class="comment">//第二个任务</span></span><br><span class="line">        CompletableFuture&lt;Integer&gt; completableFuture2 = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//模拟执行耗时任务</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"task2 doing..."</span>);</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//返回结果</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">2000</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//注册完成事件</span></span><br><span class="line">        completableFuture2.thenAccept(result -&gt; System.out.<span class="built_in">println</span>(<span class="string">"task2 done,result:"</span> + result));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将第一个任务与第二个任务组合一起执行，都执行完成后，将两个任务的结果合并</span></span><br><span class="line">        CompletableFuture&lt;Integer&gt; completableFuture3 = completableFuture1.thenCombine(completableFuture2,</span><br><span class="line">                <span class="comment">//合并函数</span></span><br><span class="line">                (result1, result2) -&gt; &#123;</span><br><span class="line">                    sleep(<span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">return</span> result1 + result2;</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line">        System.out.<span class="built_in">println</span>(completableFuture3.<span class="built_in">get</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> 随笔 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> java </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[面向对象编程（中）]]></title>
       <url>/2018/01/19/20180119_2/</url>
       <content type="html"><![CDATA[<p><strong>1.面向过程与面向对象</strong></p>
