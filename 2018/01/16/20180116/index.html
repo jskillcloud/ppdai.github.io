@@ -132,7 +132,7 @@
 
 
 
-  <title>OkHttp使用心得 | 拍拍贷基础框架团队博客</title>
+  <title>拍拍贷基础框架第一届技术沙龙精彩回顾 | 拍拍贷基础框架团队博客</title>
   
 
 
@@ -318,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/19/20180119_1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/20180116/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="基础框架">
@@ -335,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">OkHttp使用心得</h1>
+          <h1 class="post-title" itemprop="name headline">拍拍贷基础框架第一届技术沙龙精彩回顾</h1>
         
 
         <div class="post-meta">
@@ -347,7 +347,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T14:16:13+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T14:44:30+08:00">2018-01-16</time>
             
 
             
@@ -367,7 +367,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/随笔/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术沙龙/" itemprop="url" rel="index"><span itemprop="name">技术沙龙</span></a></span>
 
                 
                 
@@ -401,57 +401,69 @@
       
 
       
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>OkHttp是一款适用于Android和Java应用程序的HTTP&amp;HTTP2客户端。它有如下特性：</p>
-<ul>
-<li>支持http2，对一台机器的所有请求共享同一个socket </li>
-<li>内置连接池，支持连接复用，减少延迟 </li>
-<li>支持透明的gzip压缩响应体 </li>
-<li>通过缓存避免重复的请求 </li>
-<li>请求失败时自动重试主机的其他ip，自动重定向 </li>
-<li>好用的API</li>
-</ul>
+        <p>1月13日，第一届“拍拍贷技术沙龙”暨《亿级流量网站基础架构》沙龙，在拍拍贷和大家见面了。这次技术沙龙由拍拍贷基础框架部主办，邀请了拍拍贷基础框架部总监杨波、《RabbitMQ实战指南》作者朱忠华、点融网资深架构师刘石明、饿了么框架工具部高级研发经理黄杰四位业内大咖给大家分享了基础架构方面的经验和思考。</p>
 <a id="more"></a>
-<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>以Java为例，通常使用Maven构建方式，在pom文件中加入依赖。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.squareup.okhttp3<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>okhttp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.9.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="get请求"><a href="#get请求" class="headerlink" title="get请求"></a>get请求</h2><ol>
-<li>先实例化okhttp，构建一个request，由于get是默认方式，所以设置一个url地址就可以了，也可以通过Request.Builder设置更多的参数。</li>
-<li>然后通过client创建一个call对象并发送请求。</li>
-<li>通过response.body().string()获取返回的字符串。这个body()其实就是ResponseBody对象。</li>
-</ol>
-<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line"></span><br><span class="line"><span class="built_in">Request</span> <span class="built_in">request</span> = <span class="keyword">new</span> <span class="built_in">Request</span>.Builder()</span><br><span class="line">    .url(url)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="built_in">Response</span> <span class="built_in">response</span> = client.newCall(<span class="built_in">request</span>).<span class="keyword">execute</span>();</span><br><span class="line"><span class="built_in">String</span> responseBody = <span class="built_in">response</span>.body().<span class="built_in">string</span>();</span><br></pre></td></tr></table></figure>
-<h2 id="post请求"><a href="#post请求" class="headerlink" title="post请求"></a>post请求</h2><ul>
-<li>提交字符串</li>
-</ul>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">OkHttpClient client</span> = new OkHttpClient();</span><br><span class="line"></span><br><span class="line"><span class="attribute">MediaType mediaType</span> = MediaType.parse(<span class="string">"text/plain; charset=utf-8"</span>);</span><br><span class="line"><span class="attribute">String str</span> = <span class="string">"abcd"</span>;</span><br><span class="line"><span class="attribute">RequestBody body</span> = RequestBody.create(mediaType, str);</span><br><span class="line"></span><br><span class="line"><span class="attribute">Request request</span> = new Request.Builder()</span><br><span class="line">    .url(url)</span><br><span class="line">    .post(body)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="attribute">Response response</span> = client.newCall(request).execute();</span><br><span class="line"><span class="attribute">String responseBody</span> = response.body().string();</span><br></pre></td></tr></table></figure>
+<p>首先为大家带来分享的是拍拍贷基础框架部的总监杨波，演讲题目是《拍拍贷贷基础架构的演进之路》。</p>
+<p><img src="/2018/01/16/20180116/1.png" alt="image"></p>
+<p>对一个拥有10年发展历史的拍拍贷公司，在过去的一年经历了巨大的技术挑战和升级，杨波带来了其对拍拍贷公司业务和技术背景的思考，及其对未来几年内整个公司技术架构的发展规划，整个分享内容包括如下五个部分：</p>
 <ul>
-<li>提交json</li>
+<li>业务和技术背景</li>
+<li>2017技术挑战和升级</li>
+<li>新的挑战和思考</li>
+<li>2018技术架构和规划</li>
+<li>团队和文化</li>
 </ul>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">OkHttpClient client</span> = new OkHttpClient();</span><br><span class="line"></span><br><span class="line"><span class="attribute">MediaType mediaType</span> = MediaType.parse(<span class="string">"application/json; charset=utf-8"</span>);</span><br><span class="line"><span class="attribute">String json</span> = <span class="string">"&#123;'name':'kmt','sex':'man'&#125;"</span>;</span><br><span class="line"><span class="attribute">RequestBody body</span> = RequestBody.create(mediaType, json);</span><br><span class="line"></span><br><span class="line"><span class="attribute">Request request</span> = new Request.Builder()</span><br><span class="line">    .url(url)</span><br><span class="line">    .post(body)</span><br><span class="line">    .build();</span><br><span class="line">    </span><br><span class="line"><span class="attribute">Response response</span> = client.newCall(request).execute();</span><br><span class="line"><span class="attribute">String responseBody</span> = response.body().string();</span><br></pre></td></tr></table></figure>
+<p>在分享中，杨波详细为大家介绍了在2017年拍拍贷基础框架所面临的挑战，整个基础框架团队怎样在一年内一方面抗住业务压力，一方面快速创新，逐步打造好一个相对完整的基础架构产品生态，一分耕耘，一分收获，在新的2018年，站在新的起点上，杨波对2018年面临的新挑战做了深入的思考，对2018年的技术规划升级提出了四个关键字：“标准化”、“平台化”、“赋能创新”、“闭环反馈”，分别对研发的核心产品进行了介绍和描述，提出了打造基础架构体系2.0版本，这是新的一年，拍拍贷基础框架团队在应对新挑战所肩负的责任。</p>
+<p><img src="/2018/01/16/20180116/2.png" alt="image"></p>
+<p><img src="/2018/01/16/20180116/3.png" alt="image"></p>
+<p>第二场是朱忠华给大家带来的《RabbitMQ大型电商网站实践》，演讲者朱忠华对RabbitMQ和Kafka有深入的研究，其著有《RabbitMQ实战指南》。</p>
+<p><img src="/2018/01/16/20180116/4.png" alt="image"></p>
+<p>消息中间件作为目前分布式系统架构的核心之一，有着举足轻重的地位。起源于金融系统的RabbitMQ作为当前流行的一款消息中间件，素以消息可靠和功能多样性著称。朱忠华围绕着RabbitMQ在大型电商网站使用过程中的一些注意要点、优化手段以及解决方案，比如：消息堆积、网络分区等，做了深入浅出的讲解。</p>
+<p>整个分享主要分为四个部分：</p>
 <ul>
-<li>提交form表单</li>
+<li>RabbitMQ简介</li>
+<li>性能优化</li>
+<li>消息堆积应对</li>
+<li>故障处理</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient<span class="built_in"> client </span>= new OkHttpClient();</span><br><span class="line"></span><br><span class="line">RequestBody body = new FormBody.Builder()</span><br><span class="line">    .<span class="builtin-name">add</span>(<span class="string">"name"</span>, <span class="string">"kmt"</span>)</span><br><span class="line">    .<span class="builtin-name">add</span>(<span class="string">"sex"</span>, <span class="string">"man"</span>)</span><br><span class="line">    .build();</span><br><span class="line">    </span><br><span class="line">Request request = new Request.Builder()</span><br><span class="line">    .url(url)</span><br><span class="line">    .post(body)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">Response response = client.newCall(request).execute();</span><br><span class="line">String responseBody = response.body().string();</span><br></pre></td></tr></table></figure>
+<p>更多详细内容见PPT。</p>
+<p><img src="/2018/01/16/20180116/5.png" alt="image"></p>
+<p><img src="/2018/01/16/20180116/6.png" alt="image"></p>
+<p>在中场茶歇时间，同学们分享精美小吃、水果，大家面对面也不时地进行技术交流，有着共同的话题，一旦打开话匣子，总是有讲不完的事。</p>
+<p><img src="/2018/01/16/20180116/7.png" alt="image"></p>
+<p>第三场是由来自点融网资深架构师刘石明，为大家带来题为《gRpc微服务框架及分布式事务》的分享。</p>
+<p>整个分享分为四个部分：</p>
 <ul>
-<li>上传文件</li>
+<li>Saluki框架概述</li>
+<li>Saluki框架特性</li>
+<li>Dts分布式事务概述</li>
+<li>Dts分布式事务特性</li>
 </ul>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">OkHttpClient client</span> = new OkHttpClient();</span><br><span class="line"></span><br><span class="line"><span class="attribute">MediaType mediaType</span> = MediaType.parse(<span class="string">"image/png"</span>);</span><br><span class="line"><span class="attribute">File file</span> = new File(<span class="string">"/file/test.png"</span>);</span><br><span class="line"><span class="attribute">RequestBody body</span> = RequestBody.create(mediaType, file);</span><br><span class="line"></span><br><span class="line"><span class="attribute">Request request</span> = new Request.Builder()</span><br><span class="line">    .url(url)</span><br><span class="line">    .post(body)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="attribute">Response response</span> = client.newCall(request).execute();</span><br><span class="line"><span class="attribute">String responseBody</span> = response.body().string();</span><br></pre></td></tr></table></figure>
+<p>为大家详细介绍了基于gRpc的服务化框架Saluki的设计理念、详细特性，以及基于两阶段提交的DTS分布式事务的理念、实践经验等。</p>
+<p><img src="/2018/01/16/20180116/8.png" alt="image"></p>
+<p><img src="/2018/01/16/20180116/9.png" alt="image"></p>
+<p><img src="/2018/01/16/20180116/10.png" alt="image"></p>
+<p>第四场由饿了么框架工具部高级研发经理黄杰，为大家带来题为《全链路监控那些事》的分享，分享主要分为五个部分：</p>
 <ul>
-<li>提交分块请求</li>
+<li>介绍</li>
+<li>整体架构</li>
+<li>计算框架</li>
+<li>存储方案</li>
+<li>Demo</li>
 </ul>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">OkHttpClient client</span> = new OkHttpClient();</span><br><span class="line"></span><br><span class="line"><span class="attribute">MediaType mediaType</span> = MediaType.parse(<span class="string">"image/png"</span>);</span><br><span class="line"><span class="attribute">File file</span> = new File(<span class="string">"/file/test.png"</span>);</span><br><span class="line"><span class="attribute">RequestBody fileBody</span> = RequestBody.create(mediaType, file);</span><br><span class="line"></span><br><span class="line"><span class="attribute">RequestBody requestBody</span> = new MultipartBody.Builder()</span><br><span class="line">    .setType(MultipartBody.FORM)</span><br><span class="line">    .addFormDataPart(<span class="string">"file"</span>, <span class="string">"test_img"</span>, fileBody)</span><br><span class="line">    .addFormDataPart(<span class="string">"name"</span>, <span class="string">"kmt"</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="attribute">Request request</span> = new Request.Builder()</span><br><span class="line">    .url(url)</span><br><span class="line">    .post(requestBody)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="attribute">Response response</span> = client.newCall(request).execute();</span><br><span class="line"><span class="attribute">String responseBody</span> = response.body().string();</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
-<li>设置超时时间</li>
-</ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient<span class="built_in"> client </span>= new OkHttpClient.Builder()</span><br><span class="line">    .connectTimeout(10, TimeUnit.SECONDS)</span><br><span class="line">    .readTimeout(10,TimeUnit.SECONDS)</span><br><span class="line">    .writeTimeout(10,TimeUnit.SECONDS)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
-<ul>
-<li>添加请求头</li>
-</ul>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Request request = new Request.Builder()</span><br><span class="line"><span class="meta">    .url</span>(url)</span><br><span class="line"><span class="meta">    .addHeader</span>(<span class="string">"authorization"</span>, authorization)</span><br><span class="line"><span class="meta">    .addHeader</span>(<span class="string">"content-type"</span>, <span class="string">"application/x-www-form-urlencoded"</span>)</span><br><span class="line"><span class="meta">    .addHeader</span>(<span class="string">"cache-control"</span>, <span class="string">"no-cache"</span>)</span><br><span class="line"><span class="meta">    .post</span>(body)</span><br><span class="line"><span class="meta">    .build</span>()<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>异步</li>
-</ul>
-<p>client.newCall(request).execute()是同步的，client.newCall(request).enqueue()是异步的。onFailure是请求失败执行的方法，onResponse是请求成功执行的方法。</p>
-<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">client.newCall(<span class="built_in">request</span>).enqueue(<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> void onFailure(<span class="keyword">Call</span> <span class="keyword">call</span>, IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">public</span> void onResponse(<span class="keyword">Call</span> <span class="keyword">call</span>, <span class="built_in">Response</span> <span class="built_in">response</span>) throws IOException &#123;</span><br><span class="line">        <span class="built_in">String</span> responseBody = <span class="built_in">response</span>.body().<span class="built_in">string</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>详细为大家分享了饿了么内部全链路监控体系的应用场景和需求，架构设计，计算框架，存储方面的各种探索和思考。</p>
+<p><img src="/2018/01/16/20180116/11.png" alt="image"></p>
+<p><img src="/2018/01/16/20180116/12.png" alt="image"></p>
+<p><img src="/2018/01/16/20180116/13.png" alt="image"></p>
+<p>在大咖们分享后的问答阶段，同学们和大咖热烈交互，几次因为时间关系不得不转入线下沟通。</p>
+<p><img src="/2018/01/16/20180116/14.png" alt="image"></p>
+<p>本次活动的互动奖品是由拍拍贷资深架构师刘璟宇和蚂蚁金服、新浪微博、京东等一线专家合著的《深入分布式缓存》一书，深受到场同学和嘉宾的欢迎：</p>
+<p><img src="/2018/01/16/20180116/15.png" alt="image"></p>
+<p>两场抽书环节，各位同学专注的表情：</p>
+<p><img src="/2018/01/16/20180116/16.png" alt="image"></p>
+<p>获赠图书同学和作者合影时欢乐的氛围：</p>
+<p><img src="/2018/01/16/20180116/17.png" alt="image"></p>
+<p>最后为大家奉上各位嘉宾分享的PPT：<br><a href="https://github.com/ppdai/salon/tree/master/201801" target="_blank" rel="noopener">https://github.com/ppdai/salon/tree/master/201801</a></p>
 
       
     </div>
@@ -469,7 +481,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/OkHttp/" rel="tag"># OkHttp</a>
+            <a href="/tags/基础架构/" rel="tag"># 基础架构</a>
+          
+            <a href="/tags/RabbitMQ/" rel="tag"># RabbitMQ</a>
+          
+            <a href="/tags/gRpc/" rel="tag"># gRpc</a>
+          
+            <a href="/tags/监控/" rel="tag"># 监控</a>
           
         </div>
       
@@ -478,26 +496,6 @@
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/01/13/20180113/" rel="next" title="面向对象编程（上）">
-                <i class="fa fa-chevron-left"></i> 面向对象编程（上）
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/19/20180119_2/" rel="prev" title="面向对象编程（中）">
-                面向对象编程（中） <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
@@ -543,17 +541,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -572,7 +561,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -585,7 +574,7 @@
                   
 				    <a href="/categories/">
 				  
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -644,22 +633,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入"><span class="nav-number">2.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get请求"><span class="nav-number">3.</span> <span class="nav-text">get请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post请求"><span class="nav-number">4.</span> <span class="nav-text">post请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
