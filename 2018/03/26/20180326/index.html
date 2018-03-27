@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/pinterest-p_128px.png?v=6.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/pinterest-p_32px.png?v=6.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/pinterest-p_16px.png?v=6.0.1">
+
+
+  <link rel="mask-icon" href="/images/pinterest-p.svg?v=6.0.1" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="拍拍贷基础框架团队博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta property="og:type" content="website">
+<meta property="og:title" content="拍拍贷基础框架团队博客">
+<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta property="og:site_name" content="拍拍贷基础框架团队博客">
+<meta property="og:description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/about/platform.png">
+<meta property="og:updated_time" content="2018-02-09T13:16:46.653Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拍拍贷基础框架团队博客">
+<meta name="twitter:description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta name="twitter:image" content="http://yoursite.com/about/platform.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/about/"/>
+
+
+
+
+
+  <title>老司机的技术选型哲学 | 拍拍贷基础框架团队博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title"><i class="fa fa-fw fa-pinterest-p"></i>拍拍贷基础框架团队博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">致力于成为互联网行业一流的框架技术团队</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-users"></i> <br />关于</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-hire">
+          <a href="/hire/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />招聘</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/20180326/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="基础框架">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="拍拍贷基础框架团队博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">老司机的技术选型哲学</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-26T20:22:22+08:00">2018-03-26</time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+		  
+		  
+            <span class="post-time">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-user"></i>
+              </span>
+              
+                <span class="post-meta-item-text">作者</span>
+              
+              <span>杨波</span>
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>技术选型是一个很热门的话题，最近我看到自己的微信朋友圈有好几篇关于技术选型的文章，读者对这类主题的热情很高。在技术组织内部，技术人员经常会面临技术选型问题，有时候，技术选型还常常牵扯好几波干系人，相互之间还会产生争议，有的甚至还可能发展到派系斗争的地步。即便像我自己，已经有十几年研发和架构经验的老司机，不管是工作还是业余，有很大部分时间的思考都是深陷在A技术和B技术的利弊权衡之中，不能自拔。无论如何，技术选型说小了关乎项目和团队成败，说大了关乎企业业务的发展，不可小觑。</p>
+<p>本文所表达的技术选型理念应该是具体技术无关的，但是由于我个人的背景更偏向互联网后端的研发和架构，所以本文的视角更偏向后端技术的选型。</p>
+<a id="more"></a>
+<h2 id="二、软件的本质复杂性"><a href="#二、软件的本质复杂性" class="headerlink" title="二、软件的本质复杂性"></a>二、软件的本质复杂性</h2><p>近年，云计算、微服务、容器和DevOps等新技术和理念层出不穷，技术人员对各种新技术的追捧热情也空前高涨，各种新技术微信讨论群也如雨后春笋般冒了出来。这是一个好现象，说明我们的开发人员多了，技术环境也日趋成熟，有点百花齐放的感觉。同时也让我有一点担忧，我担忧的是纯技术和工具论的抬头，也就是太过专注技术，认为技术可以搞定一切，反而忽略了软件研发的本质复杂性。回想当年，自己也曾是这样的技术狂热分子，EJB刚出来的时候，我为EJB摇旗呐喊，Spring出来的时候，我也曾一度是该技术的死忠，简单认为这些技术是银弹可以帮助解决所有的复杂性问题。</p>
+<p>1986年，人月神话的作者Brooks就提出，软件的本质复杂性（Essential Complexity）存在于复杂的业务领域中（用技术的话讲是业务领域建模复杂性），技术仅是辅助工具，它解决的问题是帮助将业务领域问题映射转换成软件实现，只解决次要复杂性（Accidental Complexity）。作者同时指出，由于软件本质的复杂性，真正的银弹并不存在；也断言在十年内，没有任何一项技术或者方法可使软件工程的生产力提高一个数量级。30年前作者提出的论断，今天依然闪烁智慧的光芒。人月神话已经出了40周年纪念版了，堪称软件工程的圣经，建议所有从事软工行业的朋友学习。除了业务和技术，我还想强调软件的本质复杂性同时隐含在企业的人、组织、流程和管理中，不容忽视。</p>
+<p>架构师只有深刻理解软件的本质复杂性，才能站在解决实际业务问题的角度，更好的做出技术选型，否则易陷入唯技术工具论的陷阱。</p>
+<p><img src="/2018/03/26/20180326/mythical_man_month.jpg" alt="mythical man month"></p>
+<h2 id="三、使用成熟的技术"><a href="#三、使用成熟的技术" class="headerlink" title="三、使用成熟的技术"></a>三、使用成熟的技术</h2><p>大部分公司都是商业组织，不是科研机构或者纯软件研发机构。商业组织使用技术是为了解决当下的业务问题，他们更应该使用成熟稳定的技术。</p>
+<p>如下图，技术的使用有明显的生命周期，早期有创新者和早期使用者采用，我把这个阶段称为试水趟坑期，也就是说这个阶段技术不是很成熟稳定的，虽然尝新者可能占据一定的技术领先优势，但是他们常常需要以踩坑填坑作为代价；如果这项技术经过早期验证则会跨越鸿沟进入早期大众阶段，这个阶段技术会逐渐走向成熟，处于上升期，坑逐渐被填平，技术被大众所采纳；之后技术缓慢经过末期大众阶段，最终走向滞后期，一直到生命周期的结束退出历史舞台。</p>
+<p><img src="/2018/03/26/20180326/tech_adoption.jpg" alt="technology adoption life cycle"></p>
+<p>技术选型的一大智慧是不要盲目追求新技术，老老实实采用成熟稳定的技术，让那些喜欢追新的人去踩坑😊，等这项技术跨越鸿沟，进入早期大众阶段，你再择机投入，这样最保险和高效。当然作为技术人员，对新技术保持敏锐，提前预研是完全OK的，但是投入生产的话还是成熟稳定第一。</p>
+<h2 id="四、少即是多"><a href="#四、少即是多" class="headerlink" title="四、少即是多"></a>四、少即是多</h2><p>一项新技术既有学习成本，又有维护（定制、监控、管理和运维）成本，新技术引入很容易，学好用好运维好却很难。一个不严格把控技术栈数量的公司，开发人员常常会各自为政，随意引入新技术，造成技术栈散乱，学习和维护成本高，技术栈知识无法共享，技术体系无法建立等问题，严重的会极大影响研发效率和业务规模化能力。</p>
+<p>以我本人专注的后端基础框架领域为例，技术栈散乱还会直接影响系统稳定性，因为技术组件和工具太多，无法统一埋点和建立完善的监控体系。当业务量发展到一定规模，技术栈散乱还会给系统扩容跨机房迁移等带来巨大障碍。</p>
+<p>在一些成熟的互联网公司，比如国内的阿里，国外的Netflix和eBay等公司，这些公司虽然财力和资源丰富，但是他们的核心技术栈（比如主流开发语言，框架和数据存储等）的数量同样是受到严格把控的。</p>
+<p>新技术引入的基本原则就是少即是多，能不引入新技术尽量不要引入新技术，确实需要引入的话，也要有相应的新技术引入管理流程（一般由公司的技术或者架构委员会制定和把控）。</p>
+<h2 id="五、技术的先决条件"><a href="#五、技术的先决条件" class="headerlink" title="五、技术的先决条件"></a>五、技术的先决条件</h2><p>技术引入常常是有一些先决条件的，比方说最近比较热的微服务架构，按照马丁福勒的说法，微服务有如下先决条件：</p>
+<ul>
+<li>快速的环境提供能力（Provisioning）能力（通常指IAAS层能力），</li>
+<li>基本的监控能力</li>
+<li>快速的发布能力</li>
+<li>初步的DevOps文化</li>
+</ul>
+<p>马丁特别指出“你必须长足够高才能考虑微服务”，在这些先决条件没有满足之前，直接推行微服务会面临巨大落地挑战。</p>
+<p><img src="/2018/03/26/20180326/tech_prerequisite.jpg" alt="tech prerequisite"></p>
+<p>同样，容器技术的引入对应用也是有要求的（参考[<a href="#appendix">附录18.1</a>] ~ 12 Factor App），而DevOps研发模式的引入不仅对基础技术和架构，研发人员技能，甚至组织架构和企业文化都是有很高要求的，在没有满足先决条件前，这些新技术或研发模式都会面临巨大的落地挑战。</p>
+<p>作为管理者或者架构师，在引入一项新技术之前，要充分调研了解新技术的先决条件，不能盲目引入。对于确实需要引入但是目前还不满足先决条件的，需要做好阶段性规划，先打好基础，再适时引入新技术。</p>
+<h2 id="六、来自大公司的技术"><a href="#六、来自大公司的技术" class="headerlink" title="六、来自大公司的技术"></a>六、来自大公司的技术</h2><p>大公司采用的技术，未必适合中小公司。大公司有足够的资源、人力和时间，可以投入一些前沿和重量级的技术（在BAT级别公司，为重量级技术投入几十甚至百人以上的研发团队是很正常的事），但是中小公司资源有限，不能盲目跟风，应该选择和自己发展阶段相适应的技术，否则不仅不能帮助业务发展，反而会给业务发展带来阻碍。</p>
+<h2 id="七、技术的文化特性"><a href="#七、技术的文化特性" class="headerlink" title="七、技术的文化特性"></a>七、技术的文化特性</h2><p>技术常常带有文化特性的，在国外流行的技术，在国内未必流行。一个例子是如Scala这样的函数式语言，Scala在国外互联网公司是有一定流行度的（Twitter、Linkedin等），国内虽然有不少簇拥者，但是始终只是小众，无法流行，究其原因，国外很多大学教授的第一门编程语言是采用函数式语言的（例如美国Berkeley大学的CS61A是基于Scheme函数式语言），国内大学几乎清一色采用C/C++/Java等命令式语言作为第一门编程语言。也就是说函数式语言在国外是有文化基础的，所以容易流行，国内没有这样的文化基础，所以难以流行。</p>
+<p>我们在选型的时候，尽量采用在国内有文化基础，已经落地开花的技术，盲目追求国外新技术有可能文化不适应反而难于落地。</p>
+<p>同样的，在A公司流行的技术，在B公司也未必流行。比方说BAT三家公司所采用和后面演化出来的技术栈就明显不同，这同样和三家公司不同的业务领域和文化基因有关系。我们在做技术选型的时候，也要考虑公司的文化特性，如业务模式、已有技术生态和开发人员技能等现实情况。</p>
+<h2 id="八、开源还是第三方软件提供商的技术"><a href="#八、开源还是第三方软件提供商的技术" class="headerlink" title="八、开源还是第三方软件提供商的技术"></a>八、开源还是第三方软件提供商的技术</h2><p>互联网时代，传统的企业软件供应商开始明显地走下坡路，企业越来越多的采用开源技术来开发他们的业务系统，开源软件具有如下优势：</p>
+<ol>
+<li>成本，商业软件一般有昂贵的license费用；</li>
+<li>避免供应商绑定(vendor lockin)；</li>
+<li>灵活的定制能力，现代企业需要灵活的软件定制能力以应对快速变化的用户需求，商业闭源软件常常缺乏这种能力；</li>
+<li>社区和生态，投资具有良好社区和生态的开源技术是企业技术选型的最佳实践。</li>
+</ol>
+<p>即使是开源软件，这里面有一个很重要的闭环问题。有些开源软件是一线互联网公司成功落地后再开源出来的，比如阿里的dubbo，点评的CAT，这些公司本身有场景，内部大量使用，也就是说内部已经形成反馈闭环，开源出来和社区又形成了一个更大的反馈闭环。有一些第三方软件供应商提供的开源软件，其实他们本身是没有业务场景的（或者场景非常有限），主要靠社区使用后才能形成反馈闭环，对于这类开源软件的使用需要谨慎，如果选择的话，可能需要一起帮忙踩坑形成社区反馈闭环。</p>
+<h2 id="九、使用能掌控的技术"><a href="#九、使用能掌控的技术" class="headerlink" title="九、使用能掌控的技术"></a>九、使用能掌控的技术</h2><p>技术和武器一样，并不是说越先进越好。就像航空母舰和F117这样的尖端武器，确实非常厉害，但是掌握和部署运维这些武器的成本非常之高，如果你的团队没有足够的能力运维和掌控这样的武器，那么这些武器摆在家里充其量只能是摆设，不能形成战斗力，有时甚至还会拖累业务。</p>
+<p>在大数据领域重量级武器尤其多（Hadoop, HBase, Spark, Storm…），很多产品既消耗机器资源，部署和运维也非常复杂，如果某种重量级武器被应用在关键业务上，一旦出问题，团队能不能hold住是要重点考虑的，否则可能会死得很难看。架构师需要根据业务阶段规模，团队规模和技能水平，综合评估后再考虑引入，如果团队能力还不足以掌控某种重量级技术，则可以先从轻量级技术开始。</p>
+<h2 id="十、剑要交给懂得挥舞它的人"><a href="#十、剑要交给懂得挥舞它的人" class="headerlink" title="十、剑要交给懂得挥舞它的人"></a>十、剑要交给懂得挥舞它的人</h2><p>同一种技术，不同的人使用，可能会得出完全相反的结论。比如Cassandra这种NoSql分布式数据库，在Netflix有比较成功的应用，Netflix从2010开始将系统迁移到AWS云中，并开始将大部分业务数据从传统Oracle数据库迁移到Cassandra上，Netflix的前架构总监Adrian Cockcroft把他们技术升级的一大成功功劳归结为采用了Cassandra这种天然支持跨数据中心的分布式数据库。但是，在2012年时候，Digg在网站改版升级过程中也试图将传统Mysql数据库迁移到Cassandra Nosql数据库，结果导致Digg网站问题频发，最后技术副总裁John Quinn主动卷铺盖走人。事后，有人将问题归结为Cassandra，这就是著名的Digg使用Cassandra遭遇滑铁卢事件。有人在Quora上发帖提问“Is Cassandra to blame for Digg v4’s technical failures？”[<a href="#appendix">附录18.2</a>]，回帖中有知情人士出来澄清：把Digg网站升级失败归结为Cassandra完全是转移注意力（red herring），背后的真正原因是工程管理和架构的问题（poor engineering management and architecture），简单讲就是人的问题。</p>
+<p>我曾经在2013年左右在携程框架部工作，当时有一个很重要的框架产品叫分布式数据访问层DAL，很多团队都跃跃欲试要做，但是当时的CTO一直没有正式启动这个项目，理由是没有合适的人。这个事情拖了有一年之久才找到合适的人，这个项目才启动并逐步落地，现在已经是携程框架的关键基础设施，承载携程大部分数据库访问流量。</p>
+<p>对于一些重量级的，处于业务关键链路上的产品，如果它重要但不紧急的话，一定要找到并交给能搞定它的人。把一个重要产品交给一个不合适的人，不仅不能解决问题，后续还常常会制造问题。设想一下业务的关键链路上的某个关键产品质量不过关，问题频发，但是业务已经跑在上面无法简单替换，这是让人很无奈的事情，很多架构老司机对此场景应该深有体会吧。</p>
+<h2 id="十一、浪费是创新的副产品"><a href="#十一、浪费是创新的副产品" class="headerlink" title="十一、浪费是创新的副产品"></a>十一、浪费是创新的副产品</h2><p>即使在同一个公司中，在主流技术栈的基础上，不同团队适当引入一些不同的技术栈，比如一个公司主流的技术栈是Java，有些前端团队会尝试用Nodejs开发应用，有些大数据团队会采用Python开发应用（Python里头有很多数据分析库）。这些做法和第二点提出的少即是多并不矛盾，根据业务场景的需要，适当引入一些互补的技术栈，适度冗余可以促进团队创新。</p>
+<p>再举个例子，阿里在发展的过程中，曾经发展出两套技术体系，一套是淘宝体系，一套是B2B体系。有一段时间内，两套体系并行发展，团队之间既竞争也相互借鉴，形成一个良性竞争的技术生态。据说Dubbo最早就是B2B搞出来的，淘宝后面又搞了一套HSF（未开源），Dubbo和HSF之间相互借鉴所以功能比较类似，阿里在2014年上市前对技术栈进行了整合，集团统一使用HSF，Dubbo则继续活跃在开源社区，成为中国开源软件的一个传奇，它的成功一方面源自阿里技术的沉淀，另一方面也是B2B和淘宝相关团队思路碰撞融合的结果。</p>
+<h2 id="十二、技术的宗教信仰"><a href="#十二、技术的宗教信仰" class="headerlink" title="十二、技术的宗教信仰"></a>十二、技术的宗教信仰</h2><p>很多技术人员对他们投入时间最多最熟悉的技术栈比较热衷，有些甚至能上升到宗教信仰的程度，不同派系还会有相互鄙视的情况出现（据说PHP是最被鄙视的语言），有的还会发展到派系争斗的地步。之前我在一家互联网公司，在容器PaaS平台选型上出现了两个派系，分别被戏称为K党和M党，K党主张引入谷歌推的Kubernetes，M党主张基于Mesos做定制，两拨人都非常坚持互不相让，争得不可开交。</p>
+<p>其实我个人对技术的宗教信仰是非常排斥的，它是一种技术视野狭隘的表现，技术本身没有绝对的好坏之分，只有适用场景和利弊之分。但是，技术的宗教信仰是一种客观存在，有经验的架构师在做技术选型时需要考虑这一层面的因素。</p>
+<h2 id="十三、通过背书做技术选型"><a href="#十三、通过背书做技术选型" class="headerlink" title="十三、通过背书做技术选型"></a>十三、通过背书做技术选型</h2><p>和一线资深的架构师或者技术专家交流，获取技术选型的专家建议，是一种比较靠谱的技术选型策略。专家是一种背书，他们踩坑无数才成为专家，对很多技术有一手的实战经验，是真正know how的人，所以他们给出的建议一般都比较接地气。</p>
+<p>大公司是一个很好的背书，比方说Google，当初它推出Kubernetes的时候，其实我一开始看过架构设计之后是对这个产品嗤之以鼻的。但是Google的强大背书和号召力摆在那里，用户深信Google用脚投票，一开始架构设计不好不是根本性问题，只要有足够的用户形成社区闭环，这个产品就会不断长好长大。目前K8S已经基本垄断了容器PaaS平台市场，它的成功很大程度归结为Google公司的背书影响力。所以，绑着技术型大公司这个背书做技术选型，大概率不至于大错（当然不是绝对）。</p>
+<p>Github上的星的数量也是一个重要的技术选型参考，同时还有项目代码和文档更新频度（尤其是近期），这些指标直接反应开源项目的社区活跃度和生命力。</p>
+<h2 id="十四、实践出真知"><a href="#十四、实践出真知" class="headerlink" title="十四、实践出真知"></a>十四、实践出真知</h2><p>实际评估一项技术时，最靠谱的做法还是详细研究其文档，做一些样例和测试，对性能有要求的则必须实际做充分压力测试获得真实性能数据。对于开源的产品，如果处在业务的关键链路上，则建议把代码拉下来通读梳理一把，深入理解其内部设计和架构，有的还需要根据企业业务场景适当做一些定制。</p>
+<p>通过初步评估，仍需要寻找一定数量非关键试点项目（pilot project）做试水躺坑，经过初步生产验证，才可以考虑逐步扩大生产普及的规模。</p>
+<p>实践出真知，对于那些长期在一线实战和积累的架构师，他们最终将获得良好的技术选型的sense和对新技术的敏锐性。</p>
+<h2 id="十五、技术的落地"><a href="#十五、技术的落地" class="headerlink" title="十五、技术的落地"></a>十五、技术的落地</h2><p>简单回顾下我国辽宁号航母的历史：1999年中国购买了瓦良格号，于2002年3月拖回大连港，2005年4月开始由中国海军继续建造改进，2012年9月正式更名辽宁号，交付中国人民解放军海军，2013年11月，辽宁舰从青岛远赴中国南海展开为期47天的海上综合演练，标志着辽宁号航母开始具备海上编队战斗群能力。我国前前后后花费超过10年才让辽宁号航母初步形成战力能力。</p>
+<p>技术和武器一样，你引入一个技术是一码事，真正落地形成战斗力或者说产生业务价值完全是另外一码事。技术一般有落地周期：引入，定制改造，小规模试点，再到逐步扩大生产规模，这个周期可长可短，对于一些基础性和重量级的技术，或者涉及大规模遗留系统升级改造的技术，一般周期比较漫长（可能时间跨度长达1年甚至几年），对于这类技术的引入和落地，架构师需要高屋建瓴，通盘考虑，制定落地计划，分阶段推进技术的落地。</p>
+<h2 id="十六、定制、自研还是购买"><a href="#十六、定制、自研还是购买" class="headerlink" title="十六、定制、自研还是购买"></a>十六、定制、自研还是购买</h2><p>这个问题比较复杂，很难一概而论，和企业的业务和团队规模，架构甚至文化等诸多因素有关系。我个人遵循的两个简单原则分别是：</p>
+<ol>
+<li>如果不是你最擅长，也提供不了差异化的竞争优势的技术则直接用开源或者购买。小心Not Invented Here症状，避免重复造轮子，始终牢记达成业务目标才是重点。</li>
+<li>当企业的业务和团队规模达到一定阶段，对于处在业务关键链路上的核心技术，必须要有一定的定制甚至自研能力。创业公司尽量用开源或者购买云服务，验证业务模式是第一优先；当你的业务模式获得验证，业务和团队达到一定规模，则需逐步考虑对核心业务链路上的技术进行定制甚至自研，以获得更大的灵活性；如果你成长到接近BAT那个量级，那么大部分核心技术必然是定制甚至自研的，否则无法支撑那个规模。</li>
+</ol>
+<h2 id="十七、写在最后"><a href="#十七、写在最后" class="headerlink" title="十七、写在最后"></a>十七、写在最后</h2><p>本文仅限个人经验视角，技术选型理念仅供参考借鉴。每个企业的具体上下文（业务场景，团队组织，技术架构等）各不相同，每个架构师的背景经验也各不相同，大家要结合实际自己做出选型，没有最好的技术，只有相对较合适的技术。另外，好的技术选型是相互借鉴甚至PK出来的，欢迎大家讨论，给出自己的技术选型思考。</p>
+<h2 id="十八、附录"><a href="#十八、附录" class="headerlink" title="十八、附录"></a><a name="appendix">十八、附录</a></h2><ol>
+<li><a href="https://12factor.net/" target="_blank" rel="noopener">12 Factor App</a></li>
+<li><a href="https://www.quora.com/Is-Cassandra-to-blame-for-Digg-v4s-technical-failures" target="_blank" rel="noopener">2.    Is Cassandra to blame for Digg v4’s technical failures?</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术管理/" rel="tag"># 技术管理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/25/20180325/" rel="next" title="微服务2.0技术栈选型手册">
+                <i class="fa fa-chevron-left"></i> 微服务2.0技术栈选型手册
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="基础框架" />
+            
+              <p class="site-author-name" itemprop="name">基础框架</p>
+              <p class="site-description motion-element" itemprop="description">革故鼎新 追求卓越 简单靠谱 彼此成就</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+				    <a href="/categories/">
+				  
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+				    <a href="/tags/">
+				  
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ppdai" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiankai02@ppdai.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、软件的本质复杂性"><span class="nav-number">2.</span> <span class="nav-text">二、软件的本质复杂性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、使用成熟的技术"><span class="nav-number">3.</span> <span class="nav-text">三、使用成熟的技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、少即是多"><span class="nav-number">4.</span> <span class="nav-text">四、少即是多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、技术的先决条件"><span class="nav-number">5.</span> <span class="nav-text">五、技术的先决条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、来自大公司的技术"><span class="nav-number">6.</span> <span class="nav-text">六、来自大公司的技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、技术的文化特性"><span class="nav-number">7.</span> <span class="nav-text">七、技术的文化特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、开源还是第三方软件提供商的技术"><span class="nav-number">8.</span> <span class="nav-text">八、开源还是第三方软件提供商的技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#九、使用能掌控的技术"><span class="nav-number">9.</span> <span class="nav-text">九、使用能掌控的技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十、剑要交给懂得挥舞它的人"><span class="nav-number">10.</span> <span class="nav-text">十、剑要交给懂得挥舞它的人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十一、浪费是创新的副产品"><span class="nav-number">11.</span> <span class="nav-text">十一、浪费是创新的副产品</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十二、技术的宗教信仰"><span class="nav-number">12.</span> <span class="nav-text">十二、技术的宗教信仰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十三、通过背书做技术选型"><span class="nav-number">13.</span> <span class="nav-text">十三、通过背书做技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十四、实践出真知"><span class="nav-number">14.</span> <span class="nav-text">十四、实践出真知</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十五、技术的落地"><span class="nav-number">15.</span> <span class="nav-text">十五、技术的落地</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十六、定制、自研还是购买"><span class="nav-number">16.</span> <span class="nav-text">十六、定制、自研还是购买</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十七、写在最后"><span class="nav-number">17.</span> <span class="nav-text">十七、写在最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十八、附录"><span class="nav-number">18.</span> <span class="nav-text">十八、附录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">基础框架</span>
+
+  
+
+  
+</div>
+<!--
+  <div class="powered-by">
+    革故鼎新
+  </div>
+
+  <span class="post-meta-divider">|</span>
+  
+  <div class="powered-by">
+    追求卓越
+  </div>
+  
+  <span class="post-meta-divider">|</span>
+  
+  <div class="powered-by">
+    简单靠谱
+  </div>
+  
+  <span class="post-meta-divider">|</span>
+  
+  <div class="powered-by">
+    彼此成就
+  </div>
+-->  
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.1"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

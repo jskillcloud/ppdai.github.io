@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/pinterest-p_128px.png?v=6.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/pinterest-p_32px.png?v=6.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/pinterest-p_16px.png?v=6.0.1">
+
+
+  <link rel="mask-icon" href="/images/pinterest-p.svg?v=6.0.1" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="拍拍贷基础框架团队博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta property="og:type" content="website">
+<meta property="og:title" content="拍拍贷基础框架团队博客">
+<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta property="og:site_name" content="拍拍贷基础框架团队博客">
+<meta property="og:description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/about/platform.png">
+<meta property="og:updated_time" content="2018-02-09T13:16:46.653Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拍拍贷基础框架团队博客">
+<meta name="twitter:description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta name="twitter:image" content="http://yoursite.com/about/platform.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/about/"/>
+
+
+
+
+
+  <title>现代发布技术的原理和实践 | 拍拍贷基础框架团队博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title"><i class="fa fa-fw fa-pinterest-p"></i>拍拍贷基础框架团队博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">致力于成为互联网行业一流的框架技术团队</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-users"></i> <br />关于</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-hire">
+          <a href="/hire/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />招聘</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/24/20180324/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="基础框架">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="拍拍贷基础框架团队博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">现代发布技术的原理和实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-24T18:46:34+08:00">2018-03-24</time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+		  
+		  
+            <span class="post-time">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-user"></i>
+              </span>
+              
+                <span class="post-meta-item-text">作者</span>
+              
+              <span>杨波</span>
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>根据2017年的DevOps发展报告，高效能组织和低效能组织在软件交付的效率上有数量级上的差异。技术组织的软件交付能力是一种综合能力，涉及众多环节，其中发布是尤为重要的环节。</p>
+<p>作为技术人员，大家可能听说过“滚动发布”和“蓝绿发布”等术语，但是很多人并不清楚这些术语背后的原理。本文试图总结当前主流的发布策略，每个的优劣，适用性，让开发人员特别是架构师对现代发布技术有一个更为清晰全面的认识，让大家能够根据自己的企业上下文，对发布策略做出正确的选型和实践。</p>
+<a id="more"></a>
+<h2 id="二、单服务器组发布"><a href="#二、单服务器组发布" class="headerlink" title="二、单服务器组发布"></a>二、单服务器组发布</h2><p>先解释下单服务器组的概念，早先我们机器资源比较紧张，不像现在云计算和虚拟化（包括容器技术）这么发达，所以应用机器基本是预先静态分配好的（一般由运维负责分配），原来应用A住在这n台机器上，那么下次升级发布的应用A也住在这n台机器上，所以称为单服务器组发布方式。</p>
+<h3 id="2-1-蛮力发布"><a href="#2-1-蛮力发布" class="headerlink" title="2.1 蛮力发布"></a>2.1 蛮力发布</h3><p>如下图所示，这种发布方式比较简单粗暴，有点像我们传统的软件升级方式，主要靠手工完成，先将老版本V1全部下掉，再将新版本发到机器上去。这种方式会引入服务中断（停机），在开发测试环境是可行的，但对于生产环境发布，其会直接影响用户的使用体验，这种方式一般是不建议的。</p>
+<p><img src="/2018/03/24/20180324/reckless_1.png" alt="reckless before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/reckless_2.png" alt="reckless after"></p>
+<center style="margin: -20px 0 20px">发布后</center>
+
+<h4 id="优势和适用场合"><a href="#优势和适用场合" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>简单成本低</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>服务中断用户受影响，出了问题回退也慢</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>开发测试环境</li>
+<li>非关键应用（用户影响面小）</li>
+<li>初创公司什么都缺，找夜深人静用户访问量小的时间干</li>
+</ul>
+<h4 id="流量模式"><a href="#流量模式" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/reckless_traffic.png" alt="reckless traffic model"></p>
+<p>蛮力发布会引入服务中断时间，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="2-2-金丝雀发布（单服务器组）"><a href="#2-2-金丝雀发布（单服务器组）" class="headerlink" title="2.2 金丝雀发布（单服务器组）"></a>2.2 金丝雀发布（单服务器组）</h3><p>在蛮力发布基础上的一种简单改进发布方式，目前仍然是不少成长型技术组织的主流发布方式。单服务器组下的金丝雀发布的简化步骤如下图所示：</p>
+<p><img src="/2018/03/24/20180324/canary_1group_1.png" alt="canary one group before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/canary_1group_2.png" alt="canary one group first"></p>
+<center style="margin: -20px 0 20px">先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/canary_1group_3.png" alt="canary one group after"></p>
+<center style="margin: -20px 0 20px">全部发完</center>
+
+<h4 id="实践要点"><a href="#实践要点" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>金丝雀发布一般先发1台，或者一个小比例，例如2%的服务器，主要做流量验证用，也称为金丝雀(Canary)测试（国内常称灰度测试）。以前旷工开矿下矿洞前，先会放一只金丝雀进去探是否有有毒气体，看金丝雀能否活下来，金丝雀发布由此得名。简单的金丝雀测试一般通过手工测试验证，复杂的金丝雀测试需要比较完善的监控基础设施配合，通过监控指标反馈，观察金丝雀的健康状况，作为后续发布或回退的依据。</li>
+<li>如果金丝测试通过，则把剩余的V1版本全部升级为V2版本。如果金丝雀测试失败，则直接回退金丝雀，发布失败。</li>
+</ol>
+<p><img src="/2018/03/24/20180324/canary.png" alt="canary"></p>
+<h4 id="优势和适用场合-1"><a href="#优势和适用场合-1" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小，金丝雀发布过程出现问题只影响少量用户</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>发布自动化程度不够，发布期间可引发服务中断</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>对新版本功能或性能缺乏足够信心</li>
+<li>用户体验要求较高的网站业务场景</li>
+<li>缺乏足够的自动化发布工具研发能力</li>
+</ul>
+<h4 id="流量模式-1"><a href="#流量模式-1" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/canary_1group_traffic.png" alt="canary one group traffic"></p>
+<p>少量金丝雀先接受流量，再全量发布，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="2-3-滚动式发布（单服务器组）"><a href="#2-3-滚动式发布（单服务器组）" class="headerlink" title="2.3 滚动式发布（单服务器组）"></a>2.3 滚动式发布（单服务器组）</h3><p>在金丝雀发布基础上的进一步优化改进，是一种自动化程度较高的发布方式，用户体验比较平滑，是目前成熟型技术组织所采用的主流发布方式。单服务器组下的滚动发布的简化步骤如下图所示：</p>
+<p><img src="/2018/03/24/20180324/rolling_update_1group_1.png" alt="rolling update one group before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_1group_2.png" alt="rolling update one group first"></p>
+<center style="margin: -20px 0 20px">发布中，先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_1group_3.png" alt="rolling update one group middle"></p>
+<center style="margin: -20px 0 20px">发布中，再发若干台</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_1group_4.png" alt="rolling update one group after"></p>
+<center style="margin: -20px 0 20px">直到全部发完</center>
+
+<h4 id="实践要点-1"><a href="#实践要点-1" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>滚动式发布一般先发1台，或者一个小比例，如2%服务器，主要做流量验证用，类似金丝雀(Canary)测试。</li>
+<li>滚动式发布需要比较复杂的发布工具和智能LB，支持平滑的版本替换和流量拉入拉出。</li>
+<li>每次发布时，先将老版本V1流量从LB上摘除，然后清除老版本，发新版本V2，再将LB流量接入新版本。这样可以尽量保证用户体验不受影响。</li>
+<li>一次滚动式发布一般由若干个发布批次组成，每批的数量一般是可以配置的（可以通过发布模板定义）。例如第一批1台（金丝雀），第二批10%，第三批50%，第四批100%。每个批次之间留观察间隔，通过手工验证或监控反馈确保没有问题再发下一批次，所以总体上滚动式发布过程是比较缓慢的(其中金丝雀的时间一般会比后续批次更长，比如金丝雀10分钟，后续间隔2分钟)。</li>
+<li>回退是发布的逆过程，将新版本流量从LB上摘除，清除新版本，发老版本，再将LB流量接入老版本。和发布过程一样，回退过程一般也比较慢的。</li>
+<li>滚动式发布国外术语通常叫Rolling Update Deployment。</li>
+</ol>
+<h4 id="优势和适用场合-2"><a href="#优势和适用场合-2" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小，体验较平滑</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>发布和回退时间比较缓慢</li>
+<li>发布工具比较复杂，LB需要平滑的流量摘除和拉入能力</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>用户体验不能中断的网站业务场景</li>
+<li>有一定的复杂发布工具研发能力；</li>
+</ul>
+<h4 id="流量模式-2"><a href="#流量模式-2" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/rolling_update_traffic.png" alt="rolling udpate one group traffic"></p>
+<p>滚动式发布，流量平滑过渡，图片来自<a href="#appendix">附录7.1</a></p>
+<h2 id="三、双服务器组发布"><a href="#三、双服务器组发布" class="headerlink" title="三、双服务器组发布"></a>三、双服务器组发布</h2><p>随着云计算和虚拟化技术的成熟，特别是容器等轻量级虚拟化技术的引入，计算资源受限和申请缓慢问题已经逐步解决，可以做到弹性按需分配。为一次发布分配两组服务器，一组运行现有的V1老版本，一组运行待上线的V2新版本，再通过LB切换流量方式完成发布，这就是所谓的双服务器组发布方式。</p>
+<h3 id="3-1-蓝绿发布（双服务器组）"><a href="#3-1-蓝绿发布（双服务器组）" class="headerlink" title="3.1 蓝绿发布（双服务器组）"></a>3.1 蓝绿发布（双服务器组）</h3><p>蓝绿发布仅适用于双服务器组发布，可以认为是对蛮力发布的一种简单优化发布方式。简化过程如下图所示：</p>
+<p><img src="/2018/03/24/20180324/blue_green_2groups_before.png" alt="blue green two groups before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/blue_green_2groups_after.png" alt="blue green two groups after"></p>
+<center style="margin: -20px 0 20px">发布后</center>
+
+<h4 id="实践要点-2"><a href="#实践要点-2" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>V1版本称为蓝组，V2版本称为绿组，发布时通过LB一次性将流量从蓝组直接切换到绿组，不经过金丝雀和滚动发布，蓝绿发布由此得名；</li>
+<li>出现问题回退也很直接，通过LB直接将流量切回蓝组。</li>
+<li>发布初步成功后，蓝组机器一般不直接回收，而是留一个待观察期，视具体情况观察期的时间可长可短，观察期过后确认发布无问题，则可以回收蓝组机器。</li>
+</ol>
+<h4 id="优势和适用场合-3"><a href="#优势和适用场合-3" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>升级切换和回退速度非常快</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>切换是全量的，如果V2版本有问题，则对用户体验有直接影响；</li>
+<li>需要两倍机器资源；</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>对用户体验有一定容忍度的场景</li>
+<li>机器资源有富余或者可以按需分配（AWS云，或自建容器云）</li>
+<li>暂不具备复杂滚动发布工具研发能力；</li>
+</ul>
+<h4 id="流量模式-3"><a href="#流量模式-3" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/blue_green_2groups_traffic.png" alt="blue green two groups traffic"></p>
+<p>蓝绿发布一次完成流程切换，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="3-2-金丝雀发布（双服务器组）"><a href="#3-2-金丝雀发布（双服务器组）" class="headerlink" title="3.2 金丝雀发布（双服务器组）"></a>3.2 金丝雀发布（双服务器组）</h3><p>对蓝绿部署的一种简单优化，发布时先从绿组拉入1台金丝雀，待金丝雀验证通过再发全量。对比蓝绿发布，该发布方式的优势是有一个生产流量的金丝雀验证过程，可以减轻V2可能有问题的风险和影响面。简化发布过程如下图所示：</p>
+<p><img src="/2018/03/24/20180324/canary_2groups_1.png" alt="canary two groups before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/canary_2groups_2.png" alt="canary two groups middle"></p>
+<center style="margin: -20px 0 20px">发布中，先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/canary_2groups_3.png" alt="canary two groups after"></p>
+<center style="margin: -20px 0 20px">全量发布</center>
+
+
+<h3 id="3-3-滚动式发布（双服务器组）"><a href="#3-3-滚动式发布（双服务器组）" class="headerlink" title="3.3 滚动式发布（双服务器组）"></a>3.3 滚动式发布（双服务器组）</h3><p>滚动式发布是对上面的蓝绿和金丝雀发布的进一步优化，按批次增量滚动发布，提供更平滑的用户体验。</p>
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_1.png" alt="rolling update two groups before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_2.png" alt="rolling update two groups first"></p>
+<center style="margin: -20px 0 20px">发布中，先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_3.png" alt="rolling update two groups middle"></p>
+<center style="margin: -20px 0 20px">发布中，再发若干台</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_4.png" alt="rolling update two groups after"></p>
+<center style="margin: -20px 0 20px">直到全部发完</center>
+
+<h3 id="实践要点-3"><a href="#实践要点-3" class="headerlink" title="实践要点"></a>实践要点</h3><ol>
+<li>发布前先申请一批新服务器，数量一般和V1版本相同，将V2版本应用发布到新服务器上。例如如果在AWS云上，则可以直接调用API申请一批新VM，如果用容器云k8s，则可以直接启动一批新容器（使用V2版本容器镜像）。</li>
+<li>一般会先通过LB拉入1台V2版本的机器，这台机器也相当于金丝雀，用于流量验证。</li>
+<li>逐步按批次完成发布，每批只需要通过LB拉入V2版本，再拉出对应数量的V1版本。批次之间留有观察间隔，通过手工或监控反馈确保没有问题再继续发布。</li>
+<li>发布有问题回退很快，直接通过LB将流量切回V1即可。</li>
+<li>完成发布后，一般V1版本要保留观察以备万一，比如留1天，1天后没有问题则回收V1机器资源。</li>
+</ol>
+<h4 id="优势和适用场合-4"><a href="#优势和适用场合-4" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小；</li>
+<li>升级切换和回退（rollback）速度比单服务器组滚动发布要快，LB切流量即可；</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>需要两倍机器资源；</li>
+<li>发布工具比较复杂，LB需要流量切换能力</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>用户体验不能中断的网站业务场景</li>
+<li>机器资源有富余或者可以按需分配（AWS云，或自建容器云）</li>
+<li>有一定的发布工具研发能力；</li>
+</ul>
+<h4 id="流量模式-4"><a href="#流量模式-4" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/rolling_update_traffic.png" alt="rolling upodate two groups traffic"></p>
+<p>滚动式发布，流量平滑过渡，图片来自<a href="#appendix">附录7.1</a></p>
+<h2 id="四、其它发布方式"><a href="#四、其它发布方式" class="headerlink" title="四、其它发布方式"></a>四、其它发布方式</h2><p>上述都是偏传统的发布方式，能覆盖大部分应用发布场景。针对一些关键新功能的上线发布，或者一些特定的场景，还有一些特殊的发布方式。</p>
+<h3 id="4-1-功能开关发布"><a href="#4-1-功能开关发布" class="headerlink" title="4.1 功能开关发布"></a>4.1 功能开关发布</h3><p>利用代码中的功能开关（Feature Flag/Toggle/Switch）来控制发布逻辑，一般不需要复杂的发布工具和智能LB配合，是一种相对比较低成本和简单的发布方式。这种方式也是支持现代DevOps理念，研发人员可以灵活定制和自助完成的发布方式。功能开关的原理如下图所示：</p>
+<p><img src="/2018/03/24/20180324/feature_flag_deployment.png" alt="feature flag deployment"></p>
+<p>功能开关发布，图片来自<a href="#appendix">附录7.2</a></p>
+<h4 id="实践要点-4"><a href="#实践要点-4" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>功能开关发布需要一个配置中心或者开关中心这样的服务支持，例如携程的Apollo配置中心<a href="#appendix">附录7.3</a>，或者开源的FF4J<a href="#appendix">附录7.4</a>，这些都支持开关发布，业界还有专门的功能开关SaaS服务，例如LaunchDarkly<a href="#appendix">附录7.5</a>。通过配置中心，运维或研发人员可以在运行期动态配置功能开关的值。当然，功能开关发布只是配置中心的一种使用场景，配置中心还能支持其它很多动态配置场景。</li>
+<li>功能开关服务一般提供客户端SDK，方便开发人员集成。在运行期，客户端SDK会同步最新的开关值，技术实现有推方式(push)，也有拉方式(pull)，或者推拉结合方式。</li>
+<li>新功能（V2 new feature）和老功能（V1 old feature）住在同一套代码中，新功能隐藏在开关后面，如果开关没有打开，则走老代码逻辑，如果开关打开，则走新代码逻辑。技术实现上可以理解为一个简单的if/else逻辑。</li>
+<li>应用上线后，开关先不打开，然后运维或研发人员通过开关中心打开新功能，经过流量验证新功能没有问题，则发布完成；如果有问题，则随时可以通过开关中心切回老功能逻辑。</li>
+</ol>
+<h4 id="优势和适用场合-5"><a href="#优势和适用场合-5" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>升级切换和回退速度非常快</li>
+<li>相对于复杂的发布工具，实施比较简单，成本相对低廉</li>
+<li>研发能够灵活定制发布逻辑，支持DevOps自助发布</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>切换是全量的，如果V2版本有问题，则对用户体验有直接影响；</li>
+<li>对代码有侵入，代码逻辑会变复杂，需要定期清理老版本逻辑，维护成本变高</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>对用户体验有一定容忍度的场景</li>
+<li>已有配置中心或开关中心服务</li>
+<li>暂不具备研发复杂发布工具能力；</li>
+</ul>
+<h4 id="流量模式-5"><a href="#流量模式-5" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/blue_green_2groups_traffic.png" alt="feature flag traffic"></p>
+<p>通过功能开关一次完成流量切换，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="4-2-A-B测试"><a href="#4-2-A-B测试" class="headerlink" title="4.2 A/B测试"></a>4.2 A/B测试</h3><p>A/B测试<a href="#appendix">附录7.10</a>原来主要用于产品功能的比对测试，收集用户反馈和对比数据做产品功能设计的决策。实际上，A/B测试也可以作为一种新功能发布技术。下图展示基于LB实现的一种A/B测试发布。</p>
+<p><img src="/2018/03/24/20180324/ab_testing_deployment.png" alt="a/b testing deployment"></p>
+<h4 id="实践要点-5"><a href="#实践要点-5" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>上图中，原来PC端和手机端都访问老版本V1服务（也称A组或控制组），当V2新版本（也称B组或实验组）发布以后，为了验证V2的功能正确性，同时也为了避免V2有问题时影响所有用户，先通过LB将手机端的流量切换到V2版本，经过一段时间的A/B比对测试和观察（主要通过用户和监控反馈），确保V2正常，则通过LB将全部流量切换到V2。</li>
+<li>基于LB方式实现A/B测试，LB需要能够通过某种条件做流量路由，例如通过client ip，设备类型，浏览器类型，甚至是定制的http header或查询字符串。</li>
+<li>高级的A/B测试需要专门的平台支撑，wasabi<a href="#appendix">附录7.6</a>就是intuit开源的一个支持高级A/B测试的平台，这类平台可以细粒度到针对某类用户做A/B测试，例如针对某个地区的用户，某个年龄段的用户，公司内部用户等等。举了例子，假设一个关键业务的新功能上线，为了降低风险采用A/B测试，可以做到先只让公司内部员工能访问到新功能，待新功能验证过，再全量放开给外部用户使用。</li>
+<li>功能开关和A/B测试有点相似，但功能开关一般是无状态和全量的，无法做到针对某类特定用户进行测试，而A/B测试一般是有状态的，能够跟踪事务和用户级别的状态，可以实现针对某类特定用户进行测试。</li>
+</ol>
+<h4 id="优势和适用场合-6"><a href="#优势和适用场合-6" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小；</li>
+<li>可以使用生产流量测试；</li>
+<li>可以做到针对某类特定目标用户进行测试；</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>搭建复杂度相对高，有一定技术门槛</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>核心关键业务，比如涉及资金的</li>
+<li>具备一定的A/B测试平台研发能力</li>
+</ul>
+<h4 id="流量模式-6"><a href="#流量模式-6" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/ab_testing_traffic.png" alt="a/b testing traffic"></p>
+<p>针对某类目标用户进行A/B测试，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="4-3-影子测试"><a href="#4-3-影子测试" class="headerlink" title="4.3 影子测试"></a>4.3 影子测试</h3><p>对于一些涉及核心业务的遗留系统的升级改造，为了确保万无一失，有一种称为影子测试的大招，采用比较复杂的流量复制、回放和比对技术实现。下面是影子测试的一个样例架构图，</p>
+<p><img src="/2018/03/24/20180324/shadow_testing.png" alt="shadow testing"></p>
+<h4 id="实践要点-6"><a href="#实践要点-6" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>目标实现老的legacy服务迁移升级到新的experimental服务。</li>
+<li>测试开始前，需要在测试环境部署一份legacy服务和experimental服务，同时将生产数据库复制两份到测试环境。同时需要将生产请求日志收集起来，一般可以通过kafka队列收集，然后通过类似goreplay<a href="#appendix">附录7.8</a>这样的工具，消费kafka里头的请求日志，复制回放，将请求分发到legacy服务和experimental服务，收到响应后进行比对，如果所有响应比对成功，则可以认为legacy服务和experimental服务在功能逻辑上是等价的；如果有响应比对失败，则认为两者在功能逻辑上不等价，需要修复experimental并重新进行影子测试，直到全部比对成功。根据系统复杂度和关键性不同，比对测试时间短的可能需要几周，长的可达半年之久。</li>
+<li>影子测试因为旁路在独立测试环境中进行，可以对生产流量完全无影响。</li>
+<li>影子测试一般适用于遗留系统的等价重构迁移，例如.net转java，或者sqlserver数据库升级为mysql数据库，且外部依赖不能太多，否则需要开发很多mock，测试部署成本会很高，且比对测试更加复杂和不稳定。</li>
+<li>当当网有一个比较成功的交易系统.net转java迁移项目<a href="#appendix">附录7.9</a>，采用了影子测试技术，值得参考借鉴。</li>
+</ol>
+<h4 id="优势和适用场合-7"><a href="#优势和适用场合-7" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>对生产用户体验完全无影响</li>
+<li>可以使用生产真实流量进行测试（复制比对）</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>搭建复杂度很高，技术门槛高，数据库的导出复制是难点</li>
+<li>外部依赖不能太多，否则测试部署成本很高，且比对测试更加复杂和不稳定</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>核心关键业务，比如涉及资金的</li>
+<li>具备一定影子测试平台研发能力，包括流量复制、数据库导出复制和分发比对系统。</li>
+</ul>
+<h4 id="流量模式-7"><a href="#流量模式-7" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/shadow_testing_traffic.png" alt="shadow testing traffic"></p>
+<p>影子测试对生产流量无影响，图片来自<a href="#appendix">附录7.1</a></p>
+<h2 id="五、比较"><a href="#五、比较" class="headerlink" title="五、比较"></a>五、比较</h2><p>下表对各种发布策略，从各个维度进行综合比较，供参考：</p>
+<p><img src="/2018/03/24/20180324/comparision.png" alt="comparision"></p>
+<h2 id="六、结论和建议"><a href="#六、结论和建议" class="headerlink" title="六、结论和建议"></a>六、结论和建议</h2><p>下面是对发布策略的一些选型建议，供不同阶段公司参考：</p>
+<ol>
+<li>蛮力发布一般是不建议采用的，除非是开发测试环境，用户体验不敏感的非关键应用，或者是创业期什么都缺时候的无奈之举。</li>
+<li>如果暂时还不具备研发较复杂的滚动发布工具和配套智能LB，则功能开关是一种不错的轻量级发布技术，投入相对较小的成本，可以让研发人员灵活定制发布逻辑。</li>
+<li>金丝雀发布通过少量新版本服务器接收生产流量的方式去验证新版本，可以显著降低风险。金丝雀发布适用于大部分场景，一般成长型公司就可以采用。</li>
+<li>对于达到一定业务体量的公司，考虑到用户体验对业务的关键性，则需要投入研发资源开发支持滚动式发布的工具和配套的智能LB，实现自动化和零停机的发布。滚动式发布一般和金丝雀发布配合，先发一台金丝雀去验证流量，再按批次增量发布。</li>
+<li>随着轻量级虚拟化（例如容器）的普及，双服务器组发布方式具有更快的发布和回退速度，是值得投入的高级发布技术。蓝绿部署仅适用于双服务器组，滚动式发布既可以在单服务器组上实现，也可以在双服务器组上实现。</li>
+<li>对于涉及关键核心业务的新功能上线，采用A/B测试，可以显著降低发布风险，A/B测试是唯一一种支持针对特定用户组进行生产测试的高级发布技术。当然A/B测试的投入不低，建议有一定研发能力的组织采用。</li>
+<li>对于关键核心业务的迁移重构，为确保万无一失，最后的一个大招是影子测试，影子测试对生产流量和用户完全无影响。当然这个大招的投入成本和门槛都高，建议有足够业务体量和研发能力的组织投入。</li>
+<li>上述的各种发布策略并不是非此即彼的，一个公司常常会综合采用多种发布技术作为互补，实现灵活的发布能力。例如主流的发布手段是金丝雀+滚动式发布，某些业务线可能根据业务场景需要采用功能开关发布，还有一些业务线则可能采用高级的A/B测试发布手段。</li>
+</ol>
+<h2 id="七、附录"><a href="#七、附录" class="headerlink" title="七、附录"></a><a name="appendix">七、附录</a></h2><ol>
+<li><a href="https://github.com/ContainerSolutions/k8s-deployment-strategies" target="_blank" rel="noopener">k8s deployment strategies</a></li>
+<li><a href="https://opensource.com/article/18/2/feature-flags-ring-deployment-model" target="_blank" rel="noopener">Deploying new releases: Feature flags or rings?</a></li>
+<li><a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener">携程Apollo配置中心</a></li>
+<li><a href="http://www.ff4j.org/" target="_blank" rel="noopener">Feature Flag for Java</a></li>
+<li><a href="https://launchdarkly.com/" target="_blank" rel="noopener">LaunchDarkly ~ Feature Flag as a Service</a></li>
+<li><a href="https://github.com/intuit/wasabi" target="_blank" rel="noopener">Wasabi高级A/B测试平台</a></li>
+<li><a href="https://blog.zenika.com/2017/04/19/migration-dun-legacy-avec-goreplay/" target="_blank" rel="noopener">使用goreplay实现遗留系统升级</a></li>
+<li><a href="https://github.com/buger/goreplay" target="_blank" rel="noopener">Goreplay</a></li>
+<li><a href="http://blog.shurenyun.com/untitled-9/" target="_blank" rel="noopener">9.    华丽蜕变 – 当当网交易系统重构</a></li>
+<li><a href="https://en.wikipedia.org/wiki/A/B_testing" target="_blank" rel="noopener">A/B Testing</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
+          
+            <a href="/tags/devops/" rel="tag"># devops</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/16/20180116/" rel="next" title="第一届技术沙龙精彩回顾">
+                <i class="fa fa-chevron-left"></i> 第一届技术沙龙精彩回顾
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/25/20180325/" rel="prev" title="微服务2.0技术栈选型手册">
+                微服务2.0技术栈选型手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="基础框架" />
+            
+              <p class="site-author-name" itemprop="name">基础框架</p>
+              <p class="site-description motion-element" itemprop="description">革故鼎新 追求卓越 简单靠谱 彼此成就</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+				    <a href="/categories/">
+				  
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+				    <a href="/tags/">
+				  
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ppdai" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiankai02@ppdai.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、单服务器组发布"><span class="nav-number">2.</span> <span class="nav-text">二、单服务器组发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-蛮力发布"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 蛮力发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合"><span class="nav-number">2.1.1.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式"><span class="nav-number">2.1.2.</span> <span class="nav-text">流量模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-金丝雀发布（单服务器组）"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 金丝雀发布（单服务器组）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实践要点"><span class="nav-number">2.2.1.</span> <span class="nav-text">实践要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">流量模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-滚动式发布（单服务器组）"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 滚动式发布（单服务器组）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实践要点-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">实践要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">流量模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、双服务器组发布"><span class="nav-number">3.</span> <span class="nav-text">三、双服务器组发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-蓝绿发布（双服务器组）"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 蓝绿发布（双服务器组）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实践要点-2"><span class="nav-number">3.1.1.</span> <span class="nav-text">实践要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-3"><span class="nav-number">3.1.2.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-3"><span class="nav-number">3.1.3.</span> <span class="nav-text">流量模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-金丝雀发布（双服务器组）"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 金丝雀发布（双服务器组）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-滚动式发布（双服务器组）"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 滚动式发布（双服务器组）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实践要点-3"><span class="nav-number">3.4.</span> <span class="nav-text">实践要点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-4"><span class="nav-number">3.4.1.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-4"><span class="nav-number">3.4.2.</span> <span class="nav-text">流量模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、其它发布方式"><span class="nav-number">4.</span> <span class="nav-text">四、其它发布方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-功能开关发布"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 功能开关发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实践要点-4"><span class="nav-number">4.1.1.</span> <span class="nav-text">实践要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-5"><span class="nav-number">4.1.2.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-5"><span class="nav-number">4.1.3.</span> <span class="nav-text">流量模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-A-B测试"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 A/B测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实践要点-5"><span class="nav-number">4.2.1.</span> <span class="nav-text">实践要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-6"><span class="nav-number">4.2.2.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-6"><span class="nav-number">4.2.3.</span> <span class="nav-text">流量模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-影子测试"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 影子测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实践要点-6"><span class="nav-number">4.3.1.</span> <span class="nav-text">实践要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优势和适用场合-7"><span class="nav-number">4.3.2.</span> <span class="nav-text">优势和适用场合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量模式-7"><span class="nav-number">4.3.3.</span> <span class="nav-text">流量模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、比较"><span class="nav-number">5.</span> <span class="nav-text">五、比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、结论和建议"><span class="nav-number">6.</span> <span class="nav-text">六、结论和建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、附录"><span class="nav-number">7.</span> <span class="nav-text">七、附录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">基础框架</span>
+
+  
+
+  
+</div>
+<!--
+  <div class="powered-by">
+    革故鼎新
+  </div>
+
+  <span class="post-meta-divider">|</span>
+  
+  <div class="powered-by">
+    追求卓越
+  </div>
+  
+  <span class="post-meta-divider">|</span>
+  
+  <div class="powered-by">
+    简单靠谱
+  </div>
+  
+  <span class="post-meta-divider">|</span>
+  
+  <div class="powered-by">
+    彼此成就
+  </div>
+-->  
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.1"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

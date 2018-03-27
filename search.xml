@@ -3,6 +3,529 @@
   
     
     <entry>
+      <title><![CDATA[老司机的技术选型哲学]]></title>
+      <url>/2018/03/26/20180326/</url>
+      <content type="html"><![CDATA[<h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>技术选型是一个很热门的话题，最近我看到自己的微信朋友圈有好几篇关于技术选型的文章，读者对这类主题的热情很高。在技术组织内部，技术人员经常会面临技术选型问题，有时候，技术选型还常常牵扯好几波干系人，相互之间还会产生争议，有的甚至还可能发展到派系斗争的地步。即便像我自己，已经有十几年研发和架构经验的老司机，不管是工作还是业余，有很大部分时间的思考都是深陷在A技术和B技术的利弊权衡之中，不能自拔。无论如何，技术选型说小了关乎项目和团队成败，说大了关乎企业业务的发展，不可小觑。</p>
+<p>本文所表达的技术选型理念应该是具体技术无关的，但是由于我个人的背景更偏向互联网后端的研发和架构，所以本文的视角更偏向后端技术的选型。</p>
+<a id="more"></a>
+<h2 id="二、软件的本质复杂性"><a href="#二、软件的本质复杂性" class="headerlink" title="二、软件的本质复杂性"></a>二、软件的本质复杂性</h2><p>近年，云计算、微服务、容器和DevOps等新技术和理念层出不穷，技术人员对各种新技术的追捧热情也空前高涨，各种新技术微信讨论群也如雨后春笋般冒了出来。这是一个好现象，说明我们的开发人员多了，技术环境也日趋成熟，有点百花齐放的感觉。同时也让我有一点担忧，我担忧的是纯技术和工具论的抬头，也就是太过专注技术，认为技术可以搞定一切，反而忽略了软件研发的本质复杂性。回想当年，自己也曾是这样的技术狂热分子，EJB刚出来的时候，我为EJB摇旗呐喊，Spring出来的时候，我也曾一度是该技术的死忠，简单认为这些技术是银弹可以帮助解决所有的复杂性问题。</p>
+<p>1986年，人月神话的作者Brooks就提出，软件的本质复杂性（Essential Complexity）存在于复杂的业务领域中（用技术的话讲是业务领域建模复杂性），技术仅是辅助工具，它解决的问题是帮助将业务领域问题映射转换成软件实现，只解决次要复杂性（Accidental Complexity）。作者同时指出，由于软件本质的复杂性，真正的银弹并不存在；也断言在十年内，没有任何一项技术或者方法可使软件工程的生产力提高一个数量级。30年前作者提出的论断，今天依然闪烁智慧的光芒。人月神话已经出了40周年纪念版了，堪称软件工程的圣经，建议所有从事软工行业的朋友学习。除了业务和技术，我还想强调软件的本质复杂性同时隐含在企业的人、组织、流程和管理中，不容忽视。</p>
+<p>架构师只有深刻理解软件的本质复杂性，才能站在解决实际业务问题的角度，更好的做出技术选型，否则易陷入唯技术工具论的陷阱。</p>
+<p><img src="/2018/03/26/20180326/mythical_man_month.jpg" alt="mythical man month"></p>
+<h2 id="三、使用成熟的技术"><a href="#三、使用成熟的技术" class="headerlink" title="三、使用成熟的技术"></a>三、使用成熟的技术</h2><p>大部分公司都是商业组织，不是科研机构或者纯软件研发机构。商业组织使用技术是为了解决当下的业务问题，他们更应该使用成熟稳定的技术。</p>
+<p>如下图，技术的使用有明显的生命周期，早期有创新者和早期使用者采用，我把这个阶段称为试水趟坑期，也就是说这个阶段技术不是很成熟稳定的，虽然尝新者可能占据一定的技术领先优势，但是他们常常需要以踩坑填坑作为代价；如果这项技术经过早期验证则会跨越鸿沟进入早期大众阶段，这个阶段技术会逐渐走向成熟，处于上升期，坑逐渐被填平，技术被大众所采纳；之后技术缓慢经过末期大众阶段，最终走向滞后期，一直到生命周期的结束退出历史舞台。</p>
+<p><img src="/2018/03/26/20180326/tech_adoption.jpg" alt="technology adoption life cycle"></p>
+<p>技术选型的一大智慧是不要盲目追求新技术，老老实实采用成熟稳定的技术，让那些喜欢追新的人去踩坑😊，等这项技术跨越鸿沟，进入早期大众阶段，你再择机投入，这样最保险和高效。当然作为技术人员，对新技术保持敏锐，提前预研是完全OK的，但是投入生产的话还是成熟稳定第一。</p>
+<h2 id="四、少即是多"><a href="#四、少即是多" class="headerlink" title="四、少即是多"></a>四、少即是多</h2><p>一项新技术既有学习成本，又有维护（定制、监控、管理和运维）成本，新技术引入很容易，学好用好运维好却很难。一个不严格把控技术栈数量的公司，开发人员常常会各自为政，随意引入新技术，造成技术栈散乱，学习和维护成本高，技术栈知识无法共享，技术体系无法建立等问题，严重的会极大影响研发效率和业务规模化能力。</p>
+<p>以我本人专注的后端基础框架领域为例，技术栈散乱还会直接影响系统稳定性，因为技术组件和工具太多，无法统一埋点和建立完善的监控体系。当业务量发展到一定规模，技术栈散乱还会给系统扩容跨机房迁移等带来巨大障碍。</p>
+<p>在一些成熟的互联网公司，比如国内的阿里，国外的Netflix和eBay等公司，这些公司虽然财力和资源丰富，但是他们的核心技术栈（比如主流开发语言，框架和数据存储等）的数量同样是受到严格把控的。</p>
+<p>新技术引入的基本原则就是少即是多，能不引入新技术尽量不要引入新技术，确实需要引入的话，也要有相应的新技术引入管理流程（一般由公司的技术或者架构委员会制定和把控）。</p>
+<h2 id="五、技术的先决条件"><a href="#五、技术的先决条件" class="headerlink" title="五、技术的先决条件"></a>五、技术的先决条件</h2><p>技术引入常常是有一些先决条件的，比方说最近比较热的微服务架构，按照马丁福勒的说法，微服务有如下先决条件：</p>
+<ul>
+<li>快速的环境提供能力（Provisioning）能力（通常指IAAS层能力），</li>
+<li>基本的监控能力</li>
+<li>快速的发布能力</li>
+<li>初步的DevOps文化</li>
+</ul>
+<p>马丁特别指出“你必须长足够高才能考虑微服务”，在这些先决条件没有满足之前，直接推行微服务会面临巨大落地挑战。</p>
+<p><img src="/2018/03/26/20180326/tech_prerequisite.jpg" alt="tech prerequisite"></p>
+<p>同样，容器技术的引入对应用也是有要求的（参考[<a href="#appendix">附录18.1</a>] ~ 12 Factor App），而DevOps研发模式的引入不仅对基础技术和架构，研发人员技能，甚至组织架构和企业文化都是有很高要求的，在没有满足先决条件前，这些新技术或研发模式都会面临巨大的落地挑战。</p>
+<p>作为管理者或者架构师，在引入一项新技术之前，要充分调研了解新技术的先决条件，不能盲目引入。对于确实需要引入但是目前还不满足先决条件的，需要做好阶段性规划，先打好基础，再适时引入新技术。</p>
+<h2 id="六、来自大公司的技术"><a href="#六、来自大公司的技术" class="headerlink" title="六、来自大公司的技术"></a>六、来自大公司的技术</h2><p>大公司采用的技术，未必适合中小公司。大公司有足够的资源、人力和时间，可以投入一些前沿和重量级的技术（在BAT级别公司，为重量级技术投入几十甚至百人以上的研发团队是很正常的事），但是中小公司资源有限，不能盲目跟风，应该选择和自己发展阶段相适应的技术，否则不仅不能帮助业务发展，反而会给业务发展带来阻碍。</p>
+<h2 id="七、技术的文化特性"><a href="#七、技术的文化特性" class="headerlink" title="七、技术的文化特性"></a>七、技术的文化特性</h2><p>技术常常带有文化特性的，在国外流行的技术，在国内未必流行。一个例子是如Scala这样的函数式语言，Scala在国外互联网公司是有一定流行度的（Twitter、Linkedin等），国内虽然有不少簇拥者，但是始终只是小众，无法流行，究其原因，国外很多大学教授的第一门编程语言是采用函数式语言的（例如美国Berkeley大学的CS61A是基于Scheme函数式语言），国内大学几乎清一色采用C/C++/Java等命令式语言作为第一门编程语言。也就是说函数式语言在国外是有文化基础的，所以容易流行，国内没有这样的文化基础，所以难以流行。</p>
+<p>我们在选型的时候，尽量采用在国内有文化基础，已经落地开花的技术，盲目追求国外新技术有可能文化不适应反而难于落地。</p>
+<p>同样的，在A公司流行的技术，在B公司也未必流行。比方说BAT三家公司所采用和后面演化出来的技术栈就明显不同，这同样和三家公司不同的业务领域和文化基因有关系。我们在做技术选型的时候，也要考虑公司的文化特性，如业务模式、已有技术生态和开发人员技能等现实情况。</p>
+<h2 id="八、开源还是第三方软件提供商的技术"><a href="#八、开源还是第三方软件提供商的技术" class="headerlink" title="八、开源还是第三方软件提供商的技术"></a>八、开源还是第三方软件提供商的技术</h2><p>互联网时代，传统的企业软件供应商开始明显地走下坡路，企业越来越多的采用开源技术来开发他们的业务系统，开源软件具有如下优势：</p>
+<ol>
+<li>成本，商业软件一般有昂贵的license费用；</li>
+<li>避免供应商绑定(vendor lockin)；</li>
+<li>灵活的定制能力，现代企业需要灵活的软件定制能力以应对快速变化的用户需求，商业闭源软件常常缺乏这种能力；</li>
+<li>社区和生态，投资具有良好社区和生态的开源技术是企业技术选型的最佳实践。</li>
+</ol>
+<p>即使是开源软件，这里面有一个很重要的闭环问题。有些开源软件是一线互联网公司成功落地后再开源出来的，比如阿里的dubbo，点评的CAT，这些公司本身有场景，内部大量使用，也就是说内部已经形成反馈闭环，开源出来和社区又形成了一个更大的反馈闭环。有一些第三方软件供应商提供的开源软件，其实他们本身是没有业务场景的（或者场景非常有限），主要靠社区使用后才能形成反馈闭环，对于这类开源软件的使用需要谨慎，如果选择的话，可能需要一起帮忙踩坑形成社区反馈闭环。</p>
+<h2 id="九、使用能掌控的技术"><a href="#九、使用能掌控的技术" class="headerlink" title="九、使用能掌控的技术"></a>九、使用能掌控的技术</h2><p>技术和武器一样，并不是说越先进越好。就像航空母舰和F117这样的尖端武器，确实非常厉害，但是掌握和部署运维这些武器的成本非常之高，如果你的团队没有足够的能力运维和掌控这样的武器，那么这些武器摆在家里充其量只能是摆设，不能形成战斗力，有时甚至还会拖累业务。</p>
+<p>在大数据领域重量级武器尤其多（Hadoop, HBase, Spark, Storm…），很多产品既消耗机器资源，部署和运维也非常复杂，如果某种重量级武器被应用在关键业务上，一旦出问题，团队能不能hold住是要重点考虑的，否则可能会死得很难看。架构师需要根据业务阶段规模，团队规模和技能水平，综合评估后再考虑引入，如果团队能力还不足以掌控某种重量级技术，则可以先从轻量级技术开始。</p>
+<h2 id="十、剑要交给懂得挥舞它的人"><a href="#十、剑要交给懂得挥舞它的人" class="headerlink" title="十、剑要交给懂得挥舞它的人"></a>十、剑要交给懂得挥舞它的人</h2><p>同一种技术，不同的人使用，可能会得出完全相反的结论。比如Cassandra这种NoSql分布式数据库，在Netflix有比较成功的应用，Netflix从2010开始将系统迁移到AWS云中，并开始将大部分业务数据从传统Oracle数据库迁移到Cassandra上，Netflix的前架构总监Adrian Cockcroft把他们技术升级的一大成功功劳归结为采用了Cassandra这种天然支持跨数据中心的分布式数据库。但是，在2012年时候，Digg在网站改版升级过程中也试图将传统Mysql数据库迁移到Cassandra Nosql数据库，结果导致Digg网站问题频发，最后技术副总裁John Quinn主动卷铺盖走人。事后，有人将问题归结为Cassandra，这就是著名的Digg使用Cassandra遭遇滑铁卢事件。有人在Quora上发帖提问“Is Cassandra to blame for Digg v4’s technical failures？”[<a href="#appendix">附录18.2</a>]，回帖中有知情人士出来澄清：把Digg网站升级失败归结为Cassandra完全是转移注意力（red herring），背后的真正原因是工程管理和架构的问题（poor engineering management and architecture），简单讲就是人的问题。</p>
+<p>我曾经在2013年左右在携程框架部工作，当时有一个很重要的框架产品叫分布式数据访问层DAL，很多团队都跃跃欲试要做，但是当时的CTO一直没有正式启动这个项目，理由是没有合适的人。这个事情拖了有一年之久才找到合适的人，这个项目才启动并逐步落地，现在已经是携程框架的关键基础设施，承载携程大部分数据库访问流量。</p>
+<p>对于一些重量级的，处于业务关键链路上的产品，如果它重要但不紧急的话，一定要找到并交给能搞定它的人。把一个重要产品交给一个不合适的人，不仅不能解决问题，后续还常常会制造问题。设想一下业务的关键链路上的某个关键产品质量不过关，问题频发，但是业务已经跑在上面无法简单替换，这是让人很无奈的事情，很多架构老司机对此场景应该深有体会吧。</p>
+<h2 id="十一、浪费是创新的副产品"><a href="#十一、浪费是创新的副产品" class="headerlink" title="十一、浪费是创新的副产品"></a>十一、浪费是创新的副产品</h2><p>即使在同一个公司中，在主流技术栈的基础上，不同团队适当引入一些不同的技术栈，比如一个公司主流的技术栈是Java，有些前端团队会尝试用Nodejs开发应用，有些大数据团队会采用Python开发应用（Python里头有很多数据分析库）。这些做法和第二点提出的少即是多并不矛盾，根据业务场景的需要，适当引入一些互补的技术栈，适度冗余可以促进团队创新。</p>
+<p>再举个例子，阿里在发展的过程中，曾经发展出两套技术体系，一套是淘宝体系，一套是B2B体系。有一段时间内，两套体系并行发展，团队之间既竞争也相互借鉴，形成一个良性竞争的技术生态。据说Dubbo最早就是B2B搞出来的，淘宝后面又搞了一套HSF（未开源），Dubbo和HSF之间相互借鉴所以功能比较类似，阿里在2014年上市前对技术栈进行了整合，集团统一使用HSF，Dubbo则继续活跃在开源社区，成为中国开源软件的一个传奇，它的成功一方面源自阿里技术的沉淀，另一方面也是B2B和淘宝相关团队思路碰撞融合的结果。</p>
+<h2 id="十二、技术的宗教信仰"><a href="#十二、技术的宗教信仰" class="headerlink" title="十二、技术的宗教信仰"></a>十二、技术的宗教信仰</h2><p>很多技术人员对他们投入时间最多最熟悉的技术栈比较热衷，有些甚至能上升到宗教信仰的程度，不同派系还会有相互鄙视的情况出现（据说PHP是最被鄙视的语言），有的还会发展到派系争斗的地步。之前我在一家互联网公司，在容器PaaS平台选型上出现了两个派系，分别被戏称为K党和M党，K党主张引入谷歌推的Kubernetes，M党主张基于Mesos做定制，两拨人都非常坚持互不相让，争得不可开交。</p>
+<p>其实我个人对技术的宗教信仰是非常排斥的，它是一种技术视野狭隘的表现，技术本身没有绝对的好坏之分，只有适用场景和利弊之分。但是，技术的宗教信仰是一种客观存在，有经验的架构师在做技术选型时需要考虑这一层面的因素。</p>
+<h2 id="十三、通过背书做技术选型"><a href="#十三、通过背书做技术选型" class="headerlink" title="十三、通过背书做技术选型"></a>十三、通过背书做技术选型</h2><p>和一线资深的架构师或者技术专家交流，获取技术选型的专家建议，是一种比较靠谱的技术选型策略。专家是一种背书，他们踩坑无数才成为专家，对很多技术有一手的实战经验，是真正know how的人，所以他们给出的建议一般都比较接地气。</p>
+<p>大公司是一个很好的背书，比方说Google，当初它推出Kubernetes的时候，其实我一开始看过架构设计之后是对这个产品嗤之以鼻的。但是Google的强大背书和号召力摆在那里，用户深信Google用脚投票，一开始架构设计不好不是根本性问题，只要有足够的用户形成社区闭环，这个产品就会不断长好长大。目前K8S已经基本垄断了容器PaaS平台市场，它的成功很大程度归结为Google公司的背书影响力。所以，绑着技术型大公司这个背书做技术选型，大概率不至于大错（当然不是绝对）。</p>
+<p>Github上的星的数量也是一个重要的技术选型参考，同时还有项目代码和文档更新频度（尤其是近期），这些指标直接反应开源项目的社区活跃度和生命力。</p>
+<h2 id="十四、实践出真知"><a href="#十四、实践出真知" class="headerlink" title="十四、实践出真知"></a>十四、实践出真知</h2><p>实际评估一项技术时，最靠谱的做法还是详细研究其文档，做一些样例和测试，对性能有要求的则必须实际做充分压力测试获得真实性能数据。对于开源的产品，如果处在业务的关键链路上，则建议把代码拉下来通读梳理一把，深入理解其内部设计和架构，有的还需要根据企业业务场景适当做一些定制。</p>
+<p>通过初步评估，仍需要寻找一定数量非关键试点项目（pilot project）做试水躺坑，经过初步生产验证，才可以考虑逐步扩大生产普及的规模。</p>
+<p>实践出真知，对于那些长期在一线实战和积累的架构师，他们最终将获得良好的技术选型的sense和对新技术的敏锐性。</p>
+<h2 id="十五、技术的落地"><a href="#十五、技术的落地" class="headerlink" title="十五、技术的落地"></a>十五、技术的落地</h2><p>简单回顾下我国辽宁号航母的历史：1999年中国购买了瓦良格号，于2002年3月拖回大连港，2005年4月开始由中国海军继续建造改进，2012年9月正式更名辽宁号，交付中国人民解放军海军，2013年11月，辽宁舰从青岛远赴中国南海展开为期47天的海上综合演练，标志着辽宁号航母开始具备海上编队战斗群能力。我国前前后后花费超过10年才让辽宁号航母初步形成战力能力。</p>
+<p>技术和武器一样，你引入一个技术是一码事，真正落地形成战斗力或者说产生业务价值完全是另外一码事。技术一般有落地周期：引入，定制改造，小规模试点，再到逐步扩大生产规模，这个周期可长可短，对于一些基础性和重量级的技术，或者涉及大规模遗留系统升级改造的技术，一般周期比较漫长（可能时间跨度长达1年甚至几年），对于这类技术的引入和落地，架构师需要高屋建瓴，通盘考虑，制定落地计划，分阶段推进技术的落地。</p>
+<h2 id="十六、定制、自研还是购买"><a href="#十六、定制、自研还是购买" class="headerlink" title="十六、定制、自研还是购买"></a>十六、定制、自研还是购买</h2><p>这个问题比较复杂，很难一概而论，和企业的业务和团队规模，架构甚至文化等诸多因素有关系。我个人遵循的两个简单原则分别是：</p>
+<ol>
+<li>如果不是你最擅长，也提供不了差异化的竞争优势的技术则直接用开源或者购买。小心Not Invented Here症状，避免重复造轮子，始终牢记达成业务目标才是重点。</li>
+<li>当企业的业务和团队规模达到一定阶段，对于处在业务关键链路上的核心技术，必须要有一定的定制甚至自研能力。创业公司尽量用开源或者购买云服务，验证业务模式是第一优先；当你的业务模式获得验证，业务和团队达到一定规模，则需逐步考虑对核心业务链路上的技术进行定制甚至自研，以获得更大的灵活性；如果你成长到接近BAT那个量级，那么大部分核心技术必然是定制甚至自研的，否则无法支撑那个规模。</li>
+</ol>
+<h2 id="十七、写在最后"><a href="#十七、写在最后" class="headerlink" title="十七、写在最后"></a>十七、写在最后</h2><p>本文仅限个人经验视角，技术选型理念仅供参考借鉴。每个企业的具体上下文（业务场景，团队组织，技术架构等）各不相同，每个架构师的背景经验也各不相同，大家要结合实际自己做出选型，没有最好的技术，只有相对较合适的技术。另外，好的技术选型是相互借鉴甚至PK出来的，欢迎大家讨论，给出自己的技术选型思考。</p>
+<h2 id="十八、附录"><a href="#十八、附录" class="headerlink" title="十八、附录"></a><a name="appendix">十八、附录</a></h2><ol>
+<li><a href="https://12factor.net/" target="_blank" rel="noopener">12 Factor App</a></li>
+<li><a href="https://www.quora.com/Is-Cassandra-to-blame-for-Digg-v4s-technical-failures" target="_blank" rel="noopener">2.    Is Cassandra to blame for Digg v4’s technical failures?</a></li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 技术管理 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务2.0技术栈选型手册]]></title>
+      <url>/2018/03/25/20180325/</url>
+      <content type="html"><![CDATA[<h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>2014年可以认为是微服务1.0的元年，当年有几个标志性事件，一是Martin Fowler在其博客上发表了“Microservices”一文，正式提出微服务架构风格；二是Netflix微服务架构经过多年大规模生产验证，最终抽象落地形成一整套开源的微服务基础组件，统称NetflixOSS，Netflix的成功经验开始被业界认可并推崇；三是Pivotal将NetflixOSS开源微服务组件集成到其Spring体系，推出Spring Cloud微服务开发技术栈。</p>
+<p>一晃三年过去，微服务技术生态又发生了巨大变化，容器，PaaS，Cloud Native，gRPC，ServiceMesh，Serverless等新技术新理念你方唱罢我登场，不知不觉我们又来到了微服务2.0时代。基于近年在微服务基础架构方面的实战经验和平时的学习积累，我想总结并提出一些构建微服务2.0技术栈的选型思路，供各位在一线实战的架构师、工程师参考借鉴。对于一些暂时还没有成熟开源产品的微服务支撑模块，我也会给出一些定制自研的设计思路。</p>
+<a id="more"></a>
+<h2 id="二、选型准侧"><a href="#二、选型准侧" class="headerlink" title="二、选型准侧"></a>二、选型准侧</h2><p>对于技术选型，我个人有很多标准，其中下面三项是最重要的:</p>
+<h3 id="1-生产级"><a href="#1-生产级" class="headerlink" title="1. 生产级"></a>1. 生产级</h3><p>我们选择的技术栈是要解决实际业务问题和上生产抗流量的（选择不慎可能造成生产级事故），而不是简单做个POC或者Demo展示，所以生产级（Production Ready），可运维（Ops Ready），可治理，成熟稳定的技术才是我们的首选；</p>
+<h3 id="2-一线互联网公司落地产品"><a href="#2-一线互联网公司落地产品" class="headerlink" title="2. 一线互联网公司落地产品"></a>2. 一线互联网公司落地产品</h3><p>我们会尽量采用在一线互联网公司落地并且开源的，且在社区内形成良好口碑的产品，它们已经在这些公司经过流量冲击，坑已经基本被填平，且被社区接受形成一个良好的社区生态（本文附录部分会给出所有推荐使用或参考的开源项目的github链接。）。</p>
+<h3 id="3-开源社区活跃度"><a href="#3-开源社区活跃度" class="headerlink" title="3. 开源社区活跃度"></a>3. 开源社区活跃度</h3><p>Github上的stars的数量是一个重要指标，同时会参考其代码和文档更新频率（尤其是近年），这些指标直接反应开源产品的社区活跃度或者说生命力。</p>
+<p>另外，对于不同业务体量和团队规模的公司，技术选型标准往往是不同的，创业公司的技术选型和BAT级别公司的技术选型标准可能完全不同。本文主要针对日流量千万以上，研发团队规模不少于50人的公司，如果小于这个规模我建议认真评估是否真的需要采用微服务架构。考虑到Java语言在国内的流行度和我个人的背景经验，本文主要针对采用Java技术栈的企业。本文也假定自建微服务基础架构，有些产品其实有对应的云服务可以直接使用，自建和采用云服务各有利弊，架构师需要根据场景上下文综合权衡。</p>
+<h2 id="三、微服务基础架构核心关心点"><a href="#三、微服务基础架构核心关心点" class="headerlink" title="三、微服务基础架构核心关心点"></a>三、微服务基础架构核心关心点</h2><p>下面脑图中芒果色标注的七个模块，我认为是构建微服务2.0技术栈的核心模块，本文后面的选型会分别基于这些模块展开。对于每个模块我也列出一些核心架构关注点，在选择具体产品时，需要尽可能覆盖到这些关注点。</p>
+<p><img src="/2018/03/25/20180325/msa_arch.png" alt="msa arch"></p>
+<p>下图是在参考过华为技术专家王磊的《微服务的设计与生态系统》<a href="#appendix">附录12.46</a>的基础上，结合作者自身的实践调整而来，我想同时分享给一线架构师或者工程师参考，其中粉红色标注的模块是和微服务关系最密切的模块，大家在做技术选型时，可以同时对照这个体系。</p>
+<p><img src="/2018/03/25/20180325/msa_system.png" alt="msa system"></p>
+<h2 id="四、服务框架选型"><a href="#四、服务框架选型" class="headerlink" title="四、服务框架选型"></a>四、服务框架选型</h2><p>服务框架是一个比较成熟的领域，有太多可选项。<strong>Spring Boot/Cloud</strong>[<a href="#appendix">附录12.1</a>]由于Spring社区的影响力和Netflix的背书，目前可以认为是构建Java微服务的一个社区标准，Spring Boot目前在github上有超过20k星。基于Spring的框架本质上可以认为是一种RESTful框架（不是RPC框架），序列化协议主要采用基于文本的JSON，通讯协议一般基于HTTP。RESTful框架天然支持跨语言，任何语言只要有HTTP客户端都可以接入调用，但是客户端一般需要自己解析payload。目前Spring框架也支持Swagger契约编程模型，能够基于契约生成各种语言的强类型客户端，极大方便不同语言栈的应用接入，但是因为RESTful框架和Swagger规范的弱契约特性，生成的各种语言客户端的互操作性还是有不少坑的。</p>
+<p><strong>Dubbo</strong>[<a href="#appendix">附录12.2</a>]是阿里多年构建生产级分布式微服务的技术结晶，服务治理能力非常丰富，在国内技术社区具有很大影响力，目前github上有超过16k星。Dubbo本质上是一套基于Java的RPC框架，当当Dubbox扩展了Dubbo支持RESTful接口暴露能力。Dubbo主要面向Java 技术栈，跨语言支持不足是它的一个弱项，另外因为治理能力太丰富，以至于这个框架比较重，完全用好这个框架的门槛比较高，但是如果你的企业基本上投资在Java技术栈上，选Dubbo可以让你在服务框架一块站在较高的起点上，不管是性能还是企业级的服务治理能力，Dubbo都做的很出色。新浪微博开源的Motan（github 4k stars）也不错，功能和Dubbo类似，可以认为是一个轻量裁剪版的Dubbo。</p>
+<p><strong>gRPC</strong>[<a href="#appendix">附录12.3</a>]是谷歌近年新推的一套RPC框架，基于protobuf的强契约编程模型，能自动生成各种语言客户端，且保证互操作。支持HTTP2是gRPC的一大亮点，通讯层性能比HTTP有很大改进。Protobuf是在社区具有悠久历史和良好口碑的高性能序列化协议，加上Google公司的背书和社区影响力，目前gRPC也比较火，github上有超过13.4k星。目前看gRPC更适合内部服务相互调用场景，对外暴露HTTP RESTful接口可以实现，但是比较麻烦（需要gRPC Gateway配合），所以对于对外暴露API场景可能还需要引入第二套HTTP RESTful框架作为补充。总体上gRPC这个东西还比较新，社区对于HTTP2带来的好处还未形成一致认同，建议谨慎投入，可以做一些试点。</p>
+<h2 id="五、运行时支撑服务选型"><a href="#五、运行时支撑服务选型" class="headerlink" title="五、运行时支撑服务选型"></a>五、运行时支撑服务选型</h2><p>运行时支撑服务主要包括服务注册中心，服务路由网关和集中式配置中心三个产品。</p>
+<p><strong>服务注册中心</strong>，如果采用Spring Cloud体系，则选择<strong>Eureka</strong>[<a href="#appendix">附录12.4</a>]是最佳搭配，Eureka在Netflix经过大规模生产验证，支持跨数据中心，客户端配合Ribbon可以实现灵活的客户端软负载，Eureka目前在github上有超过4.7k星；<strong>Consul</strong>[<a href="#appendix">附录12.5</a>]也是不错选择，天然支持跨数据中心，还支持KV模型存储和灵活健康检查能力，目前在github上有超过11k星。</p>
+<p><strong>服务网关</strong>也是一个比较成熟的领域，有很多可选项。如果采用Spring Cloud体系，则选择<strong>Zuul</strong>[<a href="#appendix">附录12.6</a>]是最佳搭配，Zuul在Netflix经过大规模生产验证，支持灵活的动态过滤器脚本机制，异步性能不足（基于Netty的异步Zuul迟迟未能推出正式版）。Zuul网关目前在github上有超过3.7k星。基于Nginx/OpenResty的API网关<strong>Kong</strong>[<a href="#appendix">附录12.7]</a>目前在github上比较火，有超过14.1k星。因为采用Nginx内核，Kong的异步性能较强，另外基于lua的插件机制比较灵活，社区插件也比较丰富，从安全到限流熔断都有，还有不少开源的管理界面，能够集中管理Kong集群。</p>
+<p><strong>配置中心</strong>，Spring Cloud自带<strong>Spring Cloud Config</strong>[<a href="#appendix">附录12.8</a>]（github 0.75k stars），个人认为算不上生产级，很多治理能力缺失，小规模场景可以试用。个人比较推荐携程的<strong>Apollo</strong>[<a href="#appendix">附录12.9</a>]配置中心，在携程经过生产级验证，具备高可用，配置实时生效（推拉结合），配置审计和版本化，多环境多集群支持等生产级特性，建议中大规模需要对配置集中进行治理的企业采用。Apollo目前在github上有超过3.4k星。</p>
+<h2 id="六、服务监控选型"><a href="#六、服务监控选型" class="headerlink" title="六、服务监控选型"></a>六、服务监控选型</h2><p>主要包括日志监控，调用链监控，Metrics监控，健康检查和告警通知等产品。</p>
+<p><strong>ELK</strong>目前可以认为是日志监控的标配，功能完善开箱即用，<strong>Elasticsearch</strong>[<a href="#appendix">附录12.10</a>]目前在github上有超过28.4k星。<strong>Elastalert</strong>[<a href="#appendix">附录12.11</a>] (github 4k stars)是Yelp开源的针对ELK的告警通知模块。</p>
+<p>调用链监控目前社区主流是点评<strong>CAT</strong>[<a href="#appendix">附录12.12</a>]（github 4.3k stars），Twitter之前开源现在由OpenZipkin社区维护的<strong>Zipkin</strong>[<a href="#appendix">附录12.13</a>]（github 7.5k stars）和Naver开源的<strong>Pinpoint</strong>[<a href="#appendix">附录12.14</a>]（github 5.3k stars）。个人比较推荐点评开源的CAT，在点评和国内多家互联网公司有落地案例，生产级特性和治理能力较完善，另外CAT自带告警模块。下面是我之前对三款产品的评估表，供参考。</p>
+<p><img src="/2018/03/25/20180325/monitoring_evaluation.png" alt="monitoring evaluation"></p>
+<p>Metrics监控主要依赖于时间序列数据库(TSDB)，目前较成熟的产品是StumbleUpon公司开源的基于HBase的<strong>OpenTSDB</strong>[<a href="#appendix">附录12.15</a>]（基于Cassandra的<strong>KariosDB</strong>[<a href="#appendix">附录12.16</a>]也是一个选择，github 1.1k stars，它基本上是OpenTSDB针对Cassandra的一个改造版），OpenTSDB具有分布式能力可以横向扩展，但是相对较重，适用于中大规模企业，OpenTSDB目前在github上有近2.9k星。OpenTSDB 本身不提供告警模块，<strong>Argus</strong>[<a href="#appendix">附录12.17</a>]（github 0.29k星）是Salesforce开源的基于OpenTSDB的统一监控告警平台，支持丰富的告警函数和灵活的告警配置，可以作为OpenTSDB的告警补充。近年也出现一些轻量级的TSDB，如<strong>InfluxDB</strong>[<a href="#appendix">附录12.18</a>]（github 12.4k stars）和<strong>Prometheus</strong>[<a href="#appendix">附录12.19</a>]（github 14.3k stars），这些产品函数报表能力丰富，自带告警模块，但是分布式能力不足，适用于中小规模企业。<strong>Grafana</strong>[<a href="#appendix">附录12.20</a>]（github 19.9k stars）是Metrics报表展示的社区标配。</p>
+<p>社区还有一些通用的健康检查和告警产品，例如<strong>Sensu</strong>[<a href="#appendix">附录12.21</a>]（github 2.7k stars），能够对各种服务（例如spring boot暴露的健康检查端点，时间序列数据库中的metrics，ELK中的错误日志等）定制灵活的健康检查(check)，然后用户可以针对check结果设置灵活的告警通知策略。Sensu在Yelp等公司有落地案例。其它类似产品还有Esty开源的<strong>411</strong>[<a href="#appendix">附录12.22</a>]（github 0.74k星）和Zalando的<strong>ZMon</strong>[<a href="#appendix">附录12.23</a>] (github 0.15k星)，它们是分别在Esty和Zalando落地的产品，但是定制check和告警配置的使用门槛比较高，社区不热，建议有定制自研能力的团队试用。ZMon后台采用KairosDB存储，如果企业已经采用KariosDB作为时间序列数据库，则可以考虑ZMon作为告警通知模块。</p>
+<h2 id="七、服务容错选型"><a href="#七、服务容错选型" class="headerlink" title="七、服务容错选型"></a>七、服务容错选型</h2><p>针对Java技术栈，Netflix的<strong>Hystrix</strong>[<a href="#appendix">附录12.24</a>]（github 12.4k stars）把熔断、隔离、限流和降级等能力封装成组件，任何依赖调用（数据库，服务，缓存）都可以封装在Hystrix Command之内，封装后自动具备容错能力。Hystrix起源于Netflix的弹性工程项目，经过Netflix大规模生产验证，目前是容错组件的社区标准，github上有超12k星。其它语言栈也有类似Hystrix的简化版本组件。</p>
+<p>Hystrix一般需要在应用端或者框架内埋点，有一定的使用门槛。对于采用集中式反向代理（边界和内部）做服务路由的公司，则可以集中在反向代理上做熔断限流，例如采用<strong>nginx</strong>[<a href="#appendix">附录12.25</a>]（github 5.1k stars）或者<strong>Kong</strong>[<a href="#appendix">附录12.7</a>]（github 11.4k stars）这类反向代理，它们都有插件支持灵活的限流容错配置。Zuul网关也可以集成Hystrix实现网关层集中式限流容错。集中式反向代理需要有一定的研发和运维能力，但是可以对限流容错进行集中治理，可以简化客户端。</p>
+<h2 id="八、后台服务选型"><a href="#八、后台服务选型" class="headerlink" title="八、后台服务选型"></a>八、后台服务选型</h2><p>后台服务主要包括消息系统，分布式缓存，分布式数据访问层和任务调度系统。后台服务是一个相对比较成熟的领域，很多开源产品基本可以开箱即用。</p>
+<p><strong>消息系统</strong>，对于日志等可靠性要求不高的场景，则Apache顶级项目<strong>Kafka</strong>[<a href="#appendix">附录12.26</a>]（github 7.2k stars）是社区标配。对于可靠性要求较高的业务场景，kafka其实也是可以胜任，但企业需要根据具体场景，对 Kafka的监控和治理能力进行适当定制完善，Allegro公司开源的<strong>hermes</strong>[<a href="#appendix">附录12.27</a>]（github 0.3k stars）是一个可参考项目，它在Kafka基础上封装了适合业务场景的企业级治理能力。阿里开源的<strong>RocketMQ</strong>[<a href="#appendix">附录12.28</a>]（github 3.5k星）也是一个不错选择，具备更多适用于业务场景的特性，目前也是Apache顶级项目。<strong>RabbitMQ</strong>[<a href="#appendix">附录12.29</a>]（github 3.6k星）是老牌经典的MQ，队列特性和文档都很丰富，性能和分布式能力稍弱，中小规模场景可选。</p>
+<p>对于<strong>缓存治理</strong>，如果倾向于采用客户端直连模式（个人认为缓存直连更简单轻量），则SohuTv开源的<strong>cachecloud</strong>[<a href="#appendix">附录12.30</a>]（github 2.5k stars）是一款不错的Redis缓存治理平台，提供诸如监控统计，一键开启，自动故障转移，在线伸缩，自动化运维等生产级治理能力，另外其文档也比较丰富。如果倾向采用中间层Proxy模式，则Twitter开源的<strong>twemproxy</strong>[<a href="#appendix">附录12.31</a>]（github 7.5k stars）和CodisLab开源的<strong>codis</strong>[<a href="#appendix">附录12.32</a>]（github 6.9k stars）是社区比较热的选项。</p>
+<p>对于<strong>分布式数据访问层</strong>，如果采用Java技术栈，则当当开源的<strong>shardingjdbc</strong>[<a href="#appendix">附录12.33</a>]（github 3.5k stars）是一个不错的选项，分库分表逻辑做在客户端jdbc driver中，客户端直连数据库比较简单轻量，建议中小规模场景采用。如果倾向采用数据库访问中间层proxy模式，则从阿里Cobar演化出来的社区开源分库分表中间件<strong>MyCAT</strong>[<a href="#appendix">附录12.34</a>]（github 3.6k stars）是一个不错选择 。proxy模式运维成本较高，建议中大规模场景，有一定框架自研和运维能力的团队采用。</p>
+<p><strong>任务调度系统</strong>，个人推荐徐雪里开源的<strong>xxl-job</strong>[<a href="#appendix">附录12.35</a>]（github 3.4k stars），部署简单轻量，大部分场景够用。当当开源的<strong>elastic-job</strong>[<a href="#appendix">附录12.36</a>]（github 3.2k stars）也是一个不错选择，相比xxl-job功能更强一些也更复杂。</p>
+<h2 id="九、服务安全选型"><a href="#九、服务安全选型" class="headerlink" title="九、服务安全选型"></a>九、服务安全选型</h2><p>对于微服务安全认证授权机制一块，目前业界虽然有OAuth和OpenID connect等标准协议，但是各家具体实现的做法都不太一样，企业一般有很多特殊的定制需求，整个社区还没有形成通用生产级开箱即用的产品。有一些开源授权服务器产品，比较知名的如<strong>Apereo CAS</strong>[<a href="#appendix">附录12.37</a>]（github 3.6k stars），JBoss开源的<strong>keycloak</strong>[<a href="#appendix">附录12.38</a>]（github 1.9 stars），<strong>spring cloud security</strong>[<a href="#appendix">附录12.39</a>]等，大都是opinionated（一家观点和做法）的产品，同时因支持太多协议造成产品复杂，也缺乏足够灵活性。个人建议基于OAuth和OpenID connect标准，在参考一些开源产品的基础上（例如Mitre开源的<strong>OpenID-Connect-Java-Spring-Server</strong>[<a href="#appendix">附录12.40</a>]，github 0.62k stars），定制自研轻量级授权服务器。Wso2提出了一种微服务安全的参考方案[<a href="#appendix">附录12.45</a>]，建议参考，该方案的关键步骤如下：</p>
+<p><img src="/2018/03/25/20180325/msa_security.png" alt="msa security"></p>
+<ol>
+<li>使用支持OAuth 2.0和OpenID Connect标准协议的授权服务器（个人建议定制自研）；</li>
+<li>使用API网关作为单一访问入口，统一实现安全治理；</li>
+<li>客户在访问微服务之前，先通过授权服务器登录获取access token，然后将access token和请求一起发送到网关；</li>
+<li>网关获取access token，通过授权服务器校验token，同时做token转换获取JWT token。</li>
+<li>网关将JWT Token和请求一起转发到后台微服务；</li>
+<li>JWT中可以存储用户会话信息，该信息可以传递给后台的微服务，也可以在微服务之间传递，用作认证授权等用途；</li>
+<li>每个微服务包含JWT客户端，能够解密JWT并获取其中的用户会话信息。</li>
+<li>整个方案中，access token是一种by reference token，不包含用户信息可以直接暴露在公网上；JWT token是一种by value token，可以包含用户信息但不暴露在公网上。</li>
+</ol>
+<h2 id="十、服务部署平台选型"><a href="#十、服务部署平台选型" class="headerlink" title="十、服务部署平台选型"></a>十、服务部署平台选型</h2><p>容器已经被社区接受为交付微服务的一种理想手段，可以实现不可变（immutable）发布模式。一个轻量级的基于容器的服务部署平台主要包括容器资源调度，发布系统，镜像治理，资源治理和IAM等模块。</p>
+<p><strong>集群资源调度系统</strong>：屏蔽容器细节，将整个集群抽象成容器资源池，支持按需申请和释放容器资源，物理机发生故障时能够实现自动故障迁移(fail over)。目前Google开源的<strong>kubernetes</strong>[<a href="#appendix">附录12.41</a>]，在Google背书和社区的强力推动下，基本已经形成市场领导者地位，github上有31.8k星，社区的活跃度已经远远超过了<strong>mesos</strong>[<a href="#appendix">附录12.42</a>]（github 3.5k stars）和swarm等竞争产品，所以容器资源调度建议首选k8s。当然如果你的团队有足够定制自研能力，想深度把控底层调度算法，也可以基于mesos做定制自研。</p>
+<p><strong>镜像治理</strong>：基于docker registry，封装一些轻量级的治理功能。vmware开源的harbor[<a href="#appendix">附录12.43</a>] (github 3.5k stars)是目前社区比较成熟的企业级产品，在docker registry基础上扩展了权限控制，审计，镜像同步，管理界面等治理能力，可以考虑采用。</p>
+<p><strong>资源治理</strong>：类似于CMDB思路，在容器云环境中，企业仍然需要对应用app，组织org，容器配额和数量等相关信息进行轻量级的治理。目前这块还没有生产级的开源产品，一般企业需要根据自己的场景定制自研。</p>
+<p><strong>发布平台</strong>：面向用户的发布管理控制台，支持发布流程编排。它和其它子系统对接交互，实现基本的应用发布能力，也实现如蓝绿，金丝雀和灰度等高级发布机制。目前这块生产级的开源产品很少，Netflix开源的<strong>spinnaker</strong>[<a href="#appendix">附录12.44</a>]（github 4.2k stars）是一个，但是这个产品比较复杂重量（因为它既要支持适配对接各种CI系统，同时还要适配对接各种公有云和容器云，使得整个系统异常复杂），一般企业建议根据自己的场景定制自研轻量级的解决方案。</p>
+<p><strong>IAM</strong>：是identity &amp; access management的简称，对发布平台各个组件进行身份认证和安全访问控制。社区有不少开源的IAM产品，比较知名的有<strong>Apereo CAS</strong>（github 3.6k stars），JBoss开源的<strong>keycloak（github 1.9 stars）</strong>等。但是这些产品一般都比较复杂重量，很多企业考虑到内部各种系统灵活对接的需求，都会考虑定制自研轻量级的解决方案。</p>
+<p>考虑到服务部署平台目前还没有端到端生产级解决方案，企业一般需要定制集成，下面给出一个可以参考的具备轻量级治理能努力的发布体系：</p>
+<p><img src="/2018/03/25/20180325/deployment_system.png" alt="deployment system"></p>
+<p>简化发布流程如下：</p>
+<ol>
+<li>应用通过CI集成后生成镜像，用户将镜像推到镜像治理中心；</li>
+<li>用户在资产治理中心申请发布，填报应用，发布和配额相关信息，然后等待审批通过；</li>
+<li>发布审批通过，开发人员通过发布控制台发布应用；</li>
+<li>发布系统通过查询资产治理中心获取发布规格信息；</li>
+<li>发布系统向容器云发出启动容器实例指令；</li>
+<li>容器云从镜像治理中心拉取镜像并启动容器；</li>
+<li>容器内服务启动后自注册到服务注册中心，并保持定期心跳；</li>
+<li>用户通过发布系统调用服务注册中心调拨流量，实现蓝绿，金丝雀或灰度发布等机制；</li>
+<li>网关和内部微服务客户端定期同步服务注册中心上的服务路由表，将流量按负载均衡策略分发到新的服务实例上。</li>
+</ol>
+<p>另外，持续交付流水线（CD Pipeline）也是微服务发布重要环节，这块主要和研发流程相关，一般需要企业定制，下面是一个可供参考的流水线模型，在镜像治理中心上封装一些轻量级的治理流程，例如只有通过测试环境测试的镜像才能升级发布到UAT环境，只有通过UAT环境测试的镜像才能升级发布到生产环境，通过在流水线上设置一些质量门，保障应用高质量交付到生产。</p>
+<p><img src="/2018/03/25/20180325/cd.png" alt="cd pipeline"></p>
+<h2 id="十一、写在最后"><a href="#十一、写在最后" class="headerlink" title="十一、写在最后"></a>十一、写在最后</h2><p>注意，本文限于篇幅，对测试和CI等环节没有涉及，但它们同样是构建微服务架构的重要环节，也有众多成熟的开源成熟产品可选。</p>
+<p>技术选型虽然重要，但还只是微服务建设的一小部分工作，选型后的产品要在企业内部真正落地，形成完整的微服务技术栈体系，则后续还有大量集成、定制、治理、运维和推广等工作。</p>
+<p>本文仅限个人经验视角，选型思路仅供参考借鉴。每个企业的具体上下文（业务场景，团队组织，技术架构等）各不相同，每个架构师的背景经验也各不相同，大家要结合实际自己做出选型，没有最好的技术栈，只有相对较合适的技术栈。另外，好的技术选型是相互借鉴甚至PK出来的，欢迎大家讨论，给出自己的微服务2.0技术栈选型意见。</p>
+<h2 id="十二、附录"><a href="#十二、附录" class="headerlink" title="十二、附录"></a><a name="appendix">十二、附录</a></h2><ol>
+<li><a href="https://github.com/spring-projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a></li>
+<li><a href="https://github.com/alibaba/dubbo" target="_blank" rel="noopener">Alibaba Dubbo</a></li>
+<li><a href="https://github.com/grpc/grpc" target="_blank" rel="noopener">Google gRPC</a></li>
+<li><a href="https://github.com/Netflix/eureka" target="_blank" rel="noopener">NetflixOSS Eureka</a></li>
+<li><a href="https://github.com/hashicorp/consul" target="_blank" rel="noopener">Hashicorp Consul</a></li>
+<li><a href="https://github.com/Netflix/zuul" target="_blank" rel="noopener">NetflixOSS Zuul</a></li>
+<li><a href="https://github.com/Kong/kong" target="_blank" rel="noopener">Kong</a></li>
+<li><a href="https://github.com/spring-cloud/spring-cloud-config" target="_blank" rel="noopener">Spring Cloud Config</a></li>
+<li><a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener">CTrip Apollo</a></li>
+<li><a href="https://github.com/elastic/elasticsearch" target="_blank" rel="noopener">ElasticSearch</a></li>
+<li><a href="https://github.com/Yelp/elastalert" target="_blank" rel="noopener">Yelp Elastalert</a></li>
+<li><a href="https://github.com/dianping/cat" target="_blank" rel="noopener">Dianping CAT</a></li>
+<li><a href="https://github.com/openzipkin/zipkin" target="_blank" rel="noopener">Zipkin</a></li>
+<li><a href="https://github.com/naver/pinpoint" target="_blank" rel="noopener">Naver Pinpoint</a></li>
+<li><a href="https://github.com/OpenTSDB/opentsdb" target="_blank" rel="noopener">OpenTSDB</a></li>
+<li><a href="https://github.com/kairosdb/kairosdb" target="_blank" rel="noopener">KairosDB</a></li>
+<li><a href="https://github.com/salesforce/Argus" target="_blank" rel="noopener">Argus</a></li>
+<li><a href="https://github.com/influxdata/influxdb" target="_blank" rel="noopener">InfluxDB</a></li>
+<li><a href="https://github.com/prometheus/prometheus" target="_blank" rel="noopener">Prometheus</a></li>
+<li><a href="https://github.com/grafana/grafana" target="_blank" rel="noopener">Grafana</a></li>
+<li><a href="https://github.com/sensu/sensu" target="_blank" rel="noopener">Sensu</a></li>
+<li><a href="https://github.com/etsy/411" target="_blank" rel="noopener">Esty 411</a></li>
+<li><a href="https://github.com/zalando/zmon" target="_blank" rel="noopener">Zalando ZMon</a></li>
+<li><a href="https://github.com/Netflix/Hystrix" target="_blank" rel="noopener">NetflixOSS Hystrix</a></li>
+<li><a href="https://github.com/nginx/nginx" target="_blank" rel="noopener">Nginx</a></li>
+<li><a href="https://github.com/apache/kafka" target="_blank" rel="noopener">Apache Kafka</a></li>
+<li><a href="https://github.com/allegro/hermes" target="_blank" rel="noopener">Allegro Hermes</a></li>
+<li><a href="https://github.com/apache/rocketmq" target="_blank" rel="noopener">Apache Rocketmq</a></li>
+<li><a href="https://github.com/rabbitmq/rabbitmq-server" target="_blank" rel="noopener">Rabbitmq</a></li>
+<li><a href="https://github.com/sohutv/cachecloud" target="_blank" rel="noopener">Sohutv CacheCloud</a></li>
+<li><a href="https://github.com/twitter/twemproxy" target="_blank" rel="noopener">Twitter twemproxy</a></li>
+<li><a href="https://github.com/CodisLabs/codis" target="_blank" rel="noopener">CodisLab codis</a></li>
+<li><a href="https://github.com/shardingjdbc/sharding-jdbc" target="_blank" rel="noopener">Dangdang Sharding-jdbc</a></li>
+<li><a href="https://github.com/MyCATApache/Mycat-Server" target="_blank" rel="noopener">MyCAT</a></li>
+<li><a href="https://github.com/xuxueli/xxl-job" target="_blank" rel="noopener">Xxl-job</a></li>
+<li><a href="https://github.com/elasticjob/elastic-job-lite" target="_blank" rel="noopener">Dangdang elastic-job</a></li>
+<li><a href="https://github.com/apereo/cas" target="_blank" rel="noopener">Apereo CAS</a></li>
+<li><a href="https://github.com/keycloak/keycloak" target="_blank" rel="noopener">JBoss keycloak</a></li>
+<li><a href="https://github.com/spring-cloud/spring-cloud-security" target="_blank" rel="noopener">Spring cloud security</a></li>
+<li><a href="https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server" target="_blank" rel="noopener">OpenID-Connect-Java-Spring-Server</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">Google Kubernetes</a></li>
+<li><a href="https://github.com/apache/mesos" target="_blank" rel="noopener">Apache Mesos</a></li>
+<li><a href="https://github.com/vmware/harbor" target="_blank" rel="noopener">Vmware Harbor</a></li>
+<li><a href="https://github.com/spinnaker/spinnaker" target="_blank" rel="noopener">Netflix Spinnaker</a></li>
+<li><a href="https://wso2.com/whitepapers/microservices-in-practice-key-architectural-concepts-of-an-msa/" target="_blank" rel="noopener">Microservices in Practice – Key Architecture Concepts of an MSA</a></li>
+<li><a href="http://servicecomb.incubator.apache.org/assets/slides/20170619/MSAPrinciple&amp;EcoSystem.pdf" target="_blank" rel="noopener">微服务的设计与生态系统</a></li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 微服务 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[现代发布技术的原理和实践]]></title>
+      <url>/2018/03/24/20180324/</url>
+      <content type="html"><![CDATA[<h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>根据2017年的DevOps发展报告，高效能组织和低效能组织在软件交付的效率上有数量级上的差异。技术组织的软件交付能力是一种综合能力，涉及众多环节，其中发布是尤为重要的环节。</p>
+<p>作为技术人员，大家可能听说过“滚动发布”和“蓝绿发布”等术语，但是很多人并不清楚这些术语背后的原理。本文试图总结当前主流的发布策略，每个的优劣，适用性，让开发人员特别是架构师对现代发布技术有一个更为清晰全面的认识，让大家能够根据自己的企业上下文，对发布策略做出正确的选型和实践。</p>
+<a id="more"></a>
+<h2 id="二、单服务器组发布"><a href="#二、单服务器组发布" class="headerlink" title="二、单服务器组发布"></a>二、单服务器组发布</h2><p>先解释下单服务器组的概念，早先我们机器资源比较紧张，不像现在云计算和虚拟化（包括容器技术）这么发达，所以应用机器基本是预先静态分配好的（一般由运维负责分配），原来应用A住在这n台机器上，那么下次升级发布的应用A也住在这n台机器上，所以称为单服务器组发布方式。</p>
+<h3 id="2-1-蛮力发布"><a href="#2-1-蛮力发布" class="headerlink" title="2.1 蛮力发布"></a>2.1 蛮力发布</h3><p>如下图所示，这种发布方式比较简单粗暴，有点像我们传统的软件升级方式，主要靠手工完成，先将老版本V1全部下掉，再将新版本发到机器上去。这种方式会引入服务中断（停机），在开发测试环境是可行的，但对于生产环境发布，其会直接影响用户的使用体验，这种方式一般是不建议的。</p>
+<p><img src="/2018/03/24/20180324/reckless_1.png" alt="reckless before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/reckless_2.png" alt="reckless after"></p>
+<center style="margin: -20px 0 20px">发布后</center>
+
+<h4 id="优势和适用场合"><a href="#优势和适用场合" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>简单成本低</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>服务中断用户受影响，出了问题回退也慢</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>开发测试环境</li>
+<li>非关键应用（用户影响面小）</li>
+<li>初创公司什么都缺，找夜深人静用户访问量小的时间干</li>
+</ul>
+<h4 id="流量模式"><a href="#流量模式" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/reckless_traffic.png" alt="reckless traffic model"></p>
+<p>蛮力发布会引入服务中断时间，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="2-2-金丝雀发布（单服务器组）"><a href="#2-2-金丝雀发布（单服务器组）" class="headerlink" title="2.2 金丝雀发布（单服务器组）"></a>2.2 金丝雀发布（单服务器组）</h3><p>在蛮力发布基础上的一种简单改进发布方式，目前仍然是不少成长型技术组织的主流发布方式。单服务器组下的金丝雀发布的简化步骤如下图所示：</p>
+<p><img src="/2018/03/24/20180324/canary_1group_1.png" alt="canary one group before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/canary_1group_2.png" alt="canary one group first"></p>
+<center style="margin: -20px 0 20px">先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/canary_1group_3.png" alt="canary one group after"></p>
+<center style="margin: -20px 0 20px">全部发完</center>
+
+<h4 id="实践要点"><a href="#实践要点" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>金丝雀发布一般先发1台，或者一个小比例，例如2%的服务器，主要做流量验证用，也称为金丝雀(Canary)测试（国内常称灰度测试）。以前旷工开矿下矿洞前，先会放一只金丝雀进去探是否有有毒气体，看金丝雀能否活下来，金丝雀发布由此得名。简单的金丝雀测试一般通过手工测试验证，复杂的金丝雀测试需要比较完善的监控基础设施配合，通过监控指标反馈，观察金丝雀的健康状况，作为后续发布或回退的依据。</li>
+<li>如果金丝测试通过，则把剩余的V1版本全部升级为V2版本。如果金丝雀测试失败，则直接回退金丝雀，发布失败。</li>
+</ol>
+<p><img src="/2018/03/24/20180324/canary.png" alt="canary"></p>
+<h4 id="优势和适用场合-1"><a href="#优势和适用场合-1" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小，金丝雀发布过程出现问题只影响少量用户</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>发布自动化程度不够，发布期间可引发服务中断</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>对新版本功能或性能缺乏足够信心</li>
+<li>用户体验要求较高的网站业务场景</li>
+<li>缺乏足够的自动化发布工具研发能力</li>
+</ul>
+<h4 id="流量模式-1"><a href="#流量模式-1" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/canary_1group_traffic.png" alt="canary one group traffic"></p>
+<p>少量金丝雀先接受流量，再全量发布，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="2-3-滚动式发布（单服务器组）"><a href="#2-3-滚动式发布（单服务器组）" class="headerlink" title="2.3 滚动式发布（单服务器组）"></a>2.3 滚动式发布（单服务器组）</h3><p>在金丝雀发布基础上的进一步优化改进，是一种自动化程度较高的发布方式，用户体验比较平滑，是目前成熟型技术组织所采用的主流发布方式。单服务器组下的滚动发布的简化步骤如下图所示：</p>
+<p><img src="/2018/03/24/20180324/rolling_update_1group_1.png" alt="rolling update one group before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_1group_2.png" alt="rolling update one group first"></p>
+<center style="margin: -20px 0 20px">发布中，先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_1group_3.png" alt="rolling update one group middle"></p>
+<center style="margin: -20px 0 20px">发布中，再发若干台</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_1group_4.png" alt="rolling update one group after"></p>
+<center style="margin: -20px 0 20px">直到全部发完</center>
+
+<h4 id="实践要点-1"><a href="#实践要点-1" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>滚动式发布一般先发1台，或者一个小比例，如2%服务器，主要做流量验证用，类似金丝雀(Canary)测试。</li>
+<li>滚动式发布需要比较复杂的发布工具和智能LB，支持平滑的版本替换和流量拉入拉出。</li>
+<li>每次发布时，先将老版本V1流量从LB上摘除，然后清除老版本，发新版本V2，再将LB流量接入新版本。这样可以尽量保证用户体验不受影响。</li>
+<li>一次滚动式发布一般由若干个发布批次组成，每批的数量一般是可以配置的（可以通过发布模板定义）。例如第一批1台（金丝雀），第二批10%，第三批50%，第四批100%。每个批次之间留观察间隔，通过手工验证或监控反馈确保没有问题再发下一批次，所以总体上滚动式发布过程是比较缓慢的(其中金丝雀的时间一般会比后续批次更长，比如金丝雀10分钟，后续间隔2分钟)。</li>
+<li>回退是发布的逆过程，将新版本流量从LB上摘除，清除新版本，发老版本，再将LB流量接入老版本。和发布过程一样，回退过程一般也比较慢的。</li>
+<li>滚动式发布国外术语通常叫Rolling Update Deployment。</li>
+</ol>
+<h4 id="优势和适用场合-2"><a href="#优势和适用场合-2" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小，体验较平滑</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>发布和回退时间比较缓慢</li>
+<li>发布工具比较复杂，LB需要平滑的流量摘除和拉入能力</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>用户体验不能中断的网站业务场景</li>
+<li>有一定的复杂发布工具研发能力；</li>
+</ul>
+<h4 id="流量模式-2"><a href="#流量模式-2" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/rolling_update_traffic.png" alt="rolling udpate one group traffic"></p>
+<p>滚动式发布，流量平滑过渡，图片来自<a href="#appendix">附录7.1</a></p>
+<h2 id="三、双服务器组发布"><a href="#三、双服务器组发布" class="headerlink" title="三、双服务器组发布"></a>三、双服务器组发布</h2><p>随着云计算和虚拟化技术的成熟，特别是容器等轻量级虚拟化技术的引入，计算资源受限和申请缓慢问题已经逐步解决，可以做到弹性按需分配。为一次发布分配两组服务器，一组运行现有的V1老版本，一组运行待上线的V2新版本，再通过LB切换流量方式完成发布，这就是所谓的双服务器组发布方式。</p>
+<h3 id="3-1-蓝绿发布（双服务器组）"><a href="#3-1-蓝绿发布（双服务器组）" class="headerlink" title="3.1 蓝绿发布（双服务器组）"></a>3.1 蓝绿发布（双服务器组）</h3><p>蓝绿发布仅适用于双服务器组发布，可以认为是对蛮力发布的一种简单优化发布方式。简化过程如下图所示：</p>
+<p><img src="/2018/03/24/20180324/blue_green_2groups_before.png" alt="blue green two groups before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/blue_green_2groups_after.png" alt="blue green two groups after"></p>
+<center style="margin: -20px 0 20px">发布后</center>
+
+<h4 id="实践要点-2"><a href="#实践要点-2" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>V1版本称为蓝组，V2版本称为绿组，发布时通过LB一次性将流量从蓝组直接切换到绿组，不经过金丝雀和滚动发布，蓝绿发布由此得名；</li>
+<li>出现问题回退也很直接，通过LB直接将流量切回蓝组。</li>
+<li>发布初步成功后，蓝组机器一般不直接回收，而是留一个待观察期，视具体情况观察期的时间可长可短，观察期过后确认发布无问题，则可以回收蓝组机器。</li>
+</ol>
+<h4 id="优势和适用场合-3"><a href="#优势和适用场合-3" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>升级切换和回退速度非常快</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>切换是全量的，如果V2版本有问题，则对用户体验有直接影响；</li>
+<li>需要两倍机器资源；</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>对用户体验有一定容忍度的场景</li>
+<li>机器资源有富余或者可以按需分配（AWS云，或自建容器云）</li>
+<li>暂不具备复杂滚动发布工具研发能力；</li>
+</ul>
+<h4 id="流量模式-3"><a href="#流量模式-3" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/blue_green_2groups_traffic.png" alt="blue green two groups traffic"></p>
+<p>蓝绿发布一次完成流程切换，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="3-2-金丝雀发布（双服务器组）"><a href="#3-2-金丝雀发布（双服务器组）" class="headerlink" title="3.2 金丝雀发布（双服务器组）"></a>3.2 金丝雀发布（双服务器组）</h3><p>对蓝绿部署的一种简单优化，发布时先从绿组拉入1台金丝雀，待金丝雀验证通过再发全量。对比蓝绿发布，该发布方式的优势是有一个生产流量的金丝雀验证过程，可以减轻V2可能有问题的风险和影响面。简化发布过程如下图所示：</p>
+<p><img src="/2018/03/24/20180324/canary_2groups_1.png" alt="canary two groups before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/canary_2groups_2.png" alt="canary two groups middle"></p>
+<center style="margin: -20px 0 20px">发布中，先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/canary_2groups_3.png" alt="canary two groups after"></p>
+<center style="margin: -20px 0 20px">全量发布</center>
+
+
+<h3 id="3-3-滚动式发布（双服务器组）"><a href="#3-3-滚动式发布（双服务器组）" class="headerlink" title="3.3 滚动式发布（双服务器组）"></a>3.3 滚动式发布（双服务器组）</h3><p>滚动式发布是对上面的蓝绿和金丝雀发布的进一步优化，按批次增量滚动发布，提供更平滑的用户体验。</p>
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_1.png" alt="rolling update two groups before"></p>
+<center style="margin: -20px 0 20px">发布前</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_2.png" alt="rolling update two groups first"></p>
+<center style="margin: -20px 0 20px">发布中，先发一台金丝雀</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_3.png" alt="rolling update two groups middle"></p>
+<center style="margin: -20px 0 20px">发布中，再发若干台</center>
+
+<p><img src="/2018/03/24/20180324/rolling_update_2groups_4.png" alt="rolling update two groups after"></p>
+<center style="margin: -20px 0 20px">直到全部发完</center>
+
+<h3 id="实践要点-3"><a href="#实践要点-3" class="headerlink" title="实践要点"></a>实践要点</h3><ol>
+<li>发布前先申请一批新服务器，数量一般和V1版本相同，将V2版本应用发布到新服务器上。例如如果在AWS云上，则可以直接调用API申请一批新VM，如果用容器云k8s，则可以直接启动一批新容器（使用V2版本容器镜像）。</li>
+<li>一般会先通过LB拉入1台V2版本的机器，这台机器也相当于金丝雀，用于流量验证。</li>
+<li>逐步按批次完成发布，每批只需要通过LB拉入V2版本，再拉出对应数量的V1版本。批次之间留有观察间隔，通过手工或监控反馈确保没有问题再继续发布。</li>
+<li>发布有问题回退很快，直接通过LB将流量切回V1即可。</li>
+<li>完成发布后，一般V1版本要保留观察以备万一，比如留1天，1天后没有问题则回收V1机器资源。</li>
+</ol>
+<h4 id="优势和适用场合-4"><a href="#优势和适用场合-4" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小；</li>
+<li>升级切换和回退（rollback）速度比单服务器组滚动发布要快，LB切流量即可；</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>需要两倍机器资源；</li>
+<li>发布工具比较复杂，LB需要流量切换能力</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>用户体验不能中断的网站业务场景</li>
+<li>机器资源有富余或者可以按需分配（AWS云，或自建容器云）</li>
+<li>有一定的发布工具研发能力；</li>
+</ul>
+<h4 id="流量模式-4"><a href="#流量模式-4" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/rolling_update_traffic.png" alt="rolling upodate two groups traffic"></p>
+<p>滚动式发布，流量平滑过渡，图片来自<a href="#appendix">附录7.1</a></p>
+<h2 id="四、其它发布方式"><a href="#四、其它发布方式" class="headerlink" title="四、其它发布方式"></a>四、其它发布方式</h2><p>上述都是偏传统的发布方式，能覆盖大部分应用发布场景。针对一些关键新功能的上线发布，或者一些特定的场景，还有一些特殊的发布方式。</p>
+<h3 id="4-1-功能开关发布"><a href="#4-1-功能开关发布" class="headerlink" title="4.1 功能开关发布"></a>4.1 功能开关发布</h3><p>利用代码中的功能开关（Feature Flag/Toggle/Switch）来控制发布逻辑，一般不需要复杂的发布工具和智能LB配合，是一种相对比较低成本和简单的发布方式。这种方式也是支持现代DevOps理念，研发人员可以灵活定制和自助完成的发布方式。功能开关的原理如下图所示：</p>
+<p><img src="/2018/03/24/20180324/feature_flag_deployment.png" alt="feature flag deployment"></p>
+<p>功能开关发布，图片来自<a href="#appendix">附录7.2</a></p>
+<h4 id="实践要点-4"><a href="#实践要点-4" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>功能开关发布需要一个配置中心或者开关中心这样的服务支持，例如携程的Apollo配置中心<a href="#appendix">附录7.3</a>，或者开源的FF4J<a href="#appendix">附录7.4</a>，这些都支持开关发布，业界还有专门的功能开关SaaS服务，例如LaunchDarkly<a href="#appendix">附录7.5</a>。通过配置中心，运维或研发人员可以在运行期动态配置功能开关的值。当然，功能开关发布只是配置中心的一种使用场景，配置中心还能支持其它很多动态配置场景。</li>
+<li>功能开关服务一般提供客户端SDK，方便开发人员集成。在运行期，客户端SDK会同步最新的开关值，技术实现有推方式(push)，也有拉方式(pull)，或者推拉结合方式。</li>
+<li>新功能（V2 new feature）和老功能（V1 old feature）住在同一套代码中，新功能隐藏在开关后面，如果开关没有打开，则走老代码逻辑，如果开关打开，则走新代码逻辑。技术实现上可以理解为一个简单的if/else逻辑。</li>
+<li>应用上线后，开关先不打开，然后运维或研发人员通过开关中心打开新功能，经过流量验证新功能没有问题，则发布完成；如果有问题，则随时可以通过开关中心切回老功能逻辑。</li>
+</ol>
+<h4 id="优势和适用场合-5"><a href="#优势和适用场合-5" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>升级切换和回退速度非常快</li>
+<li>相对于复杂的发布工具，实施比较简单，成本相对低廉</li>
+<li>研发能够灵活定制发布逻辑，支持DevOps自助发布</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>切换是全量的，如果V2版本有问题，则对用户体验有直接影响；</li>
+<li>对代码有侵入，代码逻辑会变复杂，需要定期清理老版本逻辑，维护成本变高</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>对用户体验有一定容忍度的场景</li>
+<li>已有配置中心或开关中心服务</li>
+<li>暂不具备研发复杂发布工具能力；</li>
+</ul>
+<h4 id="流量模式-5"><a href="#流量模式-5" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/blue_green_2groups_traffic.png" alt="feature flag traffic"></p>
+<p>通过功能开关一次完成流量切换，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="4-2-A-B测试"><a href="#4-2-A-B测试" class="headerlink" title="4.2 A/B测试"></a>4.2 A/B测试</h3><p>A/B测试<a href="#appendix">附录7.10</a>原来主要用于产品功能的比对测试，收集用户反馈和对比数据做产品功能设计的决策。实际上，A/B测试也可以作为一种新功能发布技术。下图展示基于LB实现的一种A/B测试发布。</p>
+<p><img src="/2018/03/24/20180324/ab_testing_deployment.png" alt="a/b testing deployment"></p>
+<h4 id="实践要点-5"><a href="#实践要点-5" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>上图中，原来PC端和手机端都访问老版本V1服务（也称A组或控制组），当V2新版本（也称B组或实验组）发布以后，为了验证V2的功能正确性，同时也为了避免V2有问题时影响所有用户，先通过LB将手机端的流量切换到V2版本，经过一段时间的A/B比对测试和观察（主要通过用户和监控反馈），确保V2正常，则通过LB将全部流量切换到V2。</li>
+<li>基于LB方式实现A/B测试，LB需要能够通过某种条件做流量路由，例如通过client ip，设备类型，浏览器类型，甚至是定制的http header或查询字符串。</li>
+<li>高级的A/B测试需要专门的平台支撑，wasabi<a href="#appendix">附录7.6</a>就是intuit开源的一个支持高级A/B测试的平台，这类平台可以细粒度到针对某类用户做A/B测试，例如针对某个地区的用户，某个年龄段的用户，公司内部用户等等。举了例子，假设一个关键业务的新功能上线，为了降低风险采用A/B测试，可以做到先只让公司内部员工能访问到新功能，待新功能验证过，再全量放开给外部用户使用。</li>
+<li>功能开关和A/B测试有点相似，但功能开关一般是无状态和全量的，无法做到针对某类特定用户进行测试，而A/B测试一般是有状态的，能够跟踪事务和用户级别的状态，可以实现针对某类特定用户进行测试。</li>
+</ol>
+<h4 id="优势和适用场合-6"><a href="#优势和适用场合-6" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>用户体验影响小；</li>
+<li>可以使用生产流量测试；</li>
+<li>可以做到针对某类特定目标用户进行测试；</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>搭建复杂度相对高，有一定技术门槛</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>核心关键业务，比如涉及资金的</li>
+<li>具备一定的A/B测试平台研发能力</li>
+</ul>
+<h4 id="流量模式-6"><a href="#流量模式-6" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/ab_testing_traffic.png" alt="a/b testing traffic"></p>
+<p>针对某类目标用户进行A/B测试，图片来自<a href="#appendix">附录7.1</a></p>
+<h3 id="4-3-影子测试"><a href="#4-3-影子测试" class="headerlink" title="4.3 影子测试"></a>4.3 影子测试</h3><p>对于一些涉及核心业务的遗留系统的升级改造，为了确保万无一失，有一种称为影子测试的大招，采用比较复杂的流量复制、回放和比对技术实现。下面是影子测试的一个样例架构图，</p>
+<p><img src="/2018/03/24/20180324/shadow_testing.png" alt="shadow testing"></p>
+<h4 id="实践要点-6"><a href="#实践要点-6" class="headerlink" title="实践要点"></a>实践要点</h4><ol>
+<li>目标实现老的legacy服务迁移升级到新的experimental服务。</li>
+<li>测试开始前，需要在测试环境部署一份legacy服务和experimental服务，同时将生产数据库复制两份到测试环境。同时需要将生产请求日志收集起来，一般可以通过kafka队列收集，然后通过类似goreplay<a href="#appendix">附录7.8</a>这样的工具，消费kafka里头的请求日志，复制回放，将请求分发到legacy服务和experimental服务，收到响应后进行比对，如果所有响应比对成功，则可以认为legacy服务和experimental服务在功能逻辑上是等价的；如果有响应比对失败，则认为两者在功能逻辑上不等价，需要修复experimental并重新进行影子测试，直到全部比对成功。根据系统复杂度和关键性不同，比对测试时间短的可能需要几周，长的可达半年之久。</li>
+<li>影子测试因为旁路在独立测试环境中进行，可以对生产流量完全无影响。</li>
+<li>影子测试一般适用于遗留系统的等价重构迁移，例如.net转java，或者sqlserver数据库升级为mysql数据库，且外部依赖不能太多，否则需要开发很多mock，测试部署成本会很高，且比对测试更加复杂和不稳定。</li>
+<li>当当网有一个比较成功的交易系统.net转java迁移项目<a href="#appendix">附录7.9</a>，采用了影子测试技术，值得参考借鉴。</li>
+</ol>
+<h4 id="优势和适用场合-7"><a href="#优势和适用场合-7" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
+<ul>
+<li>对生产用户体验完全无影响</li>
+<li>可以使用生产真实流量进行测试（复制比对）</li>
+</ul>
+<p><strong>不足：</strong></p>
+<ul>
+<li>搭建复杂度很高，技术门槛高，数据库的导出复制是难点</li>
+<li>外部依赖不能太多，否则测试部署成本很高，且比对测试更加复杂和不稳定</li>
+</ul>
+<p><strong>适用场合：</strong></p>
+<ul>
+<li>核心关键业务，比如涉及资金的</li>
+<li>具备一定影子测试平台研发能力，包括流量复制、数据库导出复制和分发比对系统。</li>
+</ul>
+<h4 id="流量模式-7"><a href="#流量模式-7" class="headerlink" title="流量模式"></a>流量模式</h4><p><img src="/2018/03/24/20180324/shadow_testing_traffic.png" alt="shadow testing traffic"></p>
+<p>影子测试对生产流量无影响，图片来自<a href="#appendix">附录7.1</a></p>
+<h2 id="五、比较"><a href="#五、比较" class="headerlink" title="五、比较"></a>五、比较</h2><p>下表对各种发布策略，从各个维度进行综合比较，供参考：</p>
+<p><img src="/2018/03/24/20180324/comparision.png" alt="comparision"></p>
+<h2 id="六、结论和建议"><a href="#六、结论和建议" class="headerlink" title="六、结论和建议"></a>六、结论和建议</h2><p>下面是对发布策略的一些选型建议，供不同阶段公司参考：</p>
+<ol>
+<li>蛮力发布一般是不建议采用的，除非是开发测试环境，用户体验不敏感的非关键应用，或者是创业期什么都缺时候的无奈之举。</li>
+<li>如果暂时还不具备研发较复杂的滚动发布工具和配套智能LB，则功能开关是一种不错的轻量级发布技术，投入相对较小的成本，可以让研发人员灵活定制发布逻辑。</li>
+<li>金丝雀发布通过少量新版本服务器接收生产流量的方式去验证新版本，可以显著降低风险。金丝雀发布适用于大部分场景，一般成长型公司就可以采用。</li>
+<li>对于达到一定业务体量的公司，考虑到用户体验对业务的关键性，则需要投入研发资源开发支持滚动式发布的工具和配套的智能LB，实现自动化和零停机的发布。滚动式发布一般和金丝雀发布配合，先发一台金丝雀去验证流量，再按批次增量发布。</li>
+<li>随着轻量级虚拟化（例如容器）的普及，双服务器组发布方式具有更快的发布和回退速度，是值得投入的高级发布技术。蓝绿部署仅适用于双服务器组，滚动式发布既可以在单服务器组上实现，也可以在双服务器组上实现。</li>
+<li>对于涉及关键核心业务的新功能上线，采用A/B测试，可以显著降低发布风险，A/B测试是唯一一种支持针对特定用户组进行生产测试的高级发布技术。当然A/B测试的投入不低，建议有一定研发能力的组织采用。</li>
+<li>对于关键核心业务的迁移重构，为确保万无一失，最后的一个大招是影子测试，影子测试对生产流量和用户完全无影响。当然这个大招的投入成本和门槛都高，建议有足够业务体量和研发能力的组织投入。</li>
+<li>上述的各种发布策略并不是非此即彼的，一个公司常常会综合采用多种发布技术作为互补，实现灵活的发布能力。例如主流的发布手段是金丝雀+滚动式发布，某些业务线可能根据业务场景需要采用功能开关发布，还有一些业务线则可能采用高级的A/B测试发布手段。</li>
+</ol>
+<h2 id="七、附录"><a href="#七、附录" class="headerlink" title="七、附录"></a><a name="appendix">七、附录</a></h2><ol>
+<li><a href="https://github.com/ContainerSolutions/k8s-deployment-strategies" target="_blank" rel="noopener">k8s deployment strategies</a></li>
+<li><a href="https://opensource.com/article/18/2/feature-flags-ring-deployment-model" target="_blank" rel="noopener">Deploying new releases: Feature flags or rings?</a></li>
+<li><a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener">携程Apollo配置中心</a></li>
+<li><a href="http://www.ff4j.org/" target="_blank" rel="noopener">Feature Flag for Java</a></li>
+<li><a href="https://launchdarkly.com/" target="_blank" rel="noopener">LaunchDarkly ~ Feature Flag as a Service</a></li>
+<li><a href="https://github.com/intuit/wasabi" target="_blank" rel="noopener">Wasabi高级A/B测试平台</a></li>
+<li><a href="https://blog.zenika.com/2017/04/19/migration-dun-legacy-avec-goreplay/" target="_blank" rel="noopener">使用goreplay实现遗留系统升级</a></li>
+<li><a href="https://github.com/buger/goreplay" target="_blank" rel="noopener">Goreplay</a></li>
+<li><a href="http://blog.shurenyun.com/untitled-9/" target="_blank" rel="noopener">9.    华丽蜕变 – 当当网交易系统重构</a></li>
+<li><a href="https://en.wikipedia.org/wiki/A/B_testing" target="_blank" rel="noopener">A/B Testing</a></li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> devops </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[第一届技术沙龙精彩回顾]]></title>
       <url>/2018/01/16/20180116/</url>
       <content type="html"><![CDATA[<p>1月13日，第一届“拍拍贷技术沙龙”暨《亿级流量网站基础架构》沙龙，在拍拍贷和大家见面了。这次技术沙龙由拍拍贷基础框架部主办，邀请了拍拍贷基础框架部总监杨波、《RabbitMQ实战指南》作者朱忠华、点融网资深架构师刘石明、饿了么框架工具部高级研发经理黄杰四位业内大咖给大家分享了基础架构方面的经验和思考。</p>
