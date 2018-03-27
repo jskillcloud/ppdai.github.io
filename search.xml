@@ -269,6 +269,8 @@
 <li>如果金丝测试通过，则把剩余的V1版本全部升级为V2版本。如果金丝雀测试失败，则直接回退金丝雀，发布失败。</li>
 </ol>
 <p><img src="/2018/03/24/20180324/canary.png" alt="canary"></p>
+<center style="margin: -20px 0 20px">金丝雀</center>
+
 <h4 id="优势和适用场合-1"><a href="#优势和适用场合-1" class="headerlink" title="优势和适用场合"></a>优势和适用场合</h4><p><strong>优势：</strong></p>
 <ul>
 <li>用户体验影响小，金丝雀发布过程出现问题只影响少量用户</li>
