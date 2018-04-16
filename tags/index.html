@@ -108,7 +108,7 @@
     root: '/',
     scheme: 'Muse',
     version: '6.0.1',
-    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
     fancybox: true,
     fastclick: false,
     lazyload: false,
@@ -323,10 +323,10 @@
         
           <div class="tag-cloud">
             <div class="tag-cloud-title">
-                目前共计 7 个标签
+                目前共计 12 个标签
             </div>
             <div class="tag-cloud-tags">
-              <a href="/tags/RabbitMQ/" style="font-size: 12px; color: #ccc">RabbitMQ</a> <a href="/tags/devops/" style="font-size: 12px; color: #ccc">devops</a> <a href="/tags/gRpc/" style="font-size: 12px; color: #ccc">gRpc</a> <a href="/tags/基础架构/" style="font-size: 12px; color: #ccc">基础架构</a> <a href="/tags/微服务/" style="font-size: 30px; color: #111">微服务</a> <a href="/tags/技术管理/" style="font-size: 12px; color: #ccc">技术管理</a> <a href="/tags/监控/" style="font-size: 12px; color: #ccc">监控</a>
+              <a href="/tags/API网关/" style="font-size: 12px; color: #ccc">API网关</a> <a href="/tags/RabbitMQ/" style="font-size: 12px; color: #ccc">RabbitMQ</a> <a href="/tags/devops/" style="font-size: 12px; color: #ccc">devops</a> <a href="/tags/gRpc/" style="font-size: 12px; color: #ccc">gRpc</a> <a href="/tags/kong/" style="font-size: 12px; color: #ccc">kong</a> <a href="/tags/lua/" style="font-size: 12px; color: #ccc">lua</a> <a href="/tags/nginx/" style="font-size: 12px; color: #ccc">nginx</a> <a href="/tags/openresty/" style="font-size: 12px; color: #ccc">openresty</a> <a href="/tags/基础架构/" style="font-size: 12px; color: #ccc">基础架构</a> <a href="/tags/微服务/" style="font-size: 30px; color: #111">微服务</a> <a href="/tags/技术管理/" style="font-size: 12px; color: #ccc">技术管理</a> <a href="/tags/监控/" style="font-size: 12px; color: #ccc">监控</a>
             </div>
           </div>
         
@@ -362,6 +362,8 @@
 
   <aside id="sidebar" class="sidebar">
     
+      <div id="sidebar-dimmer"></div>
+    
     <div class="sidebar-inner">
 
       
@@ -387,7 +389,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -413,7 +415,7 @@
                   
 				    <a href="/tags/">
 				  
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -543,6 +545,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
