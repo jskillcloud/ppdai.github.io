@@ -1114,7 +1114,7 @@ pre .javascript .function {
   position: relative;
   display: inline-block;
   padding: 0 40px;
-  color: #555;
+  color: #55dae1;
   background: transparent;
   border-bottom: none;
 }
@@ -1863,7 +1863,7 @@ pre .javascript .function {
   color: #555;
 }
 .sidebar-nav li:hover {
-  color: #f5f5f5;
+  color: #55dae1;
 }
 .page-post-detail .sidebar-nav-toc {
   padding: 0 5px;
@@ -1872,11 +1872,11 @@ pre .javascript .function {
   margin-left: 10px;
 }
 .sidebar-nav .sidebar-nav-active {
-  color: #87daff;
-  border-bottom-color: #87daff;
+  color: #55dae1;
+  border-bottom-color: #55dae1;
 }
 .sidebar-nav .sidebar-nav-active:hover {
-  color: #87daff;
+  color: #55dae1;
 }
 .sidebar-panel {
   display: none;
@@ -1936,14 +1936,14 @@ pre .javascript .function {
   display: block;
 }
 .post-toc .nav .active > a {
-  color: #87daff;
-  border-bottom-color: #87daff;
+  color: #55dae1;
+  border-bottom-color: #55dae1;
 }
 .post-toc .nav .active-current > a {
-  color: #87daff;
+  color: #55dae1;
 }
 .post-toc .nav .active-current > a:hover {
-  color: #87daff;
+  color: #55dae1;
 }
 .sidebar-active #sidebar-dimmer {
   opacity: 0.7;
@@ -2375,7 +2375,7 @@ pre .javascript .function {
   }
 }
 .page-post-detail .sidebar-toggle-line {
-  background: #87daff;
+  background: #55dae1;
 }
 .page-post-detail .comments {
   overflow: hidden;
