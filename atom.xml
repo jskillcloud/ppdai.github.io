@@ -5,9 +5,9 @@
   <subtitle>致力于成为互联网行业一流的框架技术团队</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://techblog.ppdai.com/"/>
   <updated>2018-04-16T11:05:07.265Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://techblog.ppdai.com/</id>
   
   <author>
     <name>基础框架</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>kong源码导读</title>
-    <link href="http://yoursite.com/2018/04/16/20180416/"/>
-    <id>http://yoursite.com/2018/04/16/20180416/</id>
+    <link href="http://techblog.ppdai.com/2018/04/16/20180416/"/>
+    <id>http://techblog.ppdai.com/2018/04/16/20180416/</id>
     <published>2018-04-16T07:24:37.000Z</published>
     <updated>2018-04-16T11:05:07.265Z</updated>
     
@@ -31,25 +31,25 @@
     
     </summary>
     
-      <category term="技术文章" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
+      <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
-      <category term="API网关" scheme="http://yoursite.com/tags/API%E7%BD%91%E5%85%B3/"/>
+      <category term="API网关" scheme="http://techblog.ppdai.com/tags/API%E7%BD%91%E5%85%B3/"/>
     
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+      <category term="nginx" scheme="http://techblog.ppdai.com/tags/nginx/"/>
     
-      <category term="openresty" scheme="http://yoursite.com/tags/openresty/"/>
+      <category term="openresty" scheme="http://techblog.ppdai.com/tags/openresty/"/>
     
-      <category term="kong" scheme="http://yoursite.com/tags/kong/"/>
+      <category term="kong" scheme="http://techblog.ppdai.com/tags/kong/"/>
     
-      <category term="lua" scheme="http://yoursite.com/tags/lua/"/>
+      <category term="lua" scheme="http://techblog.ppdai.com/tags/lua/"/>
     
   </entry>
   
   <entry>
     <title>老司机的技术选型哲学</title>
-    <link href="http://yoursite.com/2018/03/26/20180326/"/>
-    <id>http://yoursite.com/2018/03/26/20180326/</id>
+    <link href="http://techblog.ppdai.com/2018/03/26/20180326/"/>
+    <id>http://techblog.ppdai.com/2018/03/26/20180326/</id>
     <published>2018-03-26T12:22:22.000Z</published>
     <updated>2018-03-27T03:08:41.285Z</updated>
     
@@ -62,17 +62,17 @@
     
     </summary>
     
-      <category term="技术文章" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
+      <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
-      <category term="技术管理" scheme="http://yoursite.com/tags/%E6%8A%80%E6%9C%AF%E7%AE%A1%E7%90%86/"/>
+      <category term="技术管理" scheme="http://techblog.ppdai.com/tags/%E6%8A%80%E6%9C%AF%E7%AE%A1%E7%90%86/"/>
     
   </entry>
   
   <entry>
     <title>微服务2.0技术栈选型手册</title>
-    <link href="http://yoursite.com/2018/03/25/20180325/"/>
-    <id>http://yoursite.com/2018/03/25/20180325/</id>
+    <link href="http://techblog.ppdai.com/2018/03/25/20180325/"/>
+    <id>http://techblog.ppdai.com/2018/03/25/20180325/</id>
     <published>2018-03-25T11:13:47.000Z</published>
     <updated>2018-03-27T03:08:29.404Z</updated>
     
@@ -85,17 +85,17 @@
     
     </summary>
     
-      <category term="技术文章" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
+      <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
-      <category term="微服务" scheme="http://yoursite.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+      <category term="微服务" scheme="http://techblog.ppdai.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
   <entry>
     <title>现代发布技术的原理和实践</title>
-    <link href="http://yoursite.com/2018/03/24/20180324/"/>
-    <id>http://yoursite.com/2018/03/24/20180324/</id>
+    <link href="http://techblog.ppdai.com/2018/03/24/20180324/"/>
+    <id>http://techblog.ppdai.com/2018/03/24/20180324/</id>
     <published>2018-03-24T10:46:34.000Z</published>
     <updated>2018-03-27T08:02:36.903Z</updated>
     
@@ -108,19 +108,19 @@
     
     </summary>
     
-      <category term="技术文章" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
+      <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
-      <category term="微服务" scheme="http://yoursite.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+      <category term="微服务" scheme="http://techblog.ppdai.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
-      <category term="devops" scheme="http://yoursite.com/tags/devops/"/>
+      <category term="devops" scheme="http://techblog.ppdai.com/tags/devops/"/>
     
   </entry>
   
   <entry>
     <title>第一届技术沙龙精彩回顾</title>
-    <link href="http://yoursite.com/2018/01/16/20180116/"/>
-    <id>http://yoursite.com/2018/01/16/20180116/</id>
+    <link href="http://techblog.ppdai.com/2018/01/16/20180116/"/>
+    <id>http://techblog.ppdai.com/2018/01/16/20180116/</id>
     <published>2018-01-16T06:44:30.000Z</published>
     <updated>2018-03-27T03:08:12.396Z</updated>
     
@@ -132,16 +132,16 @@
     
     </summary>
     
-      <category term="技术沙龙" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF%E6%B2%99%E9%BE%99/"/>
+      <category term="技术沙龙" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%B2%99%E9%BE%99/"/>
     
     
-      <category term="基础架构" scheme="http://yoursite.com/tags/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+      <category term="基础架构" scheme="http://techblog.ppdai.com/tags/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
     
-      <category term="RabbitMQ" scheme="http://yoursite.com/tags/RabbitMQ/"/>
+      <category term="RabbitMQ" scheme="http://techblog.ppdai.com/tags/RabbitMQ/"/>
     
-      <category term="gRpc" scheme="http://yoursite.com/tags/gRpc/"/>
+      <category term="gRpc" scheme="http://techblog.ppdai.com/tags/gRpc/"/>
     
-      <category term="监控" scheme="http://yoursite.com/tags/%E7%9B%91%E6%8E%A7/"/>
+      <category term="监控" scheme="http://techblog.ppdai.com/tags/%E7%9B%91%E6%8E%A7/"/>
     
   </entry>
   
