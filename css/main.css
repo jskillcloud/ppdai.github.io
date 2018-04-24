@@ -2148,7 +2148,7 @@ pre .javascript .function {
 .site-uv .busuanzi-value,
 .site-pv .busuanzi-value,
 .page-pv .busuanzi-value {
-  margin: 0 5px;
+  margin-right: 2px;
 }
 .site-uv {
   margin-right: 10px;
