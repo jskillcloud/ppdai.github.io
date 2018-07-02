@@ -3,6 +3,248 @@
   
     
     <entry>
+      <title><![CDATA[Jedis源码分析(四) - JedisSentinel与ShardedJedis介绍]]></title>
+      <url>/2018/06/28/2018062804/</url>
+      <content type="html"><![CDATA[<p>Jedis源码分析共有四个章节，以下为各章链接：</p>
+<ol>
+<li><a href="/2018/06/28/2018062801/">Jedis源码分析(一) - Jedis介绍</a></li>
+<li><a href="/2018/06/28/2018062802/">Jedis源码分析(二) - Jedis类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062803/">Jedis源码分析(三) - JedisCluster类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062804/">Jedis源码分析(四) - JedisSentinel与ShardedJedis介绍</a></li>
+</ol>
+<a id="more"></a>
+<h3 id="JedisSentinel"><a href="#JedisSentinel" class="headerlink" title="JedisSentinel"></a>JedisSentinel</h3><p>JedisSentinel常用方式有两种：</p>
+<p>1.使用哨兵单节点拿到主节点，从节点的信息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过哨兵节点的信息新建Jedis实例，然后拿到Master节点的信息</span></span><br><span class="line">Jedis j = <span class="keyword">new</span> Jedis(sentinel);</span><br><span class="line">List&lt;Map&lt;String, String&gt;&gt; masters = j.sentinelMasters();</span><br><span class="line"><span class="comment">//拿到master的address，**MASTER_NAME**</span></span><br><span class="line">List&lt;String&gt; masterHostAndPort = j.sentinelGetMasterAddrByName(**MASTER_NAME**);</span><br><span class="line">HostAndPort masterFromSentinel = <span class="keyword">new</span> HostAndPort(masterHostAndPort.get(<span class="number">0</span>),Integer.parseInt(masterHostAndPort.get(<span class="number">1</span>)));</span><br><span class="line">assertEquals(master, masterFromSentinel);</span><br><span class="line"><span class="comment">//通过哨兵节点，拿到从节点的信息</span></span><br><span class="line">List&lt;Map&lt;String, String&gt;&gt; slaves = j.sentinelSlaves(**MASTER_NAME**);</span><br></pre></td></tr></table></figure>
+<p>2.使用哨兵节点对象池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;String&gt; sentinels = <span class="keyword">new</span> HashSet&lt;String&gt;();</span><br><span class="line">sentinels.add(<span class="keyword">new</span> HostAndPort(<span class="string">"localhost"</span>, <span class="number">65432</span>).toString());</span><br><span class="line">sentinels.add(<span class="keyword">new</span> HostAndPort(<span class="string">"localhost"</span>, <span class="number">65431</span>).toString());</span><br><span class="line">JedisSentinelPool pool = <span class="keyword">new</span> JedisSentinelPool(MASTER_NAME, sentinels);</span><br><span class="line">pool.destroy();</span><br></pre></td></tr></table></figure>
+<p><code>JedisSentinelPool</code>的结构清晰，内部使用对象池存放一个个<code>sentinel</code>实例。图2-12和2-13分别为<code>JedisSentinelPool</code>的类结构和初始化流程。在使用时，我们先根据，host,port等信息，初始化一个Jedis实例，然后可以通过<code>sentinelMasters()</code>，<code>sentinelGetMasterAddrByName(MASTER_NAME)</code>，<code>sentinelSlaves(MASTER_NAME)</code>等方法拿到这个哨兵节点监听的MASTER节点信息或对应的SLAVE节点信息。</p>
+<p><img src="/2018/06/28/2018062804/image014.png" alt="image014"></p>
+<center style="margin: -20px 0 20px">图1.1 JedisSentinelPool 的类结构</center>
+
+<p><img src="/2018/06/28/2018062804/image015.png" alt="image015"></p>
+<center style="margin: -20px 0 20px">图1.2 JedisSentinelPool 的初始化流程</center>
+
+<h3 id="ShardedJedis"><a href="#ShardedJedis" class="headerlink" title="ShardedJedis"></a>ShardedJedis</h3><p>下文为构建Jedis分片的方法（单节点与对象池的模式），</p>
+<p>1.单节点模式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">List&lt;JedisShardInfo&gt; shards = <span class="keyword">new</span> ArrayList&lt;JedisShardInfo&gt;(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//其中一个分片</span></span><br><span class="line">JedisShardInfo shard1 = <span class="keyword">new</span> JedisShardInfo(redis1);</span><br><span class="line">shards.add(shard1);</span><br><span class="line"><span class="comment">//另一个分片</span></span><br><span class="line">JedisShardInfo shard2 = <span class="keyword">new</span> JedisShardInfo(redis2);</span><br><span class="line">shards.add(shard2);</span><br><span class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"resource"</span>)</span><br><span class="line"><span class="comment">//新建ShardedJedis实例</span></span><br><span class="line">ShardedJedis shardedJedis = <span class="keyword">new</span> ShardedJedis(shards);</span><br><span class="line">shardedJedis.set(<span class="string">"a"</span>, <span class="string">"bar"</span>);</span><br><span class="line"><span class="comment">//通过key可以查看存储在哪个jedis</span></span><br><span class="line">JedisShardInfo ak = shardedJedis.getShardInfo(<span class="string">"a"</span>);</span><br><span class="line">assertEquals(shard2, ak);</span><br></pre></td></tr></table></figure>
+<p>2.对象池模式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ShardedJedisPool pool = <span class="keyword">new</span> ShardedJedisPool(<span class="keyword">new</span> GenericObjectPoolConfig(), shards);</span><br><span class="line">ShardedJedis jedis = pool.getResource();</span><br><span class="line">jedis.set(<span class="string">"foo"</span>, <span class="string">"bar"</span>);</span><br><span class="line">assertEquals(<span class="string">"bar"</span>, jedis.get(<span class="string">"foo"</span>));</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/28/2018062804/image016.png" alt="image016"></p>
+<center style="margin: -20px 0 20px">图2-1 ShardedJedis的类结构</center>
+
+<p><img src="/2018/06/28/2018062804/image017.png" alt="image017"></p>
+<center style="margin: -20px 0 20px">图2-1 ShardedJedis的初始化流程</center>
+
+<p>图2-1为ShardedJedis的类结构（其内部保存一个对象池，与常规的JedisPool的不同之处在于，内部的<code>PooledObjectFactory</code>实现不同）,分片信息保存在基类<code>Sharded</code>中，<code>Sharded</code>保存了3个重要变量：</p>
+<ol>
+<li>nodes是一个TreeMap,保存了每个分片节点和对应的hash值。</li>
+<li>algo是计算hash值的函数，默认是MurmurHash,可替换。</li>
+<li>resources是一个LinkedHashMap，存放着JedisShardinfo和一个Jedis实例的对应关系。</li>
+</ol>
+<p>图2-2为 <code>ShardedJedis</code>的初始化流程，通过传入待分片的节点信息，初始化好上述3个变量。在使用时，先根据key计算出hash值，在<code>nodes</code>中找到对应的分片信息，再在<code>resources</code>中找到对应的Jedis实例，然后通过这个Jedis实例才操作redis节点。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Jedis </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Jedis源码分析(三) - JedisCluster类结构及实现]]></title>
+      <url>/2018/06/28/2018062803/</url>
+      <content type="html"><![CDATA[<p>Jedis源码分析共有四个章节，以下为各章链接：</p>
+<ol>
+<li><a href="/2018/06/28/2018062801/">Jedis源码分析(一) - Jedis介绍</a></li>
+<li><a href="/2018/06/28/2018062802/">Jedis源码分析(二) - Jedis类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062803/">Jedis源码分析(三) - JedisCluster类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062804/">Jedis源码分析(四) - JedisSentinel与ShardedJedis介绍</a></li>
+</ol>
+<a id="more"></a>
+<h2 id="JedisCluster的内部结构"><a href="#JedisCluster的内部结构" class="headerlink" title="JedisCluster的内部结构"></a>JedisCluster的内部结构</h2><p>首先看一下JedisCluster的类结构，为橘色标志为核心类</p>
+<p><img src="/2018/06/28/2018062803/image009.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图1 JedisCluster的类结构</center>
+
+<p>图1是JedisCluster的类结构，由于Jedis本身不是线程安全的，所以选择使用对象池JedisPool 来保证线程安全。在<code>JedisClusterInfoCache</code>中，除了要保存节点和槽的一一对应关系，还要为每个节点建立一个对象池<code>JedisPool</code>，并保存在<code>map</code>中。因而，这个类主要用于保存集群的配置信息，并且是JedisCluster初始化部分的核心所在。<code>JedisClusterConnectionHandler</code>是cache类的一个窗口，cache类似数据管理层，而Handler就类似于操控数据提供服务的Service层。</p>
+<h2 id="JedisCluster的初始化"><a href="#JedisCluster的初始化" class="headerlink" title="JedisCluster的初始化"></a>JedisCluster的初始化</h2><p><img src="/2018/06/28/2018062803/image010.jpg" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图2-1 JedisCluster初始化调用时序图</center>
+
+<p><img src="/2018/06/28/2018062803/image011.jpg" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图2-2 JedisCluster的初始化详情</center>
+
+<p>图2-1，2-2是JedisCluster初始化的具体实现。Jedis建立集群的过程很清晰，传入节点信息，通过其中一个节点从redis服务器拿到整个集群的信息信息，包括槽位对应关系，主从节点的信息，保存在JedisClusterInfoCache中。</p>
+<h2 id="JedisCluster的调用流程"><a href="#JedisCluster的调用流程" class="headerlink" title="JedisCluster的调用流程"></a>JedisCluster的调用流程</h2><p>使用方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;HostAndPort&gt; jedisClusterNode = <span class="keyword">new</span> HashSet&lt;HostAndPort&gt;();</span><br><span class="line">jedisClusterNode.add(<span class="keyword">new</span> HostAndPort(<span class="string">"127.0.0.1"</span>, <span class="number">7379</span>));</span><br><span class="line">JedisCluster jc = <span class="keyword">new</span> JedisCluster(jedisClusterNode, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT,</span><br><span class="line">    DEFAULT_REDIRECTIONS, <span class="string">"cluster"</span>, DEFAULT_CONFIG);</span><br><span class="line">jc.set(<span class="string">"foo"</span>, <span class="string">"bar"</span>);</span><br><span class="line">assertEquals(<span class="string">"bar"</span>, jc.get(<span class="string">"foo"</span>));</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/28/2018062803/image012.jpg" alt="avatar">                  </p>
+<center style="margin: -20px 0 20px">图3-1 JedisCluster 命令时序图</center>
+
+<p><img src="/2018/06/28/2018062803/image013.jpg" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图3-2 JedisCluster 命令调用的具体实现过程</center>
+
+<p>图3-1，3-2是JedisCluster发送请求的具体实现。在发送请求时，JedisCluster对象先从初始化得到的集群map中获取key对应的节点连接，即一个可用的Jedis对象。然后通过这个对象发送<code>get key</code> 命令。</p>
+<p>通常，根据key计算槽位得到的节点不会报错。所以如果发生<code>connectionException</code>,或者<code>MovedDataException</code>,说明初始化得到的槽位与节点的对应关系有问题，即与实际的对应关系不符，应当重置map。</p>
+<p>如果出现ASK异常，说明数据正在迁移，需要临时使用返回消息指定的地址，重新发送命令。在这里，Jedis通过异常反馈，智能地同步了客户端与服务端的集群信息。</p>
+<h2 id="Jedis与Redis的版本冲突"><a href="#Jedis与Redis的版本冲突" class="headerlink" title="Jedis与Redis的版本冲突"></a>Jedis与Redis的版本冲突</h2><p>在之前的代码分析中，源码均来自于<strong>Jedis-2.10</strong>，下面我们来看下<strong>Jedis-2.7.3</strong>中<code>cache.discoverClusterNodesAndSlots</code>实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JedisClusterInfoCache类</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">discoverClusterNodesAndSlots</span><span class="params">(Jedis jedis)</span> </span>&#123;</span><br><span class="line"><span class="comment">//清空两个map</span></span><br><span class="line">    <span class="keyword">this</span>.nodes.clear();</span><br><span class="line">    <span class="keyword">this</span>.slots.clear();</span><br><span class="line">    <span class="comment">//获取集群信息</span></span><br><span class="line">    String localNodes = jedis.clusterNodes();</span><br><span class="line">    <span class="keyword">for</span> (String nodeInfo : localNodes.split(<span class="string">"\n"</span>)) &#123;</span><br><span class="line"><span class="comment">//这个方法处理“cluster nodes”命令的回复消息，先通过” ”分割消息，再通过“：”分割得到“host”和”port”。</span></span><br><span class="line">        ClusterNodeInformation clusterNodeInfo = </span><br><span class="line">            nodeInfoParser.parse(nodeInfo, <span class="keyword">new</span> HostAndPort(</span><br><span class="line">            jedis.getClient().getHost(), jedis.getClient().getPort()));</span><br><span class="line">        HostAndPort targetNode = clusterNodeInfo.getNode();</span><br><span class="line">        setNodeIfNotExist(targetNode);</span><br><span class="line">        assignSlotsToNode(clusterNodeInfo.getAvailableSlots(), targetNode);</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出与<strong>Jedis-2.10</strong>不同的是，这里使用<code>CLUSTER NODES</code>获取集群信息。</p>
+<p>这是<strong>Redis-3.2.9</strong>对于<code>CLUSTER NODES</code>命令的回复消息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">860abdabe239d096cff13385382325784ad601fc 127.0.0.1:6568 myself,master - 0 0 4 connected 5462-10923</span><br><span class="line">24e8ebefc4d0eaefd6950d30bc389e50aab84286 127.0.0.1:6394 slave 860abdabe239d096cff13385382325784ad601fc 0 1516623794886 4 connected</span><br><span class="line">d27c2ce7de4029b4f2828d67cf45e82211b1369c 127.0.0.1:6569 slave 8f82154da33324208e79bdb9580cea2ca0cada93 0 1516623795905 2 connected</span><br><span class="line">8f82154da33324208e79bdb9580cea2ca0cada93  127.0.0.1:6395 master - 0 1516623793867 2 connected 10924-16383</span><br><span class="line">4e9c6efe120db6463f42512130ed3fc0d1e5d5b8 127.0.0.1:6393 master - 0 1516623792848 1 connected 0-5461</span><br><span class="line">f3fd6e3bb7c4ae9a0c8f33472096109fd7344d4b 127.0.0.1:6567 slave 4e9c6efe120db6463f42512130ed3fc0d1e5d5b8 0 1516623793356 1 connected</span><br></pre></td></tr></table></figure>
+<p>这是<strong>Redis-4.0.6</strong>对于<code>CLUSTER NODES</code>命令的回复消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0c32e45ddadca3567ac72f6dd94e034f6daed31e 127.0.0.1:7002@17002 master - 0 1516795121251 2 connected 10923-16383</span><br><span class="line">1ca678b62e6935fc7aa274ac7e91d0e7ea752810 127.0.0.1:7000@17000 myself,master - 0 1516795120000 1 connected 0-5460</span><br><span class="line">adc7904694341b4a6a9e1946d483f92769b99473 127.0.0.1:7001@17001 master - 0 1516795120244 0 connected 5461-10922</span><br></pre></td></tr></table></figure>
+<p>可以看出从Redis新版本的回复消息中，仅通过<strong>“：”</strong>已无法获得端口号，于是就会报异常<strong>“7002@17002”无法解析为端口号</strong>。而这个问题从<strong>Jedis-2.8</strong>就被解决了</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Jedis </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Jedis源码分析(二) - Jedis类结构及实现]]></title>
+      <url>/2018/06/28/2018062802/</url>
+      <content type="html"><![CDATA[<p>Jedis源码分析共有四个章节，以下为各章链接：</p>
+<ol>
+<li><a href="/2018/06/28/2018062801/">Jedis源码分析(一) - Jedis介绍</a></li>
+<li><a href="/2018/06/28/2018062802/">Jedis源码分析(二) - Jedis类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062803/">Jedis源码分析(三) - JedisCluster类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062804/">Jedis源码分析(四) - JedisSentinel与ShardedJedis介绍</a></li>
+</ol>
+<a id="more"></a>
+<h2 id="Jedis的类结构"><a href="#Jedis的类结构" class="headerlink" title="Jedis的类结构"></a>Jedis的类结构</h2><p>首先看Jedis的内部结构，图2-1中用橘色框标出了主要支架, 为突出主要架构，或有稍许内容没有标出。</p>
+<p><img src="/2018/06/28/2018062802/image003.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图1-1 Jedis的类结构</center>
+
+<p>​          Jedis以输入的命令参数是否为二进制，将处理请求的具体实现部署在两个类中，例如<code>Jedis</code>和<code>BinaryJedis</code>，<code>Client</code>和<code>BinaryClient</code>。与Redis服务器的连接信息（Socket,host,port……）封装在<code>Client</code>的基类<code>Connection</code>中。<code>BinaryJedis</code>类中提供了Client,Pipeline和Transcation变量，对应3种请求模式。</p>
+<h2 id="Jedis的初始化流程"><a href="#Jedis的初始化流程" class="headerlink" title="Jedis的初始化流程"></a>Jedis的初始化流程</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"localhost"</span>, <span class="number">6379</span>, <span class="number">15000</span>);</span><br><span class="line">Transaction t = jedis.multi();</span><br><span class="line">Pipeline pipeline = jedis.pipelined();</span><br></pre></td></tr></table></figure>
+<p>Jedis通过传入Redis服务器地址（host,port）开始初始化，然后在BinaryJedis里实例化Client。Client通过<strong>Socket</strong>维持客户端与Redis服务器的连接与沟通。</p>
+<p>前文提到Transaction和Pipeline很相似，它们继承同一个基类<code>MultiKeyPipelineBase</code>。区别在于Transaction在实例化的时候，就自动发送<strong>MULTI</strong>命令，开启事务模式，而Pipeline则按情况手动开启，它们均依靠Client发送命令。以下是Transaction和Pipeline初始化的具体实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//BinaryJedis类</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Transaction <span class="title">multi</span><span class="params">()</span> </span>&#123;</span><br><span class="line">client.multi();</span><br><span class="line">transaction = <span class="keyword">new</span> Transaction(client);</span><br><span class="line"><span class="keyword">return</span> transaction;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Pipeline <span class="title">pipelined</span><span class="params">()</span> </span>&#123;</span><br><span class="line">pipeline = <span class="keyword">new</span> Pipeline();</span><br><span class="line">pipeline.setClient(client);</span><br><span class="line"><span class="keyword">return</span> pipeline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面通过发送一个<code>get key</code> 的命令，看看，这三种模式是如何运转的。</p>
+<h2 id="Jedis工作模式的调用流程"><a href="#Jedis工作模式的调用流程" class="headerlink" title="Jedis工作模式的调用流程"></a>Jedis工作模式的调用流程</h2><h3 id="client请求模式"><a href="#client请求模式" class="headerlink" title="client请求模式"></a>client请求模式</h3><p>以<code>get key</code> 为例，为突出主要步骤，部分代码略有缩减。</p>
+<p>用法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jedis.get(<span class="string">"foo"</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/28/2018062802/image004.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图3-1 Clinet模式的时序图</center>
+
+<p><img src="/2018/06/28/2018062802/image005.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图3-2 Client模式的调用流程</center>
+
+<p>图3-1和3-2是client模式下，发送请求，读取回复的具体实现。可以清楚看到，在每次发送命令前，会先通过<code>connect()</code>方法判断是否已经连接，若未连接则进行如下操作：</p>
+<ol>
+<li>实例化Socket，并配置，</li>
+<li>连接Socket,获取OutputStream和InputStream</li>
+<li>如果是SSL连接，则会通过SSLSocketFactory创建socket连接</li>
+</ol>
+<p><strong>Protocol</strong>是一个通讯工具类，将Redis的各类执行关键字存储为静态变量，可以直观调用命令，例如<code>Protocol.Command.GET</code>。同时，将命令包装成符合<a href="http://www.redis.cn/topics/protocol.html" target="_blank" rel="noopener">Redis的统一请求协议</a>，回复消息的处理也是在这个类进行，先通过通讯协提取出当次请求的回复消息，将Object类型的消息，格式化为String,List等具体类型，如果回复消息有Error则以异常的形式抛出。</p>
+<h3 id="Pipeline和Transaction模式"><a href="#Pipeline和Transaction模式" class="headerlink" title="Pipeline和Transaction模式"></a>Pipeline和Transaction模式</h3><p><img src="/2018/06/28/2018062802/image006.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图3-3 Transaction和Pipeline的类结构</center>
+
+<p>图3-3是Transaction和Pipeline两个类的的类结构。可以看到Pipeline和Transaction都继承自<code>MultiKeyPipelineBase</code>，其中，<code>MultiKeyPipelineBase</code>和<code>PipelineBase</code>的区别在于处理的命令不同，内部均调用Client发送命令。从以下用例也可以看出两者的操作也十分类似。Pipeline有一个内部类对象<code>MultiResponseBuilder</code>，前文提到，当Redis事务结束时，会以List的形式，一次性返回所有命令的执行结果。<code>MultiResponseBuilder</code>对象就是用于，当Pipeline开始其实模式后，在事务结束时，存储所有返回结果。</p>
+<p>Queable用一个LinkedList装入每个命令的返回结果，<code>Response&lt;T&gt;</code>是一个泛型，<code>set(Object data)</code>方法传入格式化之前的结果，<code>get()</code>方法返回格式化之后的结果。<br>Pipeline的使用方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Pipeline p = jedis.pipelined();</span><br><span class="line"><span class="comment">//只发送命令，不读取结果，此时的Response&lt;T&gt;没有数据</span></span><br><span class="line">Response&lt;String&gt; string = p.get(<span class="string">"string"</span>);</span><br><span class="line">Response&lt;String&gt; list = p.lpop(<span class="string">"list"</span>);</span><br><span class="line">Response&lt;String&gt; hash = p.hget(<span class="string">"hash"</span>, <span class="string">"foo"</span>);</span><br><span class="line">Response&lt;Set&lt;String&gt;&gt; zset = p.zrange(<span class="string">"zset"</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">Response&lt;String&gt; set = p.spop(<span class="string">"set"</span>);</span><br><span class="line"><span class="comment">//一次读取所有response.此时的Response&lt;T&gt;有数据</span></span><br><span class="line">p.sync();</span><br><span class="line"></span><br><span class="line">assertEquals(<span class="string">"foo"</span>, string.get());</span><br><span class="line">assertEquals(<span class="string">"foo"</span>, list.get());</span><br><span class="line">assertEquals(<span class="string">"bar"</span>, hash.get());</span><br><span class="line">assertEquals(<span class="string">"foo"</span>, zset.get().iterator().next());</span><br><span class="line">assertEquals(<span class="string">"foo"</span>, set.get());</span><br><span class="line"></span><br><span class="line">Transactions使用方法：</span><br><span class="line"><span class="comment">//开启事务</span></span><br><span class="line">Transaction t = jedis.multi();</span><br><span class="line"><span class="comment">//命令进入服务端的待执行队列</span></span><br><span class="line">Response&lt;String&gt; string = t.get(<span class="string">"string"</span>);</span><br><span class="line">Response&lt;String&gt; list = t.lpop(<span class="string">"list"</span>);</span><br><span class="line">Response&lt;String&gt; hash = t.hget(<span class="string">"hash"</span>, <span class="string">"foo"</span>);</span><br><span class="line">Response&lt;Set&lt;String&gt;&gt; zset = t.zrange(<span class="string">"zset"</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">Response&lt;String&gt; set = t.spop(<span class="string">"set"</span>);</span><br><span class="line"><span class="comment">//发送EXEC指令，执行所有命令，并返回结果</span></span><br><span class="line">t.exec();</span><br><span class="line"></span><br><span class="line">assertEquals(<span class="string">"foo"</span>, string.get());</span><br><span class="line">assertEquals(<span class="string">"foo"</span>, list.get());</span><br><span class="line">assertEquals(<span class="string">"bar"</span>, hash.get());</span><br><span class="line">assertEquals(<span class="string">"foo"</span>, zset.get().iterator().next());</span><br><span class="line">assertEquals(<span class="string">"foo"</span>, set.get());</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/28/2018062802/image007.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图3-4 Pipeline的调用时序图</center>
+
+<p><img src="/2018/06/28/2018062802/image008.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图3-5 Pipeline的调用流程</center>
+
+<p>图3-4，3-5显示了Pipeline从发送请求到读取回复的具体实现，Transaction的实现与其类似，因而没有另外做图说明。由上图可见，Pipeline通过Client发送命令，Client在<code>sendCommand</code>时，会同时执行<code>pipelinedCommands++</code>，记录发送命令的条数（参见图3-5）。之后，返回一个<code>Response&lt;T&gt;</code>实例，并将这个实例塞入了<code>pipelinedResponses</code>队列中。<code>Response&lt;T&gt;</code>主要有3个属性：</p>
+<ol>
+<li>格式化前的回复消息data,</li>
+<li>格式化后的回复消息response,</li>
+<li>格式化方式builder。</li>
+</ol>
+<p>​        刚发送消息后，<code>Response&lt;T&gt;</code>里面的<code>data</code>和<code>response</code>是空值，只有格式化的方式<code>builder</code>。<code>Sync()</code>用于一次性读取所有回复，首先调用client的<code>getAll()</code>方法，<code>getAll()</code>方法根据之前记录的<code>pipelinedCommands</code>和Redis通讯协议，读取相同条数的回复消息到一个List，并返回给Pipeline。随后遍历这个List,逐个将回复消息赋给<code>pipelinedResponses</code>中每个<code>Response&lt;T&gt;</code>的<code>data</code>。</p>
+<p>在执行<code>Response&lt;T&gt;.get()</code>命令时，<code>Response&lt;T&gt;</code>里面<code>data</code>已经有值了，但是是Object类型的，因而还要调用<code>build()</code>方法，做一次数据转换，返回格式化之后的数据。</p>
+<p>以上就是Pipeline的主要工作流程。Transaction的<code>exec()</code>方法和<code>sync()</code>很相似，下文为<code>exec()</code>的具体实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Object&gt; <span class="title">exec</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 清空inputstream里面的所有数据，忽略QUEUED or ERROR回复</span></span><br><span class="line">  client.getMany(getPipelinedResponseLength());</span><br><span class="line">  <span class="comment">//发送EXEC指令，让服务端执行所有命令</span></span><br><span class="line">  client.exec();</span><br><span class="line">  <span class="comment">//事务结束</span></span><br><span class="line">  inTransaction = <span class="keyword">false</span>;</span><br><span class="line">  <span class="comment">//从inputStream中读取所有回复</span></span><br><span class="line">  List&lt;Object&gt; unformatted = client.getObjectMultiBulkReply();</span><br><span class="line">  <span class="keyword">if</span> (unformatted == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//和sync（）一样</span></span><br><span class="line">  List&lt;Object&gt; formatted = <span class="keyword">new</span> ArrayList&lt;Object&gt;();</span><br><span class="line">  <span class="keyword">for</span> (Object o : unformatted) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">     formatted.add(generateResponse(o).get());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (JedisDataException e) &#123;</span><br><span class="line">    formatted.add(e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> formatted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本节虽未将Pipeline和Transaction的方法实现尽述，但也大同小异。关键点在于理解第一章介绍的3类请求逻辑。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Jedis </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Jedis源码分析(一) - Jedis介绍]]></title>
+      <url>/2018/06/28/2018062801/</url>
+      <content type="html"><![CDATA[<p>Jedis源码分析共有四个章节，以下为各章链接：</p>
+<ol>
+<li><a href="/2018/06/28/2018062801/">Jedis源码分析(一) - Jedis介绍</a></li>
+<li><a href="/2018/06/28/2018062802/">Jedis源码分析(二) - Jedis类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062803/">Jedis源码分析(三) - JedisCluster类结构及实现</a></li>
+<li><a href="/2018/06/28/2018062804/">Jedis源码分析(四) - JedisSentinel与ShardedJedis介绍</a></li>
+</ol>
+<a id="more"></a>
+<h2 id="Jedis对应Redis的四种工作模式"><a href="#Jedis对应Redis的四种工作模式" class="headerlink" title="Jedis对应Redis的四种工作模式"></a>Jedis对应Redis的四种工作模式</h2><p><img src="/2018/06/28/2018062801/image001.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图1-1 Jedis的主要模块</center>
+
+<p>图1-1是Jedis的主要模块，Jedis,JedisCluster,JedisSentinel和ShardedJedis对应了Redis的四种工作模式：Redis Standalone（单节点模式）,Redis Cluster（集群模式）,Redis Sentinel（哨兵模式）和Redis Sharding（分片模式）。</p>
+<h2 id="Jedis的三种请求模式"><a href="#Jedis的三种请求模式" class="headerlink" title="Jedis的三种请求模式"></a>Jedis的三种请求模式</h2><p>​       每个Jedis实例对应一个Redis节点，我们对Jedis实例的每个操作，都相当于使用<code>redis-cli</code>启动客户端的直接操作。无论是集群模式，哨兵模式，还是分片模式，内部均为对Jedis实例的操作。所以了解Jedis类的内部结构及Jedis实例的请求模式是掌握Jedis框架的基础。</p>
+<p>Jedis实例有3种请求模式，Pipeline，Transaction和Client。</p>
+<p><img src="/2018/06/28/2018062801/image002.png" alt="avatar"></p>
+<center style="margin: -20px 0 20px">图2-1 Jedis的三种请求模式</center>
+
+<p>Jedis实例通过<strong>Socket</strong>建立客户端与服务端的长连接，往<strong>outputStream</strong>发送命令，从<strong>inputStream</strong>读取回复，图2-1显示Redis常用的3种请求模式，下文是详细说明：</p>
+<h3 id="Client模式"><a href="#Client模式" class="headerlink" title="Client模式"></a>Client模式</h3><p>Client模式就是常用的“所见即所得”，客户端发一个命令，阻塞等待服务端执行，然后读取返回结果。优点是确保每次处理都有结果，一旦发现返回结果中有Error,就可以立即处理。</p>
+<h3 id="Pipeline模式"><a href="#Pipeline模式" class="headerlink" title="Pipeline模式"></a>Pipeline模式</h3><p>Pipeline模式则是一次性发送多个命令，最后一次取回所有的返回结果，这种模式通过减少网络的往返时间和IO的读写次数，大幅度提高通信性能，但Pipeline不支持原子性，如果想保证原子性，可同时开启事务模式。</p>
+<h3 id="Transaction模式"><a href="#Transaction模式" class="headerlink" title="Transaction模式"></a>Transaction模式</h3><p>Transaction模式即开启Redis的事务管理，Pipeline可以在事务中，也可以不在事务中。事务模式开启后，所有的命令（除了 <strong>EXEC</strong> 、 <strong>DISCARD</strong> 、 <strong>MULTI</strong> 和 <strong>WATCH</strong> ）到达服务端以后，不会立即执行，会进入一个等待队列，等到收到下述四个命令时执行不同操作：</p>
+<ol>
+<li><strong>EXEC</strong>命令执行时， 服务器以先进先出（FIFO）的方式执行事务队列中的命令,当事务队列里的所有命令被执行完之后， 将回复队列作为自己的执行结果返回给客户端， 客户端从事务状态返回到非事务状态， 至此， 事务执行完毕。    </li>
+<li><strong>DISCARD</strong>命令用于取消一个事务， 它清空客户端的整个事务队列， 然后将客户端从事务状态调整回非事务状态， 最后返回字符串 OK 给客户端， 说明事务已被取消。</li>
+<li><strong>Redis</strong> 的事务是不可嵌套的， 当客户端已经处于事务状态， 而客户端又再向服务器发送MULTI时， 服务器只是简单地向客户端发送一个错误， 然后继续等待其他命令的入队。 MULTI命令的发送不会造成整个事务失败， 也不会修改事务队列中已有的数据。</li>
+<li><strong>WATCH</strong>只能在客户端进入事务状态之前执行， 在事务状态下发送 WATCH命令会引发一个错误， 但它不会造成整个事务失败， 也不会修改事务队列中已有的数据（和前面处理 MULTI的情况一样）。</li>
+</ol>
+<p>Jedis主要有两条业务逻辑：1）初始化的过程，2）发送命令的过程。下面将摸索着2条主线来学习。本文源码解析基于Jedis-2.10，为突出主要架构，部分内容稍有删减。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Jedis </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[spring-cloud-openfeign原理分析]]></title>
       <url>/2018/05/28/20180528/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><a href="https://github.com/OpenFeign/feign" target="_blank" rel="noopener">feign</a>是一个声明试的HTTP客户端，spring-cloud-openfeign将feign集成到spring boot中，在接口上通过注解声明Rest协议，将http调用转换为接口方法的调用，使得客户端调用http服务更加简单。</p>
@@ -912,9 +1154,9 @@
         
         <tags>
             
-            <tag> 微服务 </tag>
-            
             <tag> 技术选型 </tag>
+            
+            <tag> 微服务 </tag>
             
         </tags>
         
