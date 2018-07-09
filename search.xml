@@ -3,6 +3,449 @@
   
     
     <entry>
+      <title><![CDATA[Hexo+Github搭建个人博客]]></title>
+      <url>/2018/07/06/20180706/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为程序猿，相信大家都有过这样一个想法，搭建属于自己的博客网站，在上面写写技术文章，记录生活点滴，坚持下去会发现这是一件很有成就感的事情。最近刚好在学习这部分内容，深入进去后发现里面坑很多，为了节省大家的时间，少走一点弯路，我整理出了这篇文章供大家参考。</p>
+<a id="more"></a>
+<h2 id="为什么选择Hexo"><a href="#为什么选择Hexo" class="headerlink" title="为什么选择Hexo"></a>为什么选择Hexo</h2><p>之前在网上搜了一下目前比较流行的静态博客框架，最后目标锁定在Jekyll和Hexo上，两者都支持Markdown语法，这点我很喜欢，Jekyll基于Ruby实现，安装Jekyll需要搭建Ruby环境，而Hexo基于NodeJs实现，在Windows上安装NodeJs开发环境比Ruby简单，另外Hexo的主题相对来说更符合我的审美，所以最终选择了Hexo。</p>
+<p>什么是Hexo？官网对它的介绍是：</p>
+<blockquote>
+<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+</blockquote>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><p>下载地址：<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">https://nodejs.org/en/download/</a></p>
+<p>推荐下载LTS版本的msi文件，默认64-bit，也可根据自己的Windows版本选择32-bit。</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/nodejs-install/nodejs-download.png" alt=""></p>
+<p>保持默认设置即可，一路Next。安装完成后打开命令行窗口，输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br><span class="line">$ npm -v</span><br></pre></td></tr></table></figure>
+<p>结果如下图所示，则说明安装正确，可以进行下一步，如果不正确，请回头检查自己的安装过程。</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/nodejs-install/nodejs6.png" alt=""></p>
+<h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><p>下载地址：<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">https://git-scm.com/downloads</a></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-install/git-download.png" alt=""></p>
+<p>保持默认设置即可，一路Next。安装完成后打开命令行窗口，输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git --version</span><br></pre></td></tr></table></figure>
+<p>结果如下图所示，则说明安装正确，可以进行下一步，如果不正确，请回头检查自己的安装过程。</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-install/git11.png" alt=""></p>
+<h3 id="github配置"><a href="#github配置" class="headerlink" title="github配置"></a>github配置</h3><p>第一步，注册一个github账号，记得点击邮箱中的验证链接，注册地址：<a href="https://github.com" target="_blank" rel="noopener">https://github.com</a></p>
+<p>第二步，生成SSH keys</p>
+<p>什么是ssh：ssh是Secure Shell（安全外壳协议）的缩写，建立在应用层和传输层基础上的安全协议。为了便于访问github，要生成ssh公钥，这样就不用每一次访问github都要输入用户名和密码。</p>
+<p>1.本地成功安装git后，单击鼠标右键，选择Git Bash Here，打开git bash。</p>
+<p>2.输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">"xxx@xxx.com"</span></span><br></pre></td></tr></table></figure>
+<p>引号中的内容是你在github上的注册邮箱，之后一路回车，结果如图所示：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-sshkey1.png" alt=""></p>
+<p>3.上一步已经成功的生成了ssh key，接下来输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">eval</span> <span class="string">"ssh-agent -s"</span></span><br></pre></td></tr></table></figure>
+<p>然后输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+<p>这一步可能会报错：<code>Could not open a connection to your authentication agent</code> ，这时直接输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-agent bash</span><br></pre></td></tr></table></figure>
+<p>再次输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+<p>结果如图所示：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-sshkey2.png" alt=""></p>
+<p>4.用cat命令查看key的内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p>选中内容，右键复制备用，如图：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-sshkey3.png" alt=""></p>
+<p>第三步，配置SSH keys</p>
+<p>打开github页面，找到setting中的ssh keys，点击新增按钮，输入任意的title，将刚才复制的key粘贴进去保存即可。</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-config1.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-config2.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-config3.png" alt=""></p>
+<p>第四步，测试</p>
+<p>输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p>结果如图：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-sshkey4.png" alt=""></p>
+<p>到这里为止，准备工作就全部完成了。</p>
+<h2 id="Hexo的安装与配置"><a href="#Hexo的安装与配置" class="headerlink" title="Hexo的安装与配置"></a>Hexo的安装与配置</h2><p>第一步，安装Hexo</p>
+<p>打开命令行窗口，输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>安装完成后输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo version</span><br></pre></td></tr></table></figure>
+<p>结果如下图所示，则说明安装正确。</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo2.png" alt=""></p>
+<p>如果报错：<code>&#39;hexo&#39;不是内部或外部命令，也不是可运行的程序或批处理文件</code> ，则需要检查环境变量配置是否正确，如下图所示，编辑Path变量值，在结尾处加上：<code>C:\Program Files\nodejs\node_global;</code>（文件hexo.cmd所在目录）</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/nodejs-install/nodejs7.png" alt=""></p>
+<p>第二步，初始化Hexo</p>
+<p>进入任意目录，比如F盘，然后指定一个文件夹名，这里以blog为例，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init blog</span><br></pre></td></tr></table></figure>
+<p>结果如下图所示，F盘下会多出一个blog文件夹：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo3.png" alt=""></p>
+<p>接下来进入blog目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> blog</span><br></pre></td></tr></table></figure>
+<p>第三步，安装必要的依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<p>第四步，生成静态文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>该命令的简写形式为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+<p>执行完毕后会在blog目录下生成一个public文件夹，里面包含了博客网站的所有静态资源。</p>
+<p>第五步，启动服务器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>该命令的简写形式为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+<p>默认情况下，访问地址为：<a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a></p>
+<p>另外也可以指定端口（比如8000）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s -p 8000</span><br></pre></td></tr></table></figure>
+<p>第六步，验证</p>
+<p>在浏览器中打开上面的地址，你将会看到：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo1.png" alt=""></p>
+<p>到这里为止，Hexo的安装与相关配置就全部完成了。</p>
+<h2 id="将Hexo与Github-Pages联系起来"><a href="#将Hexo与Github-Pages联系起来" class="headerlink" title="将Hexo与Github Pages联系起来"></a>将Hexo与Github Pages联系起来</h2><p>第一步，创建代码库</p>
+<p>1.登录github，点击页面右上角的加号，选择New repository</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-config4.png" alt=""></p>
+<p>2.在Repository name中填写 <code>yourname.github.io</code> ，注意这里的yourname指的是你的github用户名，如果你的名字是kirito，那就填 <code>kirito.github.io</code> ，Description中可以填一些简单的描述，不写也没关系，然后点击Create repository</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-config5.png" alt=""></p>
+<p>3.正确创建之后，你会看到如下界面：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/git-config/git-config6.png" alt=""></p>
+<p>第二步，编辑站点配置文件</p>
+<p>打开blog目录下的_config.yml文件，编辑deploy模块，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:lizhiming1995/yourname.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>注意这里的repo地址应该换成你第一步创建的代码库的地址。</p>
+<p>第三步，安装一个扩展</p>
+<p>进入blog目录，打开命令行窗口，输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>安装完成后，就可以一键部署到github上了。</p>
+<p>第四步，部署</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>该命令的简写形式为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+<p>执行结果如图所示：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo4.png" alt=""></p>
+<p>这样你public目录下的静态文件就上传到你的代码库中了。</p>
+<p>第五步，激活GitHub Pages</p>
+<p>打开代码库的Settings页面，找到GitHub Pages，选择master branch，然后点击Save按钮，如图：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo5.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo6.png" alt=""></p>
+<p>最后会提示你：<code>Your site is ready to be published at http://yourname.github.io/</code></p>
+<p>这就是你的博客地址了，任何人都可以访问哦。</p>
+<h2 id="绑定自己的域名"><a href="#绑定自己的域名" class="headerlink" title="绑定自己的域名"></a>绑定自己的域名</h2><p>第一步，在万网、腾讯云、阿里云等提供域名注册的域名服务商处购买一个域名，这里以阿里云为例，购买地址：<a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">https://wanwang.aliyun.com/</a></p>
+<p>第二步，打开控制台，给域名添加DNS解析</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/dns1.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/dns2.png" alt=""></p>
+<p>添加两条解析记录，记录类型为CNAME，主机记录分别填@和www，记录值填之前GitHub Pages提供的域名，注意没有http的前缀，如下图：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/dns3.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/dns4.png" alt=""></p>
+<p>添加完后别人用www和不用www都能访问你的网站。</p>
+<p>第三步，在blog目录的source文件夹下创建一个CNAME文件，记住不要有文件后缀名，编辑CNAME文件，里面写你购买的域名，例如 <code>yourname.com</code> ，记住不要有www，创建完成后每一次执行 <code>hexo g</code> 都会在public文件夹下生成CNAME文件，方便后面的部署</p>
+<p>第四步，在blog目录下打开命令行窗口，运行 <code>hexo g</code> ，再运行 <code>hexo d</code></p>
+<p>第五步，在浏览器输入你购买的域名，你会发现该域名已经指向了你在github上的博客地址</p>
+<p>注意：设置域名解析需要几分钟的时间，若完成以上步骤依然无法访问，请过几分钟再尝试</p>
+<h2 id="Hexo入门"><a href="#Hexo入门" class="headerlink" title="Hexo入门"></a>Hexo入门</h2><p>我们先来看一下blog的目录结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ blog</span><br><span class="line">  + public        //静态资源文件夹，内容会推送到代码库</span><br><span class="line">  + scaffolds     //模板文件夹，新建文章时，Hexo会根据模板来建立文件</span><br><span class="line">  + source        //资源文件夹，Markdown和HTML文件会被解析并放到public文件夹，而其他文件会被拷贝过去</span><br><span class="line">  + themes        //主题文件夹，Hexo会根据主题来生成静态页面</span><br><span class="line">  - _config.yml   //网站的配置信息，可以在此配置大部分的参数</span><br><span class="line">  - package.json  //应用程序的信息和依赖关系</span><br></pre></td></tr></table></figure>
+<p>方便起见，我们把网站的语言设置为中文，编辑blog目录下的_config.yml文件，将language这一项设置为 <code>language: zh-CN</code>（参考blog/themes/landscape/languages目录），将url这一项设置为 <code>url: http://yourname.com</code>（你购买的域名，若未购买可以用<a href="http://yourname.github.io代替），其他配置项请根据自己的需要进行设置。" target="_blank" rel="noopener">http://yourname.github.io代替），其他配置项请根据自己的需要进行设置。</a></p>
+<p>接下来新建一篇文章：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+<p>layout可选值有：draft（草稿）、page（页面）、post（文章），对应模板文件夹中的3个文件，如果没有设置layout的话，默认使用_config.yml中的default_layout参数（默认值post）代替。若标题包含空格，请使用引号括起来。</p>
+<p>现在，我们来新建一篇名为test的文章，输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>结果在source/_posts目录下生成了test.md文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: test</span><br><span class="line">date: 2018-06-23 19:14:56</span><br><span class="line">tags:</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>这里给出Front-matter的概念，Front-matter是文件最上方以 <code>---</code> 分隔的区域，用于指定文件的变量。</p>
+<p>常见参数：title（标题）、date（创建日期）、tags（标签）、categories（分类），只有文章（post）支持标签和分类参数，建议文章分类只写一个，标签可以有多个，写法为 <code>tags: [tag1,tag2,tag3]</code> ，注意每个参数的冒号后面都应该有一个空格，这一点同样体现在_config.yml文件中</p>
+<p>编辑test.md文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: test</span><br><span class="line">date: 2018-06-23 19:14:56</span><br><span class="line">tags: [tag1,tag2,tag3]</span><br><span class="line">categories: java</span><br><span class="line">---</span><br><span class="line">文章正文</span><br></pre></td></tr></table></figure>
+<p>保存后刷新页面，通常情况下页面会自动更新，若修改没有生效，则需要重新执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+<p>这里再介绍一个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+<p>它的作用是清除缓存文件 (db.json) 和已生成的静态文件 (public)。在某些情况下（尤其是更换主题后），如果你发现对站点的更改无论如何也不生效，你可能需要运行该命令。</p>
+<p>打开网站首页，你会看到刚才设置的标签和分类生效了：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo7.png" alt=""></p>
+<p>发现Hello World这篇文章的内容被折叠起来了吗，很简单，只需要在文章正文合适的地方加上 <code>&lt;!--more--&gt;</code> 这一行代码就搞定了。</p>
+<p>菜单栏只有Home和Archives？没关系，我们可以加个页面（page），这里以about为例，在blog目录下打开命令行窗口，输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page about</span><br></pre></td></tr></table></figure>
+<p>结果会在source目录下生成about文件夹，里面包含一个index.md文件，文件内容就是about页面的内容。</p>
+<p>还没有结束，编辑blog/themes/landscape目录下的_config.yml文件，修改menu的配置为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  首页: /</span><br><span class="line">  归档: /archives</span><br><span class="line">  关于: /about</span><br></pre></td></tr></table></figure>
+<p>保存刷新页面，你会看到导航栏里多了“关于”，点进去就是about页面啦，目前只有一个标题，内容待编辑，注意页面是不支持设置标签和分类的，只有文章才支持。</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo8.png" alt=""></p>
+<p>最后，我们来总结一下发布文章的流程：</p>
+<p>第一步，<code>hexo new &lt;title&gt;</code> 生成一篇文章，这里的title指文件名，不建议使用中文</p>
+<p>第二步，编辑文章，修改title、tags等参数，这里的title指文章标题，可以使用中文</p>
+<p>第三步，<code>hexo s</code> 本地预览效果，不满意继续修改</p>
+<p>第四步，<code>hexo g</code> 生成静态文件</p>
+<p>第五步，<code>hexo d</code> 将静态文件推送至代码库</p>
+<p>第四步和第五步可以合并成一条命令，<code>hexo d -g</code> ，表示部署之前预先生成静态文件。修改配置与发布文章的流程相似，最后都需要执行第三四五步。</p>
+<h2 id="Hexo进阶"><a href="#Hexo进阶" class="headerlink" title="Hexo进阶"></a>Hexo进阶</h2><h3 id="添加RSS订阅功能"><a href="#添加RSS订阅功能" class="headerlink" title="添加RSS订阅功能"></a>添加RSS订阅功能</h3><p>RSS是在线共享内容的一种简易方式，也叫简易信息聚合，全称Really Simple Syndication。当网站内容更新时，可以通过订阅RSS源在RSS阅读器上获取更新的信息，大多数的内容提供网站都会提供RSS订阅功能，方便用户去获取最新的内容。</p>
+<p>1.安装feed插件</p>
+<p>Hexo有一个专门生成RSS文件的插件 <code>hexo-generator-feed</code> ，进入blog目录，打开命令行窗口，输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
+<p>2.启用插件</p>
+<p>编辑blog目录下的_config.yml文件，添加如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Extensions</span><br><span class="line">Plugins:</span><br><span class="line">- hexo-generator-feed</span><br><span class="line"># Feed Atom</span><br><span class="line">feed:</span><br><span class="line">  type: atom</span><br><span class="line">  path: atom.xml</span><br><span class="line">  limit: 20</span><br></pre></td></tr></table></figure>
+<p>3.生成RSS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+<p>如果生成了atom.xml就表示成功了：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo9.png" alt=""></p>
+<p>在浏览器中打开 <a href="http://localhost:4000/atom.xml" target="_blank" rel="noopener">http://localhost:4000/atom.xml</a> ，你会看到订阅功能已开启：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo10.png" alt=""></p>
+<p>4.部署</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+<p>5.使用RSS订阅功能</p>
+<p>这里以Office的Outlook邮箱为例，订阅地址假设为 <code>http://spring2go.com/atom.xml</code>，如图：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo11.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo12.png" alt=""></p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo13.png" alt=""></p>
+<h3 id="添加站点地图"><a href="#添加站点地图" class="headerlink" title="添加站点地图"></a>添加站点地图</h3><p>站点地图是一种文件，你可以通过该文件列出你网站上的网页，从而将你网站内容的组织架构告知Google和其他搜索引擎。Googlebot等搜索引擎网页抓取工具会读取此文件，以便更加智能地抓取你的网站。</p>
+<p>1.安装sitemap插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-sitemap --save</span><br><span class="line">$ npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+<p>2.编辑blog目录下的_config.yml文件，添加如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Plugins:</span><br><span class="line">- hexo-generator-sitemap</span><br><span class="line">- hexo-generator-baidu-sitemap</span><br><span class="line"></span><br><span class="line">sitemap:</span><br><span class="line">  path: sitemap.xml</span><br><span class="line"></span><br><span class="line">baidusitemap:</span><br><span class="line">  path: baidusitemap.xml</span><br></pre></td></tr></table></figure>
+<p>3.生成站点地图文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+<p>如果生成了sitemap.xml和baidusitemap.xml就表示成功了：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo15.png" alt=""></p>
+<p>4.部署</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+<p>5.确认博客是否被收录</p>
+<p>在百度或者谷歌输入下面格式的内容，如果能搜索到就说明被收录，否则未收录，可能需要等上一段时间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">site:xxx.com</span><br></pre></td></tr></table></figure>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo14.png" alt=""></p>
+<h3 id="使用模板功能"><a href="#使用模板功能" class="headerlink" title="使用模板功能"></a>使用模板功能</h3><p>现在我们生成的每一篇新文章都只有title、date、tags三个参数，通常情况下我们还会有categories参数和一些自定义的参数（如何使用自定义参数我们后面讲），每次都要手动加上这些参数会浪费很多时间，这时候模板的作用就出来了。</p>
+<p>打开scaffolds文件夹，你会看到里面有draft、page、post三个模板，对应草稿、页面、文章，我们日常使用最多的就是文章，所以这里以文章为例，其他两个模板请根据自己的需要进行修改。</p>
+<p>模板的参数是可以设置默认值的，我们假设categories参数的默认值为 <code>随笔</code> ，然后自定义一个参数 <code>author</code> ，默认值为 <code>kirito</code> ，因为每篇文章的标签是不确定的，所以这里不进行设置，编辑post.md文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &#123;&#123; title &#125;&#125;</span><br><span class="line">date: &#123;&#123; date &#125;&#125;</span><br><span class="line">tags: </span><br><span class="line">categories: 随笔</span><br><span class="line">author: kirito</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>让我们用模板生成一篇新文章：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new test2</span><br></pre></td></tr></table></figure>
+<p>打开blog/source/_posts目录下的test2.md文件，可以看到以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: test2</span><br><span class="line">categories: 随笔</span><br><span class="line">author: kirito</span><br><span class="line">date: 2018-06-27 22:02:33</span><br><span class="line">tags:</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>接下来我们只需要写好文章，设置一下tags就可以发布了。</p>
+<h3 id="使用自定义参数"><a href="#使用自定义参数" class="headerlink" title="使用自定义参数"></a>使用自定义参数</h3><p>文章参数里的title、date、categories和tags都在页面上有所展示，那我们自定义的参数该如何使用和展示呢？</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo16.png" alt=""></p>
+<p>通过控制台我们可以看到，每篇文章都是一个 <code>class=&quot;article article-type-post&quot;</code> 的 <code>article</code> 标签，结构如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">article</span> <span class="attr">id</span>=<span class="string">"post-test"</span> <span class="attr">class</span>=<span class="string">"article article-type-post"</span> <span class="attr">itemscope</span>=<span class="string">""</span> <span class="attr">itemprop</span>=<span class="string">"blogPost"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-meta"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/2018/06/23/test/"</span> <span class="attr">class</span>=<span class="string">"article-date"</span>&gt;</span>...<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-category"</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-inner"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span> <span class="attr">class</span>=<span class="string">"article-header"</span>&gt;</span>...<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-entry"</span> <span class="attr">itemprop</span>=<span class="string">"articleBody"</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">footer</span> <span class="attr">class</span>=<span class="string">"article-footer"</span>&gt;</span>...<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>title、date、categories和tags的值分别显示于article-header、article-date、article-category和article-footer，要使用自定义参数，我们需要修改主题的源文件，打开 <code>blog/themes/landscape/layout/_partial</code> 目录下的article.ejs文件，可以看到代码中的标签与class名都与上面一致，接下来我们让作者的名字显示在分类右边，编辑article-meta模块的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-meta"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%-</span> <span class="attr">partial</span>('<span class="attr">post</span>/<span class="attr">date</span>', &#123;<span class="attr">class_name:</span> '<span class="attr">article-date</span>', <span class="attr">date_format:</span> <span class="attr">null</span>&#125;) %&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%-</span> <span class="attr">partial</span>('<span class="attr">post</span>/<span class="attr">category</span>') %&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"letter-spacing:2px;color:#999;line-height:1em;"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">%-</span> <span class="attr">post.author</span> %&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里为了方便直接将样式写在了div标签里，更好的做法是为div添加一个class，将样式写进 <code>landscape/source/css/_partial</code><br> 目录下的article.styl文件。当然，自定义标签可以用在其他地方，样式也可以根据你的喜好来定制。</p>
+<p>让我们打开浏览器来看下效果，你会发现文章的自定义标签生效了：</p>
+<p><img src="https://images-1256966106.cos.ap-shanghai.myqcloud.com/hexo/hexo17.png" alt=""></p>
+<p>值得注意的是，我们刚才修改的文件是article.ejs，这是跟主题有关的，换一个主题，也许文件的路径和名字都变了，甚至格式也不再是ejs而是swig，不过修改文件的思路都是一样的，明确自己要修改哪一个模块，然后到主题的相关目录下，模仿源代码的语法进行修改，最后记住，源文件里使用Tab键会导致修改的代码无效或者报错，请使用空格。</p>
+<p>那么教程到这里就结束了，快来试试搭建自己的博客吧，有什么问题可以在评论区留言~</p>
+<p>ps：后面我会单独整理一篇关于Hexo主题的文章，不用期待…</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> Github </tag>
+            
+            <tag> 博客 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Slf4j源码解析 - 无底层日志实现框架时的执行流程]]></title>
+      <url>/2018/07/04/20180704/</url>
+      <content type="html"><![CDATA[<h3 id="一-前言"><a href="#一-前言" class="headerlink" title="一. 前言"></a>一. 前言</h3><ul>
+<li>commons-logging 和 slf4j 都是<strong>日志的接口</strong>，供用户使用，而<strong>没有提供实现</strong></li>
+<li>commons-logging 和 slf4j 作用如下图所示</li>
+</ul>
+<p><img src="/2018/07/04/20180704/1.png" alt="image"></p>
+<a id="more"></a>
+<h3 id="二-slf4j-源码类结构图"><a href="#二-slf4j-源码类结构图" class="headerlink" title="二. slf4j 源码类结构图"></a>二. slf4j 源码类结构图</h3><p><img src="/2018/07/04/20180704/2.png" alt="image"></p>
+<h3 id="三-slf4j-api-主要类介绍"><a href="#三-slf4j-api-主要类介绍" class="headerlink" title="三. slf4j-api 主要类介绍"></a>三. slf4j-api 主要类介绍</h3><ul>
+<li>org.slf4j.Logger 接口<ul>
+<li><strong>client 使用日志的主要入口</strong></li>
+<li><strong>日志行为的最顶层接口，定义各种日志打印方法，如 log.info()</strong></li>
+<li>第三方日志实现框架会<strong>实现该接口</strong></li>
+</ul>
+</li>
+<li>org.slf4j.ILoggerFactory 接口<ul>
+<li><strong>获取各种 Logger 的接口，定义了 getLogger() 方法</strong></li>
+<li>第三方日志实现框架会<strong>实现该接口</strong></li>
+</ul>
+</li>
+<li>org.slf4j.LoggerFactory 类<ul>
+<li>slf4j 包中<strong>最主要的类</strong></li>
+<li>作用是<strong>编译时绑定具体日志实现框架，对 client 提供具体 Logger 对象</strong></li>
+</ul>
+</li>
+<li>org.slf4j.spi.LoggerFactoryBinder<ul>
+<li><strong>内部接口</strong>，用来帮助 org.slf4j.LoggerFactory 来<strong>绑定合适的 ILoggerFactory 实例</strong></li>
+<li>ch.qos.logback：logback-core.jar 中的 org.slf4j.impl.StaticLoggerBinder <strong>实现了该接口</strong></li>
+<li><strong>StaticLoggerBinder</strong>是 slf4j 与 底层日志实现框架间<strong>沟通的桥梁</strong>，后续会详细讲解</li>
+</ul>
+</li>
+<li>NOPLogger 类<ul>
+<li>slf4j 包<strong>自带的 Logger 实现类</strong></li>
+<li><strong>实现 Logger 接口，实现了其中的 info/warn 各种方法, 但方法体为空</strong></li>
+</ul>
+</li>
+<li>NOPLoggerFactory 类<ul>
+<li>slf4j 包<strong>自带的 ILoggerFactory 实现类</strong></li>
+<li><strong>实现了 ILoggerFactory 接口，getLogger() 方法 返回一个 NOPLogger 实例，NOPLogger 实例的单例</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="四-slf4j-日志执行过程大致分为两个步骤"><a href="#四-slf4j-日志执行过程大致分为两个步骤" class="headerlink" title="四. slf4j 日志执行过程大致分为两个步骤"></a>四. slf4j 日志执行过程大致分为两个步骤</h3><ol>
+<li>slf4j 通过 LoggerFactory 获取 Logger </li>
+<li>Logger 记录日志</li>
+</ol>
+<p>下面分别来介绍</p>
+<h3 id="五-slf4j-通过-LoggerFactory-获取-Logger-的过程"><a href="#五-slf4j-通过-LoggerFactory-获取-Logger-的过程" class="headerlink" title="五. slf4j 通过 LoggerFactory 获取 Logger 的过程"></a>五. slf4j 通过 LoggerFactory 获取 Logger 的过程</h3><ul>
+<li><p>使用 slf4j 的方式如下面代码所示</p>
+<ul>
+<li>其中 Logger 是<strong>定义在 slf4j-api 中的接口</strong>，其中声明了各种日志打印方法如 log.info() 等</li>
+<li>获取 Logger 只需通过 <strong>LoggerFactory 的静态方法 getLogger() 来实现</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//调用 LoggerFactory.getLogger() 方法获取 Logger</span></span><br><span class="line">        Logger logger = LoggerFactory.getLogger(LogDemo.class); <span class="comment">//断点处</span></span><br><span class="line">        logger.info(<span class="string">"log"</span>);</span><br><span class="line">        System.out.println(<span class="string">"log test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>LoggerFactory 获取Logger 的时序图如下</p>
+</li>
+</ul>
+<p><img src="/2018/07/04/20180704/3.png" alt="image"></p>
+<ul>
+<li>LoggerFactory 定义了若干静态变量，代码如下<ul>
+<li>其中定义了 5个 静态不可变 int 类型的变量，<strong>用于表示 LoggerFactory 初始化过程的不同状态值</strong><ul>
+<li>UNINITIALIZED <strong>未初始化</strong></li>
+<li>ONGOING_INITIALIZATION <strong>正在被初始化</strong></li>
+<li>FAILED_INITIALIZATION <strong>初始化失败</strong></li>
+<li>SUCCESSFUL_INITIALIZATION  <strong>初始化成功</strong></li>
+<li>NOP_FALLBACK_INITIALIZATION <strong>空状态，表示无底层日志实现框架时的结果</strong></li>
+</ul>
+</li>
+<li><strong>volatile 变量 INITIALIZATION_STATE</strong>，用于标记 <strong>ILoggerFactory 实例初始化的结果</strong>，且初始化为 <strong>UNINITIALIZED</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggerFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//INITIALIZATION_STATE 的可能结果：</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNINITIALIZED = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ONGOING_INITIALIZATION = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FAILED_INITIALIZATION = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SUCCESSFUL_INITIALIZATION = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NOP_FALLBACK_INITIALIZATION = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//类加载时初始化该变量</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> INITIALIZATION_STATE = UNINITIALIZED;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> SubstituteLoggerFactory SUBST_FACTORY = <span class="keyword">new</span> SubstituteLoggerFactory();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//定义了默认的 LoggerFactory</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> NOPLoggerFactory NOP_FALLBACK_FACTORY = <span class="keyword">new</span> NOPLoggerFactory();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>LoggerFactory 通过静态方法 getLogger(Class clazz) 获取 Logger<ul>
+<li>方法内部又通过 getLogger(String name) 方法获取 Logger</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Return a logger named corresponding to the class passed as parameter,</span></span><br><span class="line"><span class="comment"> * using the statically bound ILoggerFactory instance. </span></span><br><span class="line"><span class="comment"> * 根据静态绑定的 ILoggerFactory 实例 获取 logger</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Logger <span class="title">getLogger</span><span class="params">(Class&lt;?&gt; clazz)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//核心代码 class=log.learn.LogDemo</span></span><br><span class="line">    Logger logger = getLogger(clazz.getName());</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (DETECT_LOGGER_NAME_MISMATCH) &#123;</span><br><span class="line">        Class&lt;?&gt; autoComputedCallingClass = Util.getCallingClass();</span><br><span class="line">        <span class="keyword">if</span> (autoComputedCallingClass != <span class="keyword">null</span> &amp;&amp; nonMatchingClasses(clazz, autoComputedCallingClass)) &#123;</span><br><span class="line">            Util.report(String.format(<span class="string">"Detected logger name mismatch. Given name: \"%s\"; computed name: \"%s\"."</span>, logger.getName(),</span><br><span class="line">                            autoComputedCallingClass.getName()));</span><br><span class="line">            Util.report(<span class="string">"See "</span> + LOGGER_NAME_MISMATCH_URL + <span class="string">" for an explanation"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> logger;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>getLogger(String name) 方法使用同类中返回类型为 ILoggerFactory 的 <strong>getILoggerFactory() 方法获取 ILoggerFactory 实例</strong><ul>
+<li>ILoggerFactory 是获得 Logger 的工厂接口，<strong>接口定义了获得 Logger 的方法 getLogger()</strong></li>
+</ul>
+</li>
+<li>getILoggerFactory() 方法通过 <strong>synchronized 代码块初始化 INITIALIZATION_STATE</strong></li>
+<li><p>随后通过 switch INITIALIZATION_STATE 来<strong>获取日志工厂类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Return a logger named according to the name parameter using the</span></span><br><span class="line"><span class="comment"> * statically bound ILoggerFactory instance.</span></span><br><span class="line"><span class="comment"> * 说明最终获取 logger 的实现是由 静态绑定的 ILoggerFactory 实例决定的</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Logger <span class="title">getLogger</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//进入 getILoggerFactory 方法</span></span><br><span class="line">    ILoggerFactory iLoggerFactory = getILoggerFactory();</span><br><span class="line">    <span class="keyword">return</span> iLoggerFactory.getLogger(name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Return the ILoggerFactory instance in use.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * ILoggerFactory instance is bound with this class at compile time.</span></span><br><span class="line"><span class="comment"> * 在编译时刻绑定 ILoggerFactory 的具体实例</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ILoggerFactory <span class="title">getILoggerFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//类加载时， INITIALIZATION_STATE == UNINITIALIZED，标志为未初始化</span></span><br><span class="line">    <span class="comment">//且对 初始化状态的更新使用了 双重校验锁（DCL，即 double-checked locking），参考单例模式初始化</span></span><br><span class="line">    <span class="keyword">if</span> (INITIALIZATION_STATE == UNINITIALIZED) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (LoggerFactory.class) &#123;</span><br><span class="line">            <span class="keyword">if</span> (INITIALIZATION_STATE == UNINITIALIZED) &#123;</span><br><span class="line">                <span class="comment">//将初始化状态标记为 ONGING</span></span><br><span class="line">                INITIALIZATION_STATE = ONGOING_INITIALIZATION;ONGING</span><br><span class="line">                <span class="comment">//执行 ILoggerFactory 实例初始化，实际是开始在 classpath 寻找看看是否存在 。。。</span></span><br><span class="line">                <span class="comment">//我们先跳到初始化的位置，这也是Slf4j 实现 facade 的核心所在</span></span><br><span class="line">                <span class="comment">//了解了核心，再转回来看下面的</span></span><br><span class="line">                performInitialization();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">switch</span> (INITIALIZATION_STATE) &#123;</span><br><span class="line">    <span class="keyword">case</span> SUCCESSFUL_INITIALIZATION:</span><br><span class="line">        <span class="keyword">return</span> StaticLoggerBinder.getSingleton().getLoggerFactory();</span><br><span class="line">    <span class="keyword">case</span> NOP_FALLBACK_INITIALIZATION:</span><br><span class="line">        <span class="keyword">return</span> NOP_FALLBACK_FACTORY;</span><br><span class="line">    <span class="keyword">case</span> FAILED_INITIALIZATION:</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(UNSUCCESSFUL_INIT_MSG);</span><br><span class="line">    <span class="keyword">case</span> ONGOING_INITIALIZATION:</span><br><span class="line">        <span class="comment">// support re-entrant behavior.</span></span><br><span class="line">        <span class="comment">// See also http://jira.qos.ch/browse/SLF4J-97</span></span><br><span class="line">        <span class="keyword">return</span> SUBST_FACTORY;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Unreachable code"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>此刻 INITIALIZATION_STATE == UNINITIALIZED 未初始化 ，performInitialization() 方法进而调用 <strong>bind() 方法初始化 INITIALIZATION_STATE</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可以看到该方法用 private 修饰，即在类内部使用</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">performInitialization</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//核心代码 bind, 开始绑定 ILoggerFactory 具体实现</span></span><br><span class="line">    bind();</span><br><span class="line">    <span class="keyword">if</span> (INITIALIZATION_STATE == SUCCESSFUL_INITIALIZATION) &#123;</span><br><span class="line">        versionSanityCheck();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bind() 方法用于初始化 <strong>INITIALIZATION_STATE</strong></p>
+<ul>
+<li>bind() 方法的关键代码是 <strong>StaticLoggerBinder.getSingleton()</strong>，该行代码会加载 <strong>org.slf4j.impl.StaticLoggerBinder.class</strong></li>
+<li>INITIALIZATION_STATE 的<strong>赋值动作发生在该条代码的执行成功和发生异常时</strong><ul>
+<li>正常执行时 <ul>
+<li><strong>INITIALIZATION_STATE = SUCCESSFUL_INITIALIZATION</strong></li>
+</ul>
+</li>
+<li>org.slf4j.impl.StaticLoggerBinder.class 未找到时，即进入 NoClassDefFoundError catch语句时<ul>
+<li><strong>INITIALIZATION_STATE = NOP_FALLBACK_INITIALIZATION</strong></li>
+</ul>
+</li>
+<li>org.slf4j.impl.StaticLoggerBinder.class 可以找到, 但未定义 getSingleton() 方法时，即进入 java.lang.NoSuchMethodError catch 语句时<ul>
+<li><strong>INITIALIZATION_STATE = FAILED_INITIALIZATION</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在对 INITIALIZATION_STATE 初始化前，bind 方法先会查找 org.slf4j.impl.StaticLoggerBinder.class <strong>类路径，并先保存到集合 Set 中</strong><ul>
+<li>方法 reportMultipleBindingAmbiguity(staticLoggerBinderPathSet) 在 <strong>Set size &gt; 1 时告知 client 此时包括多个 bindings</strong></li>
+<li>方法 reportActualBinding(staticLoggerBinderPathSet)  <strong>Set size &gt; 1  告知client 实际绑定的是哪一个 bindings</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//存放</span></span><br><span class="line">        Set&lt;URL&gt; staticLoggerBinderPathSet = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// skip check under android, see also</span></span><br><span class="line">        <span class="comment">// http://jira.qos.ch/browse/SLF4J-328</span></span><br><span class="line">        <span class="keyword">if</span> (!isAndroid()) &#123;</span><br><span class="line">            <span class="comment">//绑定的过程，该方法去寻找 StaticLoggerBinder.class 文件</span></span><br><span class="line">            staticLoggerBinderPathSet = findPossibleStaticLoggerBinderPathSet();</span><br><span class="line">            reportMultipleBindingAmbiguity(staticLoggerBinderPathSet);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// the next line does the binding</span></span><br><span class="line">        <span class="comment">//寻找 StaticLoggerBinder 类，若找不到则抛异常</span></span><br><span class="line">        <span class="comment">//pom 没有添加 日志实现依赖，抛异常</span></span><br><span class="line">        StaticLoggerBinder.getSingleton();</span><br><span class="line">        INITIALIZATION_STATE = SUCCESSFUL_INITIALIZATION;</span><br><span class="line">        reportActualBinding(staticLoggerBinderPathSet);</span><br><span class="line">        fixSubstituteLoggers();</span><br><span class="line">        replayEvents();</span><br><span class="line">        <span class="comment">// release all resources in SUBST_FACTORY</span></span><br><span class="line">        SUBST_FACTORY.clear();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoClassDefFoundError ncde) &#123; </span><br><span class="line">        String msg = ncde.getMessage();</span><br><span class="line">        <span class="keyword">if</span> (messageContainsOrgSlf4jImplStaticLoggerBinder(msg)) &#123;</span><br><span class="line">            <span class="comment">//初始化状态 INITIALIZATION_STATE 为 NOP_FALLBACK_INITIALIZATION，此标记意为无底层日志实现框架，日志的打印交付给谁? 先留个悬念</span></span><br><span class="line">            INITIALIZATION_STATE = NOP_FALLBACK_INITIALIZATION;</span><br><span class="line">            Util.report(<span class="string">"Failed to load class \"org.slf4j.impl.StaticLoggerBinder\"."</span>);</span><br><span class="line">            Util.report(<span class="string">"Defaulting to no-operation (NOP) logger implementation"</span>);</span><br><span class="line">            Util.report(<span class="string">"See "</span> + NO_STATICLOGGERBINDER_URL + <span class="string">" for further details."</span>);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            failedBinding(ncde);</span><br><span class="line">            <span class="keyword">throw</span> ncde;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (java.lang.NoSuchMethodError nsme) &#123;</span><br><span class="line">        String msg = nsme.getMessage();</span><br><span class="line">        <span class="keyword">if</span> (msg != <span class="keyword">null</span> &amp;&amp; msg.contains(<span class="string">"org.slf4j.impl.StaticLoggerBinder.getSingleton()"</span>)) &#123;</span><br><span class="line">            INITIALIZATION_STATE = FAILED_INITIALIZATION;</span><br><span class="line">            Util.report(<span class="string">"slf4j-api 1.6.x (or later) is incompatible with this binding."</span>);</span><br><span class="line">            Util.report(<span class="string">"Your binding is version 1.5.5 or earlier."</span>);</span><br><span class="line">            Util.report(<span class="string">"Upgrade your binding to version 1.6.x."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> nsme;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        failedBinding(e);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Unexpected initialization failure"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>findPossibleStaticLoggerBinderPathSet() 方法通过类加载器找到 StaticLoggerBinder.class </p>
+<ul>
+<li>这里定义了 static 变量 STATIC_LOGGER_BINDER_PATH 来定义<strong>需要加载的类资源路径</strong><ul>
+<li>STATIC_LOGGER_BINDER_PATH = “org/slf4j/impl/StaticLoggerBinder.class”</li>
+<li>StaticLoggerBinder.class 类是需要<strong>底层日志框架来定义的类</strong>，且该类实现 <strong>org.slf4j.impl.LoggerFactoryBinder 接口</strong>,该接口 由 slf4j-api 提供</li>
+<li>StaticLoggerBinder 通过实现 LoggerFactoryBinder 接口的 getLoggerFactory 方法来<strong>获得具体 LoggerFactory</strong></li>
+</ul>
+</li>
+<li>若 loggerFactoryClassLoader 为 null，则调用<strong>ClassLoader.getSystemResources()</strong></li>
+<li>否则，调用 <strong>loggerFactoryClassLoader.getResources()</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// We need to use the name of the StaticLoggerBinder class, but we can't</span></span><br><span class="line"><span class="comment">// reference the class itself.</span></span><br><span class="line"><span class="comment">// 根据classpath 下是否存在 StaticLoggerBinder 来作为判断是否存在 具体日志实现框架的标准</span></span><br><span class="line"><span class="comment">// 此处也暗示出 所有日志实现框架的包路径及 所必需包含的 StaticLoggerBinder 类路径</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String STATIC_LOGGER_BINDER_PATH = <span class="string">"org/slf4j/impl/StaticLoggerBinder.class"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> Set&lt;URL&gt; <span class="title">findPossibleStaticLoggerBinderPathSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// use Set instead of list in order to deal with bug #138</span></span><br><span class="line">    <span class="comment">// LinkedHashSet appropriate here because it preserves insertion order</span></span><br><span class="line">    <span class="comment">// during iteration</span></span><br><span class="line">    Set&lt;URL&gt; staticLoggerBinderPathSet = <span class="keyword">new</span> LinkedHashSet&lt;URL&gt;();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ClassLoader loggerFactoryClassLoader = LoggerFactory.class.getClassLoader();</span><br><span class="line">        Enumeration&lt;URL&gt; paths;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="comment">//而用户在运行期，是获取不到引导类加载器bootstrapclassloader的，因此当一个类获取它的类加载器，得到的对象时null，就说明它是由引导类加载器加载的。</span></span><br><span class="line">        <span class="comment">//引导类加载器是负责加载系统目录下的文件，因此源码中使用getSystemresource来获取资源文件。</span></span><br><span class="line">        <span class="keyword">if</span> (loggerFactoryClassLoader == <span class="keyword">null</span>) &#123;</span><br><span class="line">            paths = ClassLoader.getSystemResources(STATIC_LOGGER_BINDER_PATH);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//判断能否找到 StaticLoggerBinder 的 class 文件</span></span><br><span class="line">            <span class="comment">//pom 未添加 日志实现 依赖包的话 是找不到该 class 文件的</span></span><br><span class="line">            <span class="comment">//因为可能存在若干个该 class 文件，故此处用 Enumeration 来迭代存储URL，Enumeration 现在被 Iteration 替代</span></span><br><span class="line">            <span class="comment">//两者功能一致</span></span><br><span class="line">            paths = loggerFactoryClassLoader.getResources(STATIC_LOGGER_BINDER_PATH);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (paths.hasMoreElements()) &#123;</span><br><span class="line">            URL path = paths.nextElement();</span><br><span class="line">            <span class="comment">//将所有class url 存到有序set 中</span></span><br><span class="line">            staticLoggerBinderPathSet.add(path);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException ioe) &#123;</span><br><span class="line">        Util.report(<span class="string">"Error getting resources from path"</span>, ioe);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//返回保存了class URL 的有序集合，转到 step6,继续向下执行</span></span><br><span class="line">    <span class="keyword">return</span> staticLoggerBinderPathSet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>由于项目<strong>并未加入日志实现框架</strong><ul>
+<li>classpath 下找不到<strong>StaticLoggerBinder.class</strong> </li>
+<li>StaticLoggerBinder.getSingleton() 将会<strong>抛出 NoClassDefFoundError 异常</strong></li>
+<li>初始化 <strong>INITIALIZATION_STATE = NOP_FALLBACK_INITIALIZATION</strong></li>
+<li>switch 语句，当初始化状态为 NOP_FALLBACK_INITIALIZATION 时，返回 NOP_FALLBACK_FACTORY， <strong>NOP_FALLBACK_FACTORY 是 LoggerFactory 下 slf4j-api 中一个 NOPLoggerFactory 类对象</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Logger <span class="title">getLogger</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//classpath 不存在日志实现框架的，此刻得到的是 NOPLoggerFactory 的实例</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    ILoggerFactory iLoggerFactory = getILoggerFactory();</span><br><span class="line">    <span class="comment">//进入NOPLoggerFactory 的 getLogger </span></span><br><span class="line">    <span class="keyword">return</span> iLoggerFactory.getLogger(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过 NopLoggerFactory 可以获取<strong>slf4j 自带的 NOPLogger 对象</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NOPLoggerFactory</span> <span class="keyword">implements</span> <span class="title">ILoggerFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NOPLoggerFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// nothing to do</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//获取具体日志对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Logger <span class="title">getLogger</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> NOPLogger.NOP_LOGGER;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="六-通过-Logger-打印日志"><a href="#六-通过-Logger-打印日志" class="headerlink" title="六. 通过 Logger 打印日志"></a>六. 通过 Logger 打印日志</h3><ul>
+<li>由五可知，Logger 的<strong>具体实现类是 NOPLogger</strong></li>
+<li>NOPLogger <strong>继承了 MarkerIgnoringBase 类</strong>，而 MarkerIgnoringBase 类<strong>实现了 org.slf4j.Logger 接口</strong></li>
+<li><p>NOPLogger 的各种日志打印方法<strong>均为空</strong>，如 log.info() </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NOPLogger</span> <span class="keyword">extends</span> <span class="title">MarkerIgnoringBase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">517220405410904473L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The unique instance of NOPLogger.</span></span><br><span class="line"><span class="comment">     * 获得 NOPLogger 实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> NOPLogger NOP_LOGGER = <span class="keyword">new</span> NOPLogger();</span><br><span class="line">    </span><br><span class="line">    ......</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//实现的Logger 的所有方法，方法体全为空</span></span><br><span class="line">    <span class="comment">/** A NOP implementation.  */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">debug</span><span class="params">(String format, Object arg1, Object arg2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// NOP</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** A NOP implementation. */</span></span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trace</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// NOP</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** A NOP implementation. */</span></span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">info</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// NOP</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新进入main 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Logger logger = LoggerFactory.getLogger(LogDemo.class);</span><br><span class="line">        <span class="comment">//进入NOPLogger 的 info 方法，方法体为空</span></span><br><span class="line">        logger.info(<span class="string">"log"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="七-最终输出结果"><a href="#七-最终输出结果" class="headerlink" title="七. 最终输出结果"></a>七. 最终输出结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Connected to the target VM, address: &apos;127.0.0.1:64503&apos;, transport: &apos;socket&apos;</span><br><span class="line">SLF4J: Failed to load class &quot;org.slf4j.impl.StaticLoggerBinder&quot;.</span><br><span class="line">SLF4J: Defaulting to no-operation (NOP) logger implementation</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.</span><br><span class="line">//此处因为 NOPLogger.info() 方法体为空，故未输出任何东西</span><br></pre></td></tr></table></figure>
+<h3 id="八-其他"><a href="#八-其他" class="headerlink" title="八. 其他"></a>八. 其他</h3><ul>
+<li><p>StaticLoggerBinder 类相关事项</p>
+<ul>
+<li>StaticLoggerBinder 是 slf4j-api 核心类，是<strong>与底层日志实现框架沟通的桥梁</strong></li>
+<li>StaticLoggerBinder.class 在 slf-api.jar 中<strong>是不存在的，并没有打包进去</strong>，但是在slf-api-source.jar 是存在 <strong>org.slf4j.impl.StaticLoggerBinder</strong>这个类的，因为<strong>需要保证 slf4j 本身编译不报错</strong><ul>
+<li>源码包中是为了<strong>给slf4j-api module 提供一个 dummy StaticLoggerBinder</strong></li>
+<li>真正的实现是在<strong>每个 slf4j binding project中</strong>，比如 slf4j-nop, slf4j-log4j12 等，在实际运行时加入相应 jar，运行时就能调用到真实的日志包了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>第三方日志实现框架需要提供</p>
+<ul>
+<li>Logger 接口实现类，用以提供<strong>具体日志记录行为，如 log.info()</strong></li>
+<li>ILoggerFactory 接口实现类，用以提供<strong>各自具体的 Logger 对象</strong></li>
+</ul>
+</li>
+<li><p>多个日志实现框架时的警告信息</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># reportMultipleBindingAmbiguity(staticLoggerBinderPathSet) 方法打印</span><br><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:/F:/Maven-3.3.9/apache-maven/repository/ch/qos/logback/logback-classic/1.0.13/logback-classic-1.0.13.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:/F:/Maven-3.3.9/apache-maven/repository/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.</span><br><span class="line"></span><br><span class="line"># reportActualBinding(staticLoggerBinderPathSet) 方法打印</span><br><span class="line">SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Slf4j </tag>
+            
+            <tag> 日志 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Jedis源码分析(四) - JedisSentinel与ShardedJedis介绍]]></title>
       <url>/2018/06/28/2018062804/</url>
       <content type="html"><![CDATA[<p>Jedis源码分析共有四个章节，以下为各章链接：</p>
@@ -1154,9 +1597,9 @@
         
         <tags>
             
-            <tag> 技术选型 </tag>
-            
             <tag> 微服务 </tag>
+            
+            <tag> 技术选型 </tag>
             
         </tags>
         
