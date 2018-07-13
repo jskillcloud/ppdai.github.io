@@ -3,6 +3,106 @@
   
     
     <entry>
+      <title><![CDATA[记一次Quartz重复调度的问题排查过程]]></title>
+      <url>/2018/07/13/20180713/</url>
+      <content type="html"><![CDATA[<h2 id="1-引子"><a href="#1-引子" class="headerlink" title="1.    引子"></a>1.    引子</h2><p>公司前期改用quartz做任务调度，一日的调度量均在两百万次以上。随着调度量的增加，突然开始出现job重复调度的情况，且没有规律可循。网上也没有说得较为清楚的解决办法，于是我们开始调试Quartz源码，并最终找到了问题所在。 </p>
+<a id="more"></a>
+<h2 id="2-准备"><a href="#2-准备" class="headerlink" title="2.    准备"></a>2.    准备</h2><p>首先，因为本文是代码级别的分析文章，因而需要提前了解Quartz的用途和用法，网上还是有很多不错的文章，可以提前自行了解。</p>
+<p>其次，在用法之外，我们还需要了解一些Quartz框架的基础概念：</p>
+<p>1)      Quartz把触发job，叫做<strong>fire</strong>。<strong>TRIGGER_STATE</strong>是当前trigger的状态，<strong>PREV_FIRE_TIME</strong>是上一次触发时间，<strong>NEXT_FIRE_TIME</strong>是下一次触发时间，<strong>misfire</strong>是指这个job在某一时刻要触发，却因为某些原因没有触发的情况。</p>
+<p>2)      Quartz在运行时，会起两类线程（不止两类），一类用于调度job的调度线程（单线程），一类是用于执行job具体业务的工作池。</p>
+<p>3)      Quartz自带的表里面，本文主要涉及以下3张表：</p>
+<ul>
+<li>triggers表。triggers表里记录了，某个trigger的PREV_FIRE_TIME（上次触发时间），NEXT_FIRE_TIME（下一次触发时间），TRIGGER_STATE（当前状态）。虽未尽述，但是本文用到的只有这些。</li>
+<li>locks表。Quartz支持分布式，也就是会存在多个线程同时抢占相同资源的情况，而Quartz正是依赖这张表，处理这种状况，至于如何做到，参见3.1。</li>
+<li>fired_triggers表，记录正在触发的triggers信息。</li>
+</ul>
+<p>4)      TRIGGER_STATE，也就是trigger的状态，主要有以下几类：</p>
+<p><img src="/2018/07/13/20180713/1.PNG" alt=""></p>
+<center style="margin: -20px 0 20px">图2-1 trigger状态变化图</center>
+
+<p>trigger的初始状态是<strong>WAITING</strong>，处于<strong>WAITING</strong>状态的trigger等待被触发。调度线程会不停地扫triggers表，根据NEXT_FIRE_TIME提前拉取即将触发的trigger，如果这个trigger被该调度线程拉取到，它的状态就会变为<strong>ACQUIRED</strong>。因为是提前拉取trigger，并未到达trigger真正的触发时刻，所以调度线程会等到真正触发的时刻，再将trigger状态由<strong>ACQUIRED</strong>改为<strong>EXECUTING</strong>。如果这个trigger不再执行，就将状态改为<strong>COMPLETE</strong>,否则为<strong>WAITING</strong>，开始新的周期。如果这个周期中的任何环节抛出异常，trigger的状态会变成<strong>ERROR</strong>。如果手动暂停这个trigger，状态会变成<strong>PAUSED</strong>。</p>
+<h2 id="3-开始排查"><a href="#3-开始排查" class="headerlink" title="3.    开始排查"></a>3.    开始排查</h2><h3 id="3-1分布式状态下的数据访问"><a href="#3-1分布式状态下的数据访问" class="headerlink" title="3.1分布式状态下的数据访问"></a>3.1分布式状态下的数据访问</h3><p>前文提到，trigger的状态储存在数据库，Quartz支持分布式，所以如果起了多个quartz服务，会有多个调度线程来抢夺触发同一个trigger。mysql在默认情况下执行select 语句，是不上锁的，那么如果同时有1个以上的调度线程抢到同一个trigger，是否会导致这个trigger重复调度呢？我们来看看，Quartz是如何解决这个问题的。</p>
+<p>首先，我们先来看下<code>JobStoreSupport</code>类的<code>executeInNonManagedTXLock()</code>方法：   </p>
+<p><img src="/2018/07/13/20180713/image002.png" alt="image002"></p>
+<center style="margin: -20px 0 20px">图3-1 executeInNonManagedTXLock方法的具体实现</center>
+
+<p>这个方法的官方介绍：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"></span><br><span class="line">*Execute the given callback having acquired the given lock.</span><br><span class="line"></span><br><span class="line">*Depending on the JobStore,the surrounding transaction maybe</span><br><span class="line"></span><br><span class="line">*assumed to be already present(managed).</span><br><span class="line"></span><br><span class="line">*</span><br><span class="line"></span><br><span class="line">*@param lockName The name of the lock to acquire,for example</span><br><span class="line"></span><br><span class="line">*&quot;TRIGGER_ACCESS&quot;.If null, then no lock is acquired ,but the</span><br><span class="line"></span><br><span class="line">*lockCallback is still executed in a transaction.</span><br><span class="line"></span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p>也就是说，传入的callback方法在执行的过程中是携带了指定的锁，并开启了事务，注释也提到，lockName就是指定的锁的名字，如果lockName是空的，那么callback方法的执行不在锁的保护下，但依然在事务中。</p>
+<p>这意味着，我们使用这个方法，不仅可以保证事务，还可以选择保证，callback方法的线程安全。</p>
+<p>接下来，我们来看一下<code>executeInNonManagedTXLock（…）</code>中的<code>obtainLock(conn,lockName)</code>方法，即抢锁的过程。这个方法是在<code>Semaphore</code>接口中定义的，<code>Semaphore</code>接口通过锁住线程或者资源，来保护资源不被其他线程修改，由于我们的调度信息是存在数据库的，所以现在查看<code>DBSemaphore.java</code>中<code>obtainLock</code>方法的具体实现：</p>
+<p><img src="/2018/07/13/20180713/image003.png" alt="image003"></p>
+<center style="margin: -20px 0 20px">图3-2 obtainLock方法具体实现</center>
+
+<p>我们通过调试查看<code>expandedSQL</code>和<code>expandedInsertSQL</code>这两个变量：</p>
+<p><img src="/2018/07/13/20180713/image004.png" alt="image004"></p>
+<center style="margin: -20px 0 20px">图3-3 expandedSQL和expandedInsertSQL的具体内容</center>
+
+<p>图3-3可以看出，<code>obtainLock</code>方法通过locks表的一个行锁（lockName确定）来保证callback方法的事务和线程安全。拿到锁后，<code>obtainLock</code>方法将<code>lockName</code>写入<code>threadlocal</code>。当然在<code>releaseLock</code>的时候，会将<code>lockName</code>从<code>threadlocal</code>中删除。</p>
+<p>总而言之，<code>executeInNonManagedTXLock()</code>方法，保证了在分布式的情况，同一时刻，只有一个线程可以执行这个方法。</p>
+<h3 id="3-2-quartz的调度过程"><a href="#3-2-quartz的调度过程" class="headerlink" title="3.2 quartz的调度过程"></a>3.2 quartz的调度过程</h3><p><img src="/2018/07/13/20180713/5.PNG" alt="5"></p>
+<center style="margin: -20px 0 20px">图3-4 Quartz的调度时序图</center>
+
+<p><code>QuartzSchedulerThread</code>是调度线程的具体实现，图3-4 是这个线程<code>run()</code>方法的主要内容，图中只提到了正常的情况下，也就是流程中没有出现异常的情况下的处理过程。由图可以看出，调度流程主要分为以下三步：</p>
+<h4 id="1）拉取待触发trigger"><a href="#1）拉取待触发trigger" class="headerlink" title="1）拉取待触发trigger:"></a>1）拉取待触发trigger:</h4><p>调度线程会一次性拉取距离现在，一定时间窗口内的，一定数量内的，即将触发的trigger信息。那么，时间窗口和数量信息如何确定呢，我们先来看一下，以下几个参数：</p>
+<ul>
+<li><code>idleWaitTime</code>： 默认30s，可通过配置属性<code>org.quartz.scheduler.idleWaitTime</code>设置。</li>
+<li><code>availThreadCount</code>：获取可用（空闲）的工作线程数量，总会大于1，因为该方法会一直阻塞，直到有工作线程空闲下来。</li>
+<li><code>maxBatchSize</code>：一次拉取trigger的最大数量，默认是1，可通过<code>org.quartz.scheduler.batchTriggerAcquisitionMaxCount</code>改写</li>
+<li><code>batchTimeWindow</code>：时间窗口调节参数，默认是0，可通过<code>org.quartz.scheduler.batchTriggerAcquisitionFireAheadTimeWindow</code>改写</li>
+<li><code>misfireThreshold</code>： 超过这个时间还未触发的trigger,被认为发生了misfire,默认60s，可通过<code>org.quartz.jobStore.misfireThreshold</code>设置。</li>
+</ul>
+<p>调度线程一次会拉取<strong>NEXT_FIRE_TIME</strong>小于（<code>now + idleWaitTime +batchTimeWindow</code>）,大于（<code>now - misfireThreshold</code>）的，<code>min(availThreadCount,maxBatchSize)</code>个triggers，默认情况下，会拉取未来30s，过去60s之间还未fire的1个trigger。随后将这些triggers的状态由<strong>WAITING</strong>改为<strong>ACQUIRED</strong>，并插入fired_triggers表。</p>
+<h4 id="2）触发trigger："><a href="#2）触发trigger：" class="headerlink" title="2）触发trigger："></a>2）触发trigger：</h4><p>首先，我们会检查每个trigger的状态是不是<strong>ACQUIRED</strong>，如果是，则将状态改为<strong>EXECUTING</strong>，然后更新trigger的<strong>NEXT_FIRE_TIME</strong>，如果这个trigger的<strong>NEXT_FIRE_TIME</strong>为空，也就是未来不再触发，就将其状态改为<strong>COMPLETE</strong>。如果trigger不允许并发执行（即Job的实现类标注了<code>@DisallowConcurrentExecution</code>），则将状态变为<strong>BLOCKED</strong>，否则就将状态改为<strong>WAITING</strong>。</p>
+<h4 id="3）包装trigger，丢给工作线程池："><a href="#3）包装trigger，丢给工作线程池：" class="headerlink" title="3）包装trigger，丢给工作线程池："></a>3）包装trigger，丢给工作线程池：</h4><p>遍历triggers，如果其中某个trigger在第二步出错，即返回值里面有exception或者为null，就会做一些triggers表，fired_triggers表的内容修正，跳过这个trigger，继续检查下一个。否则，则根据trigger信息实例化<code>JobRunShell</code>（实现了Thread接口），同时依据<code>JOB_CLASS_NAME</code>实例化<code>Job</code>，随后我们将<code>JobRunShell</code>实例丢入工作线。</p>
+<p>在<code>JobRunShell</code>的<code>run()</code>方法，Quartz会在执行<code>job.execute()</code>的前后通知之前绑定的监听器，如果<code>job.execute()</code>执行的过程中有异常抛出，则执行结果<code>jobExEx</code>会保存异常信息，反之如果没有异常抛出，则<code>jobExEx</code>为null。然后根据<code>jobExEx</code>的不同，得到不同的执行指令<code>instCode</code>。</p>
+<p><code>JobRunShell</code>将trigger信息，job信息和执行指令传给<code>triggeredJobComplete()</code>方法来完成最后的数据表更新操作。例如如果job执行过程有异常抛出，就将这个trigger状态变为<strong>ERROR</strong>，如果是<strong>BLOCKED</strong>状态，就将其变为<strong>WAITING</strong>等等，最后从fired_triggers表中删除这个已经执行完成的trigger。注意，这些是在工作线程池异步完成。</p>
+<h3 id="3-3-排查问题"><a href="#3-3-排查问题" class="headerlink" title="3.3 排查问题"></a>3.3 排查问题</h3><p>在前文，我们可以看到，Quartz的调度过程中有3次（可选的）上锁行为，为什么称为可选？因为这三个步骤虽然在<code>executeInNonManagedTXLock</code>方法的保护下，但<code>executeInNonManagedTXLock</code>方法可以通过设置传入参数lockName为空，取消上锁。在翻阅代码时，我们看到第一步拉取待触发的trigger时：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;OperableTrigger&gt; <span class="title">acquireNextTriggers</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> noLaterThan, <span class="keyword">final</span> <span class="keyword">int</span> maxCount, <span class="keyword">final</span> <span class="keyword">long</span> timeWindow)</span><span class="keyword">throws</span> JobPersistenceException </span>&#123;</span><br><span class="line">	String lockName;</span><br><span class="line">	<span class="comment">//判断是否需要上锁</span></span><br><span class="line">	<span class="keyword">if</span> (isAcquireTriggersWithinLock() || maxCount &gt; <span class="number">1</span>) &#123;</span><br><span class="line">		lockName = LOCK_TRIGGER_ACCESS;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		lockName = <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> executeInNonManagedTXLock(lockName, </span><br><span class="line">                                     <span class="keyword">new</span> TransactionCallback&lt;List&lt;OperableTrigger&gt;&gt;()&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> List&lt;OperableTrigger&gt; <span class="title">execute</span><span class="params">(Connection conn)</span> <span class="keyword">throws</span> JobPersistenceException </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> acquireNextTrigger(conn, noLaterThan, maxCount, timeWindow);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;, <span class="keyword">new</span> TransactionValidator&lt;List&lt;OperableTrigger&gt;&gt;() &#123;</span><br><span class="line">		 <span class="comment">//省略</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在加锁之前对lockName做了一次判断，而非像其他加锁方法一样，默认传入的就是<strong>LOCK_TRIGGER_ACCESS</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;TriggerFiredResult&gt; <span class="title">triggersFired</span><span class="params">(<span class="keyword">final</span> List&lt;OperableTrigger&gt; triggers)</span> <span class="keyword">throws</span> JobPersistenceException </span>&#123;</span><br><span class="line">	<span class="comment">//默认上锁</span></span><br><span class="line">	<span class="keyword">return</span> executeInNonManagedTXLock(LOCK_TRIGGER_ACCESS,</span><br><span class="line">		<span class="keyword">new</span> TransactionCallback&lt;List&lt;TriggerFiredResult&gt;&gt;() &#123;</span><br><span class="line">		<span class="comment">//省略</span></span><br><span class="line">		&#125;,<span class="keyword">new</span> TransactionValidator&lt;List&lt;TriggerFiredResult&gt;&gt;() &#123;</span><br><span class="line">			<span class="comment">//省略</span></span><br><span class="line">           &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过调试发现<code>isAcquireTriggersWithinLock()</code>的值是<code>false</code>，因而导致传入的lockName是null。我在代码中加入日志，可以更清楚的看到这个过程。</p>
+<p><img src="/2018/07/13/20180713/image006.png" alt="image006"></p>
+<center style="margin: -20px 0 20px">图3-5 调度日志</center>
+
+<p>由图3-5可以清楚看到，在拉取待触发的trigger时，默认是不上锁。如果这种默认配置有问题，岂不是会频繁发生重复调度的问题？而事实上并没有，原因在于Quartz默认采取乐观锁，也就是允许多个线程同时拉取同一个trigger。我们看一下Quartz在调度流程的第二步fire trigger的时候做了什么，注意此时是上锁状态：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> TriggerFiredBundle <span class="title">triggerFired</span><span class="params">(Connection conn, OperableTrigger trigger)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> JobPersistenceException </span>&#123;</span><br><span class="line">	JobDetail job;</span><br><span class="line">	Calendar cal = <span class="keyword">null</span>;</span><br><span class="line">	<span class="comment">// Make sure trigger wasn't deleted, paused, or completed...</span></span><br><span class="line">	<span class="keyword">try</span> &#123; <span class="comment">// if trigger was deleted, state will be STATE_DELETED</span></span><br><span class="line">		String state = getDelegate().selectTriggerState(conn,trigger.getKey());</span><br><span class="line">         <span class="keyword">if</span> (!state.equals(STATE_ACQUIRED)) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> JobPersistenceException(<span class="string">"Couldn't select trigger state: "</span></span><br><span class="line">                    + e.getMessage(), e);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>调度线程如果发现当前trigger的状态不是<strong>ACQUIRED</strong>，也就是说，这个trigger被其他线程fire了，就会返回null。在3.2，我们提到，在调度流程的第三步，如果发现某个trigger第二步的返回值是null，就会跳过第三步，取消fire。在通常的情况下，乐观锁能保证不发生重复调度，但是难免有意外发生，我们看一下这是发生重复调度时的日志：</p>
+<p><img src="/2018/07/13/20180713/image008.png" alt="image008"></p>
+<center style="margin: -20px 0 20px">图3-6 重复调度的日志</center>
+
+<p>在第一步时，也就是quartz在拉取到符合条件的triggers 到将他们的状态由<strong>WAITING</strong>改为<strong>ACQUIRED</strong>之间停顿了有超过9ms的时间，而另一台服务器正是趁着这9ms的空档完成了<strong>WAITING–&gt;ACQUIRED–&gt;EXECUTING–&gt;WAITING</strong>（也就是一个完整的状态变化周期）的全部过程，参见图3-7。</p>
+<p><img src="/2018/07/13/20180713/image009.png" alt="image009"></p>
+<center style="margin: -20px 0 20px">图3-7 重复调度原因示意图</center>
+
+<p>如何去解决这个问题呢？在配置文件加上<code>org.quartz.jobStore.acquireTriggersWithinLock=true</code>，这样，在调度流程的第一步，也就是拉取待即将触发的triggers时，是上锁的状态，即不会同时存在多个线程拉取到相同的trigger的情况，也就避免的重复调度的危险。</p>
+<h3 id="3-4-心得"><a href="#3-4-心得" class="headerlink" title="3.4 心得"></a>3.4 心得</h3><p>此次排查过程并非一帆风顺，走过一些坑，也有一些非技术相关的体会：</p>
+<p>1）学习是一个需要不断打磨，修正的能力。就我个人而言，为了学Quartz，刚开始去翻一个2.4MB大小的源码是毫无头绪，并且效率低下的，所以立刻转换方向，先了解这个框架的运行模式，在做什么，有哪些模块，是怎么做的，再找主线，翻相关的源码。之后在一次次使用中，碰到问题再翻之前没看的源码，就越来越顺利。</p>
+<p>之前也听过其他同事的学习方法，感觉并不完全适合自己，可能每个人状态经验不同，学习方法也稍有不同。在平时的学习中，需要去感受自己的学习效率，参考建议，尝试，感受效果，改进，会越来越清晰自己适合什么。这里很感谢我的师父，用简短的话先帮我捋顺了调度流程，这样我再看源码就不那么吃力了。</p>
+<p>2）要质疑“经验”和“理所应当”，惯性思维会蒙住你的双眼。在大规模的代码中很容易被习惯迷惑，一开始，我们看到上锁的那个方法的时候，认为这个上锁技巧很棒，这个方法就是为了解决并发的问题，“应该”都上锁了，上锁了就不会有并发的问题了，怎么可能几次与数据库的交互都上锁，突然某一次不上锁呢？直到看到拉取待触发的trigger方法时，觉得有丝丝不对劲，打下日志，才发现实际上是没上锁的。</p>
+<p>3）日志很重要。虽然我们可以调试，但是没有日志，我们是无法发现并证明，程序发生了ABA问题。</p>
+<p>4）最重要的是，不要害怕问题，即使是Quartz这样大型的框架，解决问题也不一定需要把2.4MB的源码通通读懂。只要有时间，问题都能解决，只是好的技巧能缩短这个时间，而我们需要在一次次实战中磨练技巧。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Quartz </tag>
+            
+            <tag> 任务调度 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Hexo+Github搭建个人博客]]></title>
       <url>/2018/07/06/20180706/</url>
       <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为程序猿，相信大家都有过这样一个想法，搭建属于自己的博客网站，在上面写写技术文章，记录生活点滴，坚持下去会发现这是一件很有成就感的事情。最近刚好在学习这部分内容，深入进去后发现里面坑很多，为了节省大家的时间，少走一点弯路，我整理出了这篇文章供大家参考。</p>
@@ -134,7 +234,7 @@
 <p>注意：设置域名解析需要几分钟的时间，若完成以上步骤依然无法访问，请过几分钟再尝试</p>
 <h2 id="Hexo入门"><a href="#Hexo入门" class="headerlink" title="Hexo入门"></a>Hexo入门</h2><p>我们先来看一下blog的目录结构：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ blog</span><br><span class="line">  + public        //静态资源文件夹，内容会推送到代码库</span><br><span class="line">  + scaffolds     //模板文件夹，新建文章时，Hexo会根据模板来建立文件</span><br><span class="line">  + source        //资源文件夹，Markdown和HTML文件会被解析并放到public文件夹，而其他文件会被拷贝过去</span><br><span class="line">  + themes        //主题文件夹，Hexo会根据主题来生成静态页面</span><br><span class="line">  - _config.yml   //网站的配置信息，可以在此配置大部分的参数</span><br><span class="line">  - package.json  //应用程序的信息和依赖关系</span><br></pre></td></tr></table></figure>
-<p>方便起见，我们把网站的语言设置为中文，编辑blog目录下的_config.yml文件，将language这一项设置为 <code>language: zh-CN</code>（参考blog/themes/landscape/languages目录），将url这一项设置为 <code>url: http://yourname.com</code>（你购买的域名，若未购买可以用<a href="http://yourname.github.io代替），其他配置项请根据自己的需要进行设置。" target="_blank" rel="noopener">http://yourname.github.io代替），其他配置项请根据自己的需要进行设置。</a></p>
+<p>方便起见，我们把网站的语言设置为中文，编辑blog目录下的_config.yml文件，将language这一项设置为 <code>language: zh-CN</code>（参考blog/themes/landscape/languages目录），将url这一项设置为 <code>url: http://yourname.com</code>（你购买的域名，若未购买可以用 <code>http://yourname.github.io</code> 代替），其他配置项请根据自己的需要进行设置。</p>
 <p>接下来新建一篇文章：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
 <p>layout可选值有：draft（草稿）、page（页面）、post（文章），对应模板文件夹中的3个文件，如果没有设置layout的话，默认使用_config.yml中的default_layout参数（默认值post）代替。若标题包含空格，请使用引号括起来。</p>
