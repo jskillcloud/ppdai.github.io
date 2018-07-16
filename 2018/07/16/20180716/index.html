@@ -132,7 +132,7 @@
 
 
 
-  <title>标签: 技术选型 | 拍拍贷基础框架团队博客</title>
+  <title>CAT源码阅读 - 架构设计解读 | 拍拍贷基础框架团队博客</title>
   
 
 
@@ -178,7 +178,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -302,86 +302,231 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>技术选型<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://techblog.ppdai.com/2018/07/16/20180716/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="基础框架">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="拍拍贷基础框架团队博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/03/26/20180326/" itemprop="url">
-              
-                <span itemprop="name">老司机的技术选型哲学</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">CAT源码阅读 - 架构设计解读</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-26T20:22:22+08:00"
-              content="2018-03-26" >
-          03-26
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-16T17:37:16+08:00">2018-07-16</time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+		  
+		  
+            <span class="post-time">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-user"></i>
+              </span>
+              
+                <span class="post-meta-item-text">作者</span>
+              
+              <span>童飞帆</span>
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+				
+                  <span class="post-meta-item-text">评论数</span>
+                
+                <a href="/2018/07/16/20180716/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/16/20180716/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/25/20180325/" itemprop="url">
-              
-                <span itemprop="name">微服务2.0技术栈选型手册</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-25T19:13:47+08:00"
-              content="2018-03-25" >
-          03-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>CAT(Central Application Tracking)是基于Java开发的实时应用监控平台，为大众点评网提供了全面的监控服务和决策支持。作为大众点评网基础监控组件，它已经在中间件框架（MVC框架，RPC框架，数据库框架，缓存框架等）中得到广泛应用，为点评各业务线提供系统的性能指标、健康状况、基础告警等。</p>
+<p>目前拍拍贷已经有500多个应用接入了CAT监控。而我在接手CAT项目过程中，较为全面地阅读了CAT的源码，故在此分享。</p>
+<a id="more"></a>
+<h2 id="CAT基本概念"><a href="#CAT基本概念" class="headerlink" title="CAT基本概念"></a>CAT基本概念</h2><h3 id="Mesaage"><a href="#Mesaage" class="headerlink" title="Mesaage"></a>Mesaage</h3><p>CAT中的消息上报时的基本单位抽象类称为消息(Message)，<code>Message</code>可分为四大类，实现代码分别继承自<code>Message</code>抽象类。分别是<code>Event</code>、<code>Transaction</code>、<code>Heartbeat</code>、<code>Metric</code>。关于<code>Message</code>类的各子类含义，官方有个领域建模图可表示：<br><img src="/2018/07/16/20180716/domainModel.png" alt="domainModel"></p>
+<h3 id="消息树"><a href="#消息树" class="headerlink" title="消息树"></a>消息树</h3><p>所有消息都可被组织进消息树（MessageTree），<code>Transaction</code>类型的消息可作为消息树节点，而其他消息只可作为消息树的叶子节点。也就是<code>Transaction</code>是一个可嵌套的递归结构。我们可以简单理解，若消息A为<code>Transaction</code>消息B的子节点，那么消息A就发生在B的执行期间。<code>MessageTree</code>类中有两个属性，分别是<code>parentMessageId</code>, <code>rootMessageId</code>。<code>parentMessageId</code>表示开启这一段代码执行的调用方；<code>rootMessageId</code>表示这一段代码的调用方的最终源头。这两个属性在之后CAT的调用链分析与分布式调用链分析中发挥了关键作用。</p>
+<h2 id="CAT设计"><a href="#CAT设计" class="headerlink" title="CAT设计"></a>CAT设计</h2><p>CAT系统划分为三个模块，分别是客户端、服务端、以及portal。在实际部署时，会分为<code>cat-client.jar</code>和<code>cat-home.war</code>。其中，<code>cat-client.jar</code>为客户端jar包，服务端与portal的功能都集成在<code>cat-home.war</code>中。</p>
+<h3 id="CAT客户端设计"><a href="#CAT客户端设计" class="headerlink" title="CAT客户端设计"></a>CAT客户端设计</h3><p>CAT的客户端主要用作监控埋点，可简单分为埋点、上报两部分。</p>
+<p>埋点部分流程如下所示：<br><img src="/2018/07/16/20180716/CATclient.png" alt="CATclient"></p>
+<p>一场CAT的埋点始于<code>newTransaction</code>方法，此时会判断是否已经有<code>context</code>，<code>context</code>由ThreadLocal维护，记录当前上下文，如IP、线程号 等信息，而每个<code>context</code>中会维护一个<code>stack</code>。换句话说，CAT的一场埋点是线程隔离的。在判断并创建<code>context</code>之后,会对新建transaction压入栈中，若此时栈为空，那么会将当前transaction记录在messageTree中，作为当前messageTree的根节点，之后在该线程中的所有新<code>Transaction</code>、<code>Event</code>、<code>Heartbeat</code>等都会作为stack顶端transaction的子节点被记录，同时新<code>Transaction</code>操作会被压入栈中。<br>而埋点的结束，是一个出栈的过程，当最终栈为空时，则认为这段埋点监控结束，将构造的整个messageTree进行flush，即分配给队列，准备上报。</p>
+<p>上报过程则是从队列中取得messageTree，进行编码，通过tcpSocket上报至服务端。</p>
+<h3 id="CAT服务端设计"><a href="#CAT服务端设计" class="headerlink" title="CAT服务端设计"></a>CAT服务端设计</h3><p>为了方便说明CAT的服务端设计，我画了一幅简单的CAT数据流图<br><img src="/2018/07/16/20180716/CATprocess.png" alt="CATprocess"></p>
+<p>从图中可以看到，cat客户端的埋点数据是通过tcpsocket上报到服务端的。服务端的一切服务是通过监听上报消息开始启动。当服务端的tcpsocketReceiver收到消息以及解码后，便会创建或者寻找一个当前时间的period（在每一小时的开始会创建一个period。），如下代码所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">consume</span><span class="params">(MessageTree tree)</span> </span>&#123;</span><br><span class="line">    String domain = tree.getDomain();</span><br><span class="line">    String ip = tree.getIpAddress();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!m_blackListManager.isBlack(domain, ip)) &#123;</span><br><span class="line">        <span class="keyword">long</span> timestamp = tree.getMessage().getTimestamp();</span><br><span class="line">        Period period = m_periodManager.findPeriod(timestamp);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (period != <span class="keyword">null</span>) &#123;</span><br><span class="line">            period.distribute(tree);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            m_serverStateManager.addNetworkTimeError(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        m_black++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (m_black % CatConstants.SUCCESS_COUNT == <span class="number">0</span>) &#123;</span><br><span class="line">            Cat.logEvent(<span class="string">"Discard"</span>, domain);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这之后，period会为每一个analyzer维护一个period task，period将消息分配至每一个period task的队列中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">distribute</span><span class="params">(MessageTree tree)</span> </span>&#123;</span><br><span class="line">    m_serverStateManager.addMessageTotal(tree.getDomain(), <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">boolean</span> success = <span class="keyword">true</span>;</span><br><span class="line">    String domain = tree.getDomain();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;String, List&lt;PeriodTask&gt;&gt; entry : m_tasks.entrySet()) &#123;</span><br><span class="line">        List&lt;PeriodTask&gt; tasks = entry.getValue();</span><br><span class="line">        <span class="keyword">int</span> length = tasks.size();</span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">boolean</span> manyTasks = length &gt; <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (manyTasks) &#123;</span><br><span class="line">            index = Math.abs(domain.hashCode()) % length;</span><br><span class="line">        &#125;</span><br><span class="line">        PeriodTask task = tasks.get(index);</span><br><span class="line">        <span class="keyword">boolean</span> enqueue = task.enqueue(tree);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (enqueue == <span class="keyword">false</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (manyTasks) &#123;</span><br><span class="line">                task = tasks.get((index + <span class="number">1</span>) % length);</span><br><span class="line">                enqueue = task.enqueue(tree);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (enqueue == <span class="keyword">false</span>) &#123;</span><br><span class="line">                    success = <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                success = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!success) &#123;</span><br><span class="line">        m_serverStateManager.addMessageTotalLoss(tree.getDomain(), <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而后analyzer从队列中消费消息并处理。analyzer可以理解一个数据分析器，用来处理收到的Message，并聚合生成报表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">analyze</span><span class="params">(MessageQueue queue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!isTimeout() &amp;&amp; isActive()) &#123;</span><br><span class="line">        MessageTree tree = queue.poll();</span><br><span class="line">        <span class="keyword">if</span> (tree != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                process(tree);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                m_errors++;</span><br><span class="line">                <span class="keyword">if</span> (m_errors == <span class="number">1</span> || m_errors % <span class="number">10000</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    Cat.logError(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        MessageTree tree = queue.poll();</span><br><span class="line">        <span class="keyword">if</span> (tree != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                process(tree);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                m_errors++;</span><br><span class="line">                <span class="keyword">if</span> (m_errors == <span class="number">1</span> || m_errors % <span class="number">10000</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    Cat.logError(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中DumpAnalyzer较为特殊，它不进行任何数据处理，只用作原始数据存储。（在原始数据的文件存储这部分，CAT设计了自己的索引与存储结构，其设计较为精妙，会在后续文章中进行分析。）</p>
+<p>各个analyzer会对当前小时窗口内的数据进行聚合处理，生成report表，并且在当前小时窗口内维护在内存中，在当前小时窗口结束后，将其落地写入文件或DB中。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CAT/" rel="tag"># CAT</a>
+          
+            <a href="/tags/监控平台/" rel="tag"># 监控平台</a>
+          
+            <a href="/tags/源码解读/" rel="tag"># 源码解读</a>
+          
+            <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/13/20180713/" rel="next" title="记一次Quartz重复调度的问题排查过程">
+                <i class="fa fa-chevron-left"></i> 记一次Quartz重复调度的问题排查过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -404,8 +549,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -496,6 +650,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAT基本概念"><span class="nav-number">2.</span> <span class="nav-text">CAT基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mesaage"><span class="nav-number">2.1.</span> <span class="nav-text">Mesaage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息树"><span class="nav-number">2.2.</span> <span class="nav-text">消息树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAT设计"><span class="nav-number">3.</span> <span class="nav-text">CAT设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAT客户端设计"><span class="nav-number">3.1.</span> <span class="nav-text">CAT客户端设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAT服务端设计"><span class="nav-number">3.2.</span> <span class="nav-text">CAT服务端设计</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -659,6 +829,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.1"></script>
+
+
 
   
 
