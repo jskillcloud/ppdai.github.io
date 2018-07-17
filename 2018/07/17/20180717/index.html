@@ -132,7 +132,7 @@
 
 
 
-  <title>标签: 日志 | 拍拍贷基础框架团队博客</title>
+  <title>消息模型 | 拍拍贷基础框架团队博客</title>
   
 
 
@@ -178,7 +178,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -302,58 +302,286 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>日志<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://techblog.ppdai.com/2018/07/17/20180717/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="基础框架">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="拍拍贷基础框架团队博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/07/04/20180704/" itemprop="url">
-              
-                <span itemprop="name">Slf4j源码解析 - 无底层日志实现框架时的执行流程</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">消息模型</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-04T19:25:33+08:00"
-              content="2018-07-04" >
-          07-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-17T13:48:06+08:00">2018-07-17</time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+		  
+		  
+            <span class="post-time">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-user"></i>
+              </span>
+              
+                <span class="post-meta-item-text">作者</span>
+              
+              <span>王鹤</span>
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+				
+                  <span class="post-meta-item-text">评论数</span>
+                
+                <a href="/2018/07/17/20180717/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/17/20180717/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>消息中间件主要包括发送、存储、消费三个模块，那么消息是如何在这三个模块之间传递的呢？</p>
+<p>接下来，本文将会介绍两种常用的消息传递模型，以及这两种传递模型在主流消息中间件中的使用。</p>
+<a id="more"></a>
+<h2 id="消息传递模型"><a href="#消息传递模型" class="headerlink" title="消息传递模型"></a>消息传递模型</h2><p>消息的传递模型一般有两种：点对点（P2P，Point-to-Point）模型和发布/订阅（Pub/Sub）模型。</p>
+<h3 id="点对点模型"><a href="#点对点模型" class="headerlink" title="点对点模型"></a>点对点模型</h3><p>1.点对点模型由生产者（producer）、队列（queue）、消费者（consumer）组成。</p>
+<p>2.点对点模型的示意图：</p>
+<p><img src="/2018/07/17/20180717/ptp1.png" alt="image"></p>
+<ul>
+<li>producer生产消息并且发送到queue中，consumer从queue中拉取消息并且处理、处理成功以后发送Ack确认。</li>
+<li>由于queue不存储已经消费的消息。所以消息消费者不可能消费到已经被消费的消息，即对于一条消息而言只有一个producer和一个consumer。</li>
+<li>但是在点对点模型的实现中，对于一个queue而言，可以有多个producer和多个consumer，如下图所示：</li>
+</ul>
+<p><img src="/2018/07/17/20180717/ptp2.png" alt="image"></p>
+<ul>
+<li>在多producer和多consumer的点对点模型中，producerA发送一条消息（Message1）到queue中，由于Message1只有一份，此时只能有一个consumer可以从queue中取到Message1进行消费。</li>
+<li>例如图中consumerA从queue中取出Message1进行消费以后，queue中不再存储Message1。所以其他consumer不能对Message1进行消费，并且consumerA也不能对Message1进行重复消费。</li>
+<li>所以queue不存储已经消费的消息，保证了消息的点对点传输，即一条消息只有一个producer和一个consumer（无论queue有多少个producer和consumer）。</li>
+</ul>
+<p>3.点对点模型的特点：</p>
+<ul>
+<li>queue不存储已经消费的消息。</li>
+<li>每个消息只有一个消费者和一个生产者。</li>
+<li>生产者发消息和消费者消费消息是异步解耦的。</li>
+<li>消费者接收到消息后，需要发送ACK确定。</li>
+</ul>
+<h3 id="发布-订阅模型"><a href="#发布-订阅模型" class="headerlink" title="发布/订阅模型"></a>发布/订阅模型</h3><p>1.发布/订阅模型由生产者（producer）、主题（topic）、消费者（consumer）组成。</p>
+<p>2.发布/订阅模型的示意图：</p>
+<p><img src="/2018/07/17/20180717/sub.png" alt="image"></p>
+<ul>
+<li>生产者将消息发送到topic中，所有订阅该topic的消费者，都可以消费该topic下的全部消息。该模型是一种观察者模型，生产者和消费者之间相互透明，并且可以动态的发布和订阅。</li>
+<li>消息只会存储一份，所以订阅同一个topic的消费者拉取的是同一份消息。消息被消费以后，不会立即删除，所以支持重复消费。</li>
+</ul>
+<p>3.发布/订阅模型的特点：</p>
+<ul>
+<li>每条消息都可以有多个消费者。</li>
+<li>针对某个topic，消费者必须订阅以后才可以消费它的消息。</li>
+<li>可重复消费</li>
+</ul>
+<h2 id="消息模型的应用"><a href="#消息模型的应用" class="headerlink" title="消息模型的应用"></a>消息模型的应用</h2><p>本章节主要讲述：上文两种传递模型在主流消息中间件kafaka、RabbitMQ中的应用。</p>
+<h3 id="kafka的消息传递模型"><a href="#kafka的消息传递模型" class="headerlink" title="kafka的消息传递模型"></a>kafka的消息传递模型</h3><p>Kafka是一种发布订阅模型，但是它与传统的发布订阅模型有所不同。</p>
+<p>kafka提供了一个消费者组(consumerGroup)的概念，一个消息可以被多个消费者组消费，但是只能被一个消费者组里的一个消费者消费。当只有一个消费者组时，每个消息都只有一个消费者，就是点对点模型。当存在多个消费者组时，同一条消息可以被多个消费者组消费，就是发布订阅模型。</p>
+<p>1.kafka的模型由生产者（producer）、主题（topic）、分区（partition）、消费者（consumer）组成，一个topic包含多个partition。</p>
+<p>2.kafka消息模型的示意图：</p>
+<p><img src="/2018/07/17/20180717/kafka.png" alt="image"></p>
+<ul>
+<li>在普通发布/订阅模型下，当生产者发送的消息量比较大时，单个消费者处理能力不足，就造成大量的消息堆积。</li>
+<li>kafka使用一种基于消费者组的发布/订阅模型，来解决堆积问题。在该模型中，订阅相同topic的多个消费者组成一个消费者组，分组订阅topic，实现消费端的负载均衡。消费端负载示意图如下：</li>
+</ul>
+<p><img src="/2018/07/17/20180717/consumerGroup.png" alt="image"></p>
+<ul>
+<li>同一个消费者组中的消费者，分工消费topic下各个partition的消息，实现了消费能力的线性扩展。此模型中，topic下的某一partition，只能被消费者组中的一个消费者消费。即消费者组下的消费者，不能同时消费topic下的同一个partition，因为这样会造成重复消费。</li>
+</ul>
+<p>3.kafka消息模型的特点：</p>
+<ul>
+<li>消息持久化，客户端为拉模型。</li>
+<li>消费状态和订阅关系由客户端维护。</li>
+<li>生产者断和消费者端都实现了负载均衡。</li>
+<li>在一个消费者组内部是点对点模型。</li>
+<li>多个消费者组之间是发布/订阅模型。</li>
+</ul>
+<h3 id="RabbitMQ消息传递模型"><a href="#RabbitMQ消息传递模型" class="headerlink" title="RabbitMQ消息传递模型"></a>RabbitMQ消息传递模型</h3><p>RabbitMQ是一种典型的点对点模型，但是RabbitMQ中可以通过设置交换器类型来实现发布订阅模型而达到广播消费的效果。</p>
+<h4 id="RabbitMQ的点对点模型"><a href="#RabbitMQ的点对点模型" class="headerlink" title="RabbitMQ的点对点模型"></a>RabbitMQ的点对点模型</h4><p>RabbitMQ中一个核心的原则是，消息不能直接投递到Queue中。Producer只能将自己的消息投递到Exchange中，由Exchange按照路由规则将消息投递到对应的Queue中。</p>
+<p>在Consumer中，声明自己对哪个Exchange感兴趣，并将自己的Queue绑定到自己感兴趣的路由关键字上，建立相应的映射关系；第二，在Producer中，将消息投递一个Exchange中，并指明它的路由关键字。</p>
+<p>RabbitMQ的点对点模型如下图所示：</p>
+<p><img src="/2018/07/17/20180717/exchange1.png" alt="image"></p>
+<p>图中两个生产者将消息发送到exchange交换器，exchange交换器根据消息的路由关键字，将消息发送到不同的队列里面。消费者从自己的队列中拉取消息，由于队列不存储已经被消费的消息，此模型中每一条消息只有一个唯一的消费者</p>
+<h4 id="RabbitMQ的发布订阅模型"><a href="#RabbitMQ的发布订阅模型" class="headerlink" title="RabbitMQ的发布订阅模型"></a>RabbitMQ的发布订阅模型</h4><p>1.RabbitMQ通过exchange可以支持多订阅，当RabbitMQ需要支持多订阅时，生产者发送的消息通过路由同时写到多个Queue，不同消费者都可以消费此消息。</p>
+<p>2.RabbitMQ的发布订阅式如下图所示：</p>
+<p><img src="/2018/07/17/20180717/exchange2.png" alt="image"></p>
+<ul>
+<li>Consumer声明自己对多个Exchange感兴趣，并将自己的Queue绑定到自己感兴趣的Exchange上，建立相应的映射关系。</li>
+<li>图中queue1和queue2同时都与exchange1、exchange2建立映射关系。当生产者将消息发送到exchange1，exchange1会把同一份消息分别发送到queue1和queue2。同理exchange2也会把同一份消息分别发送给queue1和queue2。从而实现了同一份消息可以被多个消费者消费，消费者分别从自己的队列中拉取消息进行消费。</li>
+<li>由于queue中的消息消费完后立即删除，不保留历史消息。所以在多订阅时，消息会以拷贝的形式存在不同的队列中。</li>
+</ul>
+<p>3.RabbitMQ消息模型的特点：</p>
+<ul>
+<li>通exchange交换器和消息拷贝实现多订阅。</li>
+<li>RabbitMQ既支持内存队列也支持持久化队列。</li>
+<li>消费端为推模型，消费状态和订阅关系由服务端负责维护。</li>
+</ul>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/消息模型/" rel="tag"># 消息模型</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/16/20180716/" rel="next" title="CAT源码阅读 - 架构设计解读">
+                <i class="fa fa-chevron-left"></i> CAT源码阅读 - 架构设计解读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -376,8 +604,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -468,6 +705,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息传递模型"><span class="nav-number">2.</span> <span class="nav-text">消息传递模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#点对点模型"><span class="nav-number">2.1.</span> <span class="nav-text">点对点模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发布-订阅模型"><span class="nav-number">2.2.</span> <span class="nav-text">发布/订阅模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息模型的应用"><span class="nav-number">3.</span> <span class="nav-text">消息模型的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka的消息传递模型"><span class="nav-number">3.1.</span> <span class="nav-text">kafka的消息传递模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RabbitMQ消息传递模型"><span class="nav-number">3.2.</span> <span class="nav-text">RabbitMQ消息传递模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RabbitMQ的点对点模型"><span class="nav-number">3.2.1.</span> <span class="nav-text">RabbitMQ的点对点模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RabbitMQ的发布订阅模型"><span class="nav-number">3.2.2.</span> <span class="nav-text">RabbitMQ的发布订阅模型</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -631,6 +884,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.1"></script>
+
+
 
   
 
