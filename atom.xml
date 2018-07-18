@@ -306,9 +306,9 @@
       <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
-      <category term="feign" scheme="http://techblog.ppdai.com/tags/feign/"/>
-    
       <category term="spring-cloud-openfeign" scheme="http://techblog.ppdai.com/tags/spring-cloud-openfeign/"/>
+    
+      <category term="feign" scheme="http://techblog.ppdai.com/tags/feign/"/>
     
   </entry>
   
@@ -331,11 +331,11 @@
       <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
+      <category term="feign" scheme="http://techblog.ppdai.com/tags/feign/"/>
+    
       <category term="http" scheme="http://techblog.ppdai.com/tags/http/"/>
     
       <category term="rest" scheme="http://techblog.ppdai.com/tags/rest/"/>
-    
-      <category term="feign" scheme="http://techblog.ppdai.com/tags/feign/"/>
     
   </entry>
   
@@ -358,11 +358,11 @@
       <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
     
     
+      <category term="feign" scheme="http://techblog.ppdai.com/tags/feign/"/>
+    
       <category term="http" scheme="http://techblog.ppdai.com/tags/http/"/>
     
       <category term="rest" scheme="http://techblog.ppdai.com/tags/rest/"/>
-    
-      <category term="feign" scheme="http://techblog.ppdai.com/tags/feign/"/>
     
   </entry>
   

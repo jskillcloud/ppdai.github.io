@@ -1107,9 +1107,9 @@
         
         <tags>
             
-            <tag> feign </tag>
-            
             <tag> spring-cloud-openfeign </tag>
+            
+            <tag> feign </tag>
             
         </tags>
         
@@ -1193,11 +1193,11 @@
         
         <tags>
             
+            <tag> feign </tag>
+            
             <tag> http </tag>
             
             <tag> rest </tag>
-            
-            <tag> feign </tag>
             
         </tags>
         
@@ -1365,11 +1365,11 @@
         
         <tags>
             
+            <tag> feign </tag>
+            
             <tag> http </tag>
             
             <tag> rest </tag>
-            
-            <tag> feign </tag>
             
         </tags>
         
