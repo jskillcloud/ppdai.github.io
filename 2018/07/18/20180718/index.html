@@ -130,7 +130,7 @@
 
 
 
-  <title>标签 | 拍拍贷基础框架团队博客</title>
+  <title>CAT源码阅读 - 设计细节解读 | 拍拍贷基础框架团队博客</title>
   
 
 
@@ -302,45 +302,245 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://techblog.ppdai.com/2018/07/18/20180718/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="基础框架">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="拍拍贷基础框架团队博客">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline"></h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                目前共计 31 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/API网关/" style="font-size: 12px; color: #ccc">API网关</a> <a href="/tags/CAT/" style="font-size: 18px; color: #8e8e8e">CAT</a> <a href="/tags/Github/" style="font-size: 12px; color: #ccc">Github</a> <a href="/tags/Hexo/" style="font-size: 12px; color: #ccc">Hexo</a> <a href="/tags/Jedis/" style="font-size: 30px; color: #111">Jedis</a> <a href="/tags/Quartz/" style="font-size: 12px; color: #ccc">Quartz</a> <a href="/tags/RabbitMQ/" style="font-size: 12px; color: #ccc">RabbitMQ</a> <a href="/tags/Slf4j/" style="font-size: 12px; color: #ccc">Slf4j</a> <a href="/tags/archaius/" style="font-size: 12px; color: #ccc">archaius</a> <a href="/tags/devops/" style="font-size: 12px; color: #ccc">devops</a> <a href="/tags/feign/" style="font-size: 24px; color: #4f4f4f">feign</a> <a href="/tags/gRpc/" style="font-size: 12px; color: #ccc">gRpc</a> <a href="/tags/http/" style="font-size: 18px; color: #8e8e8e">http</a> <a href="/tags/kong/" style="font-size: 12px; color: #ccc">kong</a> <a href="/tags/lua/" style="font-size: 12px; color: #ccc">lua</a> <a href="/tags/nginx/" style="font-size: 12px; color: #ccc">nginx</a> <a href="/tags/openresty/" style="font-size: 12px; color: #ccc">openresty</a> <a href="/tags/rest/" style="font-size: 18px; color: #8e8e8e">rest</a> <a href="/tags/spring-cloud-openfeign/" style="font-size: 12px; color: #ccc">spring-cloud-openfeign</a> <a href="/tags/任务调度/" style="font-size: 12px; color: #ccc">任务调度</a> <a href="/tags/动态配置/" style="font-size: 12px; color: #ccc">动态配置</a> <a href="/tags/博客/" style="font-size: 12px; color: #ccc">博客</a> <a href="/tags/基础架构/" style="font-size: 12px; color: #ccc">基础架构</a> <a href="/tags/微服务/" style="font-size: 24px; color: #4f4f4f">微服务</a> <a href="/tags/技术选型/" style="font-size: 18px; color: #8e8e8e">技术选型</a> <a href="/tags/日志/" style="font-size: 12px; color: #ccc">日志</a> <a href="/tags/架构设计/" style="font-size: 12px; color: #ccc">架构设计</a> <a href="/tags/消息模型/" style="font-size: 12px; color: #ccc">消息模型</a> <a href="/tags/源码解读/" style="font-size: 18px; color: #8e8e8e">源码解读</a> <a href="/tags/监控/" style="font-size: 12px; color: #ccc">监控</a> <a href="/tags/监控平台/" style="font-size: 18px; color: #8e8e8e">监控平台</a>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">CAT源码阅读 - 设计细节解读</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T11:06:05+08:00">2018-07-18</time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+		  
+		  
+            <span class="post-time">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-user"></i>
+              </span>
+              
+                <span class="post-meta-item-text">作者</span>
+              
+              <span>童飞帆</span>
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+				
+                  <span class="post-meta-item-text">评论数</span>
+                
+                <a href="/2018/07/18/20180718/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/18/20180718/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>CAT作为一款开源监控平台已经被许多大小公司所采用，如携程、陆金所、拍拍贷等大中型公司，以及其他各种创业公司，CAT在各大小公司一直稳定运行。这源于其优秀的细节设计。故本文将会分析CAT的一些设计细节，这些设计实现了较高的可用性，且较为复杂，值得一说。CAT主要的组成部分有： 客户端、服务端、存储几部分，下面分别对这几部分的设计做一些分析。</p>
+<a id="more"></a>
+<p>客户端的主要设计点有调用链和路由，服务端的主要设计点有数据分析和报表（上文已讨论），存储的主要设计点在于文件存储模块。</p>
+<p>本文主要分析以下几点设计：</p>
+<ol>
+<li><a href="#客户端路由">客户端路由</a></li>
+<li><a href="#分布式调用链设计">分布式调用链设计</a></li>
+<li><a href="#文件存储设计">文件存储设计</a></li>
+</ol>
+<h2 id="客户端路由"><a href="#客户端路由" class="headerlink" title="客户端路由"></a>客户端路由</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>CAT的设计中，客户端路由是由客户端和服务器端共同实现的。通过服务端的参与，CAT实现了可在portal中动态配置服务地址；通过服务端分配<code>domain</code>与路由（此处<code>domain</code>可理解为应用名称），实现了相同<code>domain</code>的客户端消息都上报到同一台server端实例中，避免了server端互相通信等复杂设计。</p>
+<h3 id="设计图"><a href="#设计图" class="headerlink" title="设计图"></a>设计图</h3><p><img src="/2018/07/18/20180718/routerDesign.png" alt="routerDesign"></p>
+<h3 id="详述"><a href="#详述" class="headerlink" title="详述"></a>详述</h3><p>在路由过程，我将其分为四个环节，分别是启动-&gt;获取路由-&gt;domain路由计算-&gt;构造/更新Channel。</p>
+<p>其中启动环节只在客户端启动的时候会触发。之后三个环节除客户端启动外，也会持续地轮询执行。</p>
+<ul>
+<li>启动(上图1，2)：在客户端启动时，<code>ClientConfigManager</code>会从配置文件中读取serverAddress，将serverAddress交给<code>ChannelManager</code>。</li>
+<li>获取路由（上图3）：<code>ChannelManager</code>在获取服务器地址后，会像该服务器的router接口发送请求，请求体中携带客户端名<code>domain</code></li>
+<li>domain路由计算（上图4）：服务端在接受路由计算请求后，便会从XML或者DB中读取ip-port列表，然后会依据每个domain的hashcode分配两个ip-port给该domain（上图中代码所示）</li>
+<li>构造/更新Channel（上图5）:服务端将分配的两个ip-port返回给客户端，由此客户端就得到了两个ip-port，客户端会将第一个ip-port作为主上报服务器，将第二个ip-port作为备份，用作failover，由此构造一个channal。</li>
+</ul>
+<p>经过以上四个步骤，客户端就完成了路由计算过程，<code>TcpSocketSender</code>只需获取channel，持续上报消息即可。</p>
+<h2 id="分布式调用链设计"><a href="#分布式调用链设计" class="headerlink" title="分布式调用链设计"></a>分布式调用链设计</h2><p>CAT可以通过定制化客户端而实现对分布式调用链的跟踪。CAT的分布式调用链在服务端主要是在展示的时候得到体现，所以可以通过阅读CAT的logview部分，探索CAT的分布式调用链设计机制。另外CAT服务端会对消息的type属性的某些默认值进行特殊处理，而分布式调用链的处理，正式通过对type为<code>RemoteCall</code>的Event消息进行处理，来组合分布式调用链。</p>
+<h3 id="logview展示消息树"><a href="#logview展示消息树" class="headerlink" title="logview展示消息树"></a>logview展示消息树</h3><p><img src="/2018/07/18/20180718/CatMessageTreeShow.png" alt="CatMessageTreeShow"></p>
+<p>通过阅读展示代码，并梳理过程得到上图，我们发现CAT的分布式调用链关键是一个type为<code>RemoteCall</code>的Event，并且可以模拟构造远程调用所形成的messageTree，如下图。</p>
+<p><img src="/2018/07/18/20180718/messageTreeRemoteCall.png" alt="messageTreeRemoteCall"></p>
+<h3 id="如何使用分布式调用链监控"><a href="#如何使用分布式调用链监控" class="headerlink" title="如何使用分布式调用链监控"></a>如何使用分布式调用链监控</h3><p>在CAT的官方文档中，几乎没有提及如何使用CAT的分布式调用链监控。然后CAT是提供了这一功能的，并且有较好的支持。我们通过阅读源码，理解了在服务端CAT是如何展示分布式调用链的，那么在客户端自然也就可以配合实现，从而开始使用CAT的分布式调用链追踪。</p>
+<h3 id="调用方客户端"><a href="#调用方客户端" class="headerlink" title="调用方客户端"></a>调用方客户端</h3><p>在拍拍贷内部，对okhttp进行了Aspectj编程，达成了使用okhttp包进行远程调用时的监控。核心代码段如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PropertyContext context = <span class="keyword">new</span> PropertyContext();</span><br><span class="line">Cat.logRemoteCallClient(context);</span><br><span class="line"></span><br><span class="line">request = request.newBuilder()</span><br><span class="line">        .addHeader(CatConstants.HTTP_HEADER_ROOT_MESSAGE_ID, context.getProperty(Cat.Context.ROOT))</span><br><span class="line">        .addHeader(CatConstants.HTTP_HEADER_PARENT_MESSAGE_ID, context.getProperty(Cat.Context.PARENT))</span><br><span class="line">        .addHeader(CatConstants.HTTP_HEADER_CHILD_MESSAGE_ID, context.getProperty(Cat.Context.CHILD))</span><br><span class="line">        .addHeader(<span class="string">"X-PPD-CAT-APP"</span>, Cat.getManager().getDomain())</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">ret = proceed(request);</span><br></pre></td></tr></table></figure></p>
+<p>通过代码可以看到，在请求中，将生成的childMessageId(可通过createMessageId方法生成)，放入header中，传递给了被调用方</p>
+<h3 id="被调用方客户端"><a href="#被调用方客户端" class="headerlink" title="被调用方客户端"></a>被调用方客户端</h3><p>而对http被调用方，则在filter获取header，并设置当前messageTree的messageId。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PropertyContext propertyContext = <span class="keyword">new</span> PropertyContext();</span><br><span class="line">propertyContext.addProperty(Cat.Context.ROOT, request.getHeader(CatConstants.HTTP_HEADER_ROOT_MESSAGE_ID));</span><br><span class="line">propertyContext.addProperty(Cat.Context.PARENT, request.getHeader(CatConstants.HTTP_HEADER_PARENT_MESSAGE_ID));</span><br><span class="line">propertyContext.addProperty(Cat.Context.CHILD, request.getHeader(CatConstants.HTTP_HEADER_CHILD_MESSAGE_ID));</span><br><span class="line">Cat.logRemoteCallServer(propertyContext);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">logRemoteCallServer</span><span class="params">(Context ctx)</span> </span>&#123;</span><br><span class="line">	MessageTree tree = Cat.getManager().getThreadLocalMessageTree();</span><br><span class="line">	String messageId = ctx.getProperty(Context.CHILD);</span><br><span class="line">	String rootId = ctx.getProperty(Context.ROOT);</span><br><span class="line">	String parentId = ctx.getProperty(Context.PARENT);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (messageId != <span class="keyword">null</span>) &#123;</span><br><span class="line">		tree.setMessageId(messageId);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (parentId != <span class="keyword">null</span>) &#123;</span><br><span class="line">		tree.setParentMessageId(parentId);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (rootId != <span class="keyword">null</span>) &#123;</span><br><span class="line">		tree.setRootMessageId(rootId);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如此一来，CAT的远程调用的两个MessageTree就串起来了，这也达成了分布式调用追踪的目的。</p>
+<h2 id="文件存储设计"><a href="#文件存储设计" class="headerlink" title="文件存储设计"></a>文件存储设计</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>CAT为了高可用、高效地进行消息存储，设计了一套文件存储结构。此文件将同一小时内上报的消息归集在一个目录进行存储,存储文件各目录内分为索引文件、数据文件两部分。系统以IP、消息上报时间小时窗口、消息树序列号（1小时内序列号）便可快速定位某一个消息。</p>
+<h3 id="设计图-1"><a href="#设计图-1" class="headerlink" title="设计图"></a>设计图</h3><p><img src="/2018/07/18/20180718/CatfileDesign.png" alt="CatfileDesign"></p>
+<h3 id="详述-1"><a href="#详述-1" class="headerlink" title="详述"></a>详述</h3><p>消息存储文件分为索引文件、数据文件。索引文件路径结构为<code>/{yyyymmdd}/{hh24}/{domain}-{serverIP}.idex2</code>，数据文件路径结构与索引文件相比仅后缀不同，其结构为<code>/{yyyymmdd}/{hh24}/{domain}-{serverIP}.dat2</code>。</p>
+<p>索引文件分为heander段和segment段，其中segment段便是有多个索引块顺序存储构成；而header段内每一条数据由64位存储，前32位为IP，后32位为segmentIdex。header段通过此方式维护了消息IP、segmentIndex与索引块的关系。segmentIndex可由消息树序列号(messageSeq)计算得知。因此一个消息可通过其IP、消息树序列号快速定位索引。</p>
+<p>索引块中每一条数据，由64位存储，前40位为blockAddress, 后24位为block内offset的，通过blockAddress和blockOffset可快速定位一条messageTree在数据文件中的位置。</p>
+<p>数据文件由多个block构成，每个block内的messageTree都上报自相同domain的客户端。</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CAT/" rel="tag"># CAT</a>
+          
+            <a href="/tags/监控平台/" rel="tag"># 监控平台</a>
+          
+            <a href="/tags/源码解读/" rel="tag"># 源码解读</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/17/20180717/" rel="next" title="消息模型">
+                <i class="fa fa-chevron-left"></i> 消息模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -363,8 +563,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -455,6 +664,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端路由"><span class="nav-number">2.</span> <span class="nav-text">客户端路由</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">2.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计图"><span class="nav-number">2.2.</span> <span class="nav-text">设计图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详述"><span class="nav-number">2.3.</span> <span class="nav-text">详述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式调用链设计"><span class="nav-number">3.</span> <span class="nav-text">分布式调用链设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#logview展示消息树"><span class="nav-number">3.1.</span> <span class="nav-text">logview展示消息树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用分布式调用链监控"><span class="nav-number">3.2.</span> <span class="nav-text">如何使用分布式调用链监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用方客户端"><span class="nav-number">3.3.</span> <span class="nav-text">调用方客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#被调用方客户端"><span class="nav-number">3.4.</span> <span class="nav-text">被调用方客户端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件存储设计"><span class="nav-number">4.</span> <span class="nav-text">文件存储设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述-1"><span class="nav-number">4.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计图-1"><span class="nav-number">4.2.</span> <span class="nav-text">设计图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详述-1"><span class="nav-number">4.3.</span> <span class="nav-text">详述</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

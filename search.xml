@@ -3,6 +3,67 @@
   
     
     <entry>
+      <title><![CDATA[CAT源码阅读 - 设计细节解读]]></title>
+      <url>/2018/07/18/20180718/</url>
+      <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>CAT作为一款开源监控平台已经被许多大小公司所采用，如携程、陆金所、拍拍贷等大中型公司，以及其他各种创业公司，CAT在各大小公司一直稳定运行。这源于其优秀的细节设计。故本文将会分析CAT的一些设计细节，这些设计实现了较高的可用性，且较为复杂，值得一说。CAT主要的组成部分有： 客户端、服务端、存储几部分，下面分别对这几部分的设计做一些分析。</p>
+<a id="more"></a>
+<p>客户端的主要设计点有调用链和路由，服务端的主要设计点有数据分析和报表（上文已讨论），存储的主要设计点在于文件存储模块。</p>
+<p>本文主要分析以下几点设计：</p>
+<ol>
+<li><a href="#客户端路由">客户端路由</a></li>
+<li><a href="#分布式调用链设计">分布式调用链设计</a></li>
+<li><a href="#文件存储设计">文件存储设计</a></li>
+</ol>
+<h2 id="客户端路由"><a href="#客户端路由" class="headerlink" title="客户端路由"></a>客户端路由</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>CAT的设计中，客户端路由是由客户端和服务器端共同实现的。通过服务端的参与，CAT实现了可在portal中动态配置服务地址；通过服务端分配<code>domain</code>与路由（此处<code>domain</code>可理解为应用名称），实现了相同<code>domain</code>的客户端消息都上报到同一台server端实例中，避免了server端互相通信等复杂设计。</p>
+<h3 id="设计图"><a href="#设计图" class="headerlink" title="设计图"></a>设计图</h3><p><img src="/2018/07/18/20180718/routerDesign.png" alt="routerDesign"></p>
+<h3 id="详述"><a href="#详述" class="headerlink" title="详述"></a>详述</h3><p>在路由过程，我将其分为四个环节，分别是启动-&gt;获取路由-&gt;domain路由计算-&gt;构造/更新Channel。</p>
+<p>其中启动环节只在客户端启动的时候会触发。之后三个环节除客户端启动外，也会持续地轮询执行。</p>
+<ul>
+<li>启动(上图1，2)：在客户端启动时，<code>ClientConfigManager</code>会从配置文件中读取serverAddress，将serverAddress交给<code>ChannelManager</code>。</li>
+<li>获取路由（上图3）：<code>ChannelManager</code>在获取服务器地址后，会像该服务器的router接口发送请求，请求体中携带客户端名<code>domain</code></li>
+<li>domain路由计算（上图4）：服务端在接受路由计算请求后，便会从XML或者DB中读取ip-port列表，然后会依据每个domain的hashcode分配两个ip-port给该domain（上图中代码所示）</li>
+<li>构造/更新Channel（上图5）:服务端将分配的两个ip-port返回给客户端，由此客户端就得到了两个ip-port，客户端会将第一个ip-port作为主上报服务器，将第二个ip-port作为备份，用作failover，由此构造一个channal。</li>
+</ul>
+<p>经过以上四个步骤，客户端就完成了路由计算过程，<code>TcpSocketSender</code>只需获取channel，持续上报消息即可。</p>
+<h2 id="分布式调用链设计"><a href="#分布式调用链设计" class="headerlink" title="分布式调用链设计"></a>分布式调用链设计</h2><p>CAT可以通过定制化客户端而实现对分布式调用链的跟踪。CAT的分布式调用链在服务端主要是在展示的时候得到体现，所以可以通过阅读CAT的logview部分，探索CAT的分布式调用链设计机制。另外CAT服务端会对消息的type属性的某些默认值进行特殊处理，而分布式调用链的处理，正式通过对type为<code>RemoteCall</code>的Event消息进行处理，来组合分布式调用链。</p>
+<h3 id="logview展示消息树"><a href="#logview展示消息树" class="headerlink" title="logview展示消息树"></a>logview展示消息树</h3><p><img src="/2018/07/18/20180718/CatMessageTreeShow.png" alt="CatMessageTreeShow"></p>
+<p>通过阅读展示代码，并梳理过程得到上图，我们发现CAT的分布式调用链关键是一个type为<code>RemoteCall</code>的Event，并且可以模拟构造远程调用所形成的messageTree，如下图。</p>
+<p><img src="/2018/07/18/20180718/messageTreeRemoteCall.png" alt="messageTreeRemoteCall"></p>
+<h3 id="如何使用分布式调用链监控"><a href="#如何使用分布式调用链监控" class="headerlink" title="如何使用分布式调用链监控"></a>如何使用分布式调用链监控</h3><p>在CAT的官方文档中，几乎没有提及如何使用CAT的分布式调用链监控。然后CAT是提供了这一功能的，并且有较好的支持。我们通过阅读源码，理解了在服务端CAT是如何展示分布式调用链的，那么在客户端自然也就可以配合实现，从而开始使用CAT的分布式调用链追踪。</p>
+<h3 id="调用方客户端"><a href="#调用方客户端" class="headerlink" title="调用方客户端"></a>调用方客户端</h3><p>在拍拍贷内部，对okhttp进行了Aspectj编程，达成了使用okhttp包进行远程调用时的监控。核心代码段如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PropertyContext context = <span class="keyword">new</span> PropertyContext();</span><br><span class="line">Cat.logRemoteCallClient(context);</span><br><span class="line"></span><br><span class="line">request = request.newBuilder()</span><br><span class="line">        .addHeader(CatConstants.HTTP_HEADER_ROOT_MESSAGE_ID, context.getProperty(Cat.Context.ROOT))</span><br><span class="line">        .addHeader(CatConstants.HTTP_HEADER_PARENT_MESSAGE_ID, context.getProperty(Cat.Context.PARENT))</span><br><span class="line">        .addHeader(CatConstants.HTTP_HEADER_CHILD_MESSAGE_ID, context.getProperty(Cat.Context.CHILD))</span><br><span class="line">        .addHeader(<span class="string">"X-PPD-CAT-APP"</span>, Cat.getManager().getDomain())</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">ret = proceed(request);</span><br></pre></td></tr></table></figure></p>
+<p>通过代码可以看到，在请求中，将生成的childMessageId(可通过createMessageId方法生成)，放入header中，传递给了被调用方</p>
+<h3 id="被调用方客户端"><a href="#被调用方客户端" class="headerlink" title="被调用方客户端"></a>被调用方客户端</h3><p>而对http被调用方，则在filter获取header，并设置当前messageTree的messageId。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PropertyContext propertyContext = <span class="keyword">new</span> PropertyContext();</span><br><span class="line">propertyContext.addProperty(Cat.Context.ROOT, request.getHeader(CatConstants.HTTP_HEADER_ROOT_MESSAGE_ID));</span><br><span class="line">propertyContext.addProperty(Cat.Context.PARENT, request.getHeader(CatConstants.HTTP_HEADER_PARENT_MESSAGE_ID));</span><br><span class="line">propertyContext.addProperty(Cat.Context.CHILD, request.getHeader(CatConstants.HTTP_HEADER_CHILD_MESSAGE_ID));</span><br><span class="line">Cat.logRemoteCallServer(propertyContext);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">logRemoteCallServer</span><span class="params">(Context ctx)</span> </span>&#123;</span><br><span class="line">	MessageTree tree = Cat.getManager().getThreadLocalMessageTree();</span><br><span class="line">	String messageId = ctx.getProperty(Context.CHILD);</span><br><span class="line">	String rootId = ctx.getProperty(Context.ROOT);</span><br><span class="line">	String parentId = ctx.getProperty(Context.PARENT);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (messageId != <span class="keyword">null</span>) &#123;</span><br><span class="line">		tree.setMessageId(messageId);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (parentId != <span class="keyword">null</span>) &#123;</span><br><span class="line">		tree.setParentMessageId(parentId);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (rootId != <span class="keyword">null</span>) &#123;</span><br><span class="line">		tree.setRootMessageId(rootId);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如此一来，CAT的远程调用的两个MessageTree就串起来了，这也达成了分布式调用追踪的目的。</p>
+<h2 id="文件存储设计"><a href="#文件存储设计" class="headerlink" title="文件存储设计"></a>文件存储设计</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>CAT为了高可用、高效地进行消息存储，设计了一套文件存储结构。此文件将同一小时内上报的消息归集在一个目录进行存储,存储文件各目录内分为索引文件、数据文件两部分。系统以IP、消息上报时间小时窗口、消息树序列号（1小时内序列号）便可快速定位某一个消息。</p>
+<h3 id="设计图-1"><a href="#设计图-1" class="headerlink" title="设计图"></a>设计图</h3><p><img src="/2018/07/18/20180718/CatfileDesign.png" alt="CatfileDesign"></p>
+<h3 id="详述-1"><a href="#详述-1" class="headerlink" title="详述"></a>详述</h3><p>消息存储文件分为索引文件、数据文件。索引文件路径结构为<code>/{yyyymmdd}/{hh24}/{domain}-{serverIP}.idex2</code>，数据文件路径结构与索引文件相比仅后缀不同，其结构为<code>/{yyyymmdd}/{hh24}/{domain}-{serverIP}.dat2</code>。</p>
+<p>索引文件分为heander段和segment段，其中segment段便是有多个索引块顺序存储构成；而header段内每一条数据由64位存储，前32位为IP，后32位为segmentIdex。header段通过此方式维护了消息IP、segmentIndex与索引块的关系。segmentIndex可由消息树序列号(messageSeq)计算得知。因此一个消息可通过其IP、消息树序列号快速定位索引。</p>
+<p>索引块中每一条数据，由64位存储，前40位为blockAddress, 后24位为block内offset的，通过blockAddress和blockOffset可快速定位一条messageTree在数据文件中的位置。</p>
+<p>数据文件由多个block构成，每个block内的messageTree都上报自相同domain的客户端。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> CAT </tag>
+            
+            <tag> 监控平台 </tag>
+            
+            <tag> 源码解读 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[消息模型]]></title>
       <url>/2018/07/17/20180717/</url>
       <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>消息中间件主要包括发送、存储、消费三个模块，那么消息是如何在这三个模块之间传递的呢？</p>
@@ -111,8 +172,8 @@
 <h2 id="CAT数据结构设计"><a href="#CAT数据结构设计" class="headerlink" title="CAT数据结构设计"></a>CAT数据结构设计</h2><h3 id="Mesaage"><a href="#Mesaage" class="headerlink" title="Mesaage"></a>Mesaage</h3><p>CAT中的消息上报时的基本单位抽象类称为消息(Message)，<code>Message</code>可分为四大类，实现代码分别继承自<code>Message</code>抽象类。分别是<code>Event</code>、<code>Transaction</code>、<code>Heartbeat</code>、<code>Metric</code>。关于<code>Message</code>类的各子类含义，官方有个领域建模图可表示：<br><img src="/2018/07/16/20180716/domainModel.png" alt="domainModel"></p>
 <h3 id="消息树"><a href="#消息树" class="headerlink" title="消息树"></a>消息树</h3><p>所有消息都可被组织进消息树（MessageTree），<code>Transaction</code>类型的消息可作为消息树节点，而其他消息只可作为消息树的叶子节点。也就是<code>Transaction</code>是一个可嵌套的递归结构。结构可表示如下图：<br><img src="/2018/07/16/20180716/MessageTreeStruct.png" alt="MessageTreeStruct"></p>
 <p>有时候以时序图的方式来表示也许会更清晰：<br><img src="/2018/07/16/20180716/MessageTreeTimeline.png" alt="MessageTreeTimeline"></p>
-<p>我们可以简单理解，若消息B为<code>Transaction</code>消息A的子节点，那么消息B就发生在A的执行期间。</p>
-<p><code>MessageTree</code>类中的属性<code>messageId</code>表示<code>MessageTree</code>所持有的根节点<code>transaction</code>编号；上图中MessageTree1的<code>messageId</code>为TransactionA，MessageTree2的<code>messageId</code>为TransactionD。另外还有两个属性，分别是<code>parentMessageId</code>, <code>rootMessageId</code>。<code>parentMessageId</code>表示开启这一段代码执行的调用方；<code>rootMessageId</code>表示这一段代码的调用方的最终源头。上图中，MessageTree2的<code>parentMessageId</code>和<code>rootMessageId</code>皆为TransactionA。这两个属性在之后CAT的调用链分析与分布式调用链分析中发挥了关键作用。</p>
+<p>我们可以简单理解为，若消息B为<code>Transaction</code>消息A的子节点，那么消息B就发生在A的执行期间。</p>
+<p><code>MessageTree</code>类中的属性<code>messageId</code>表示<code>MessageTree</code>本身，其构成为：{domain}-{ip}-{timestamp}-{自增index}；另外还有两个属性，分别是<code>parentMessageId</code>, <code>rootMessageId</code>。<code>parentMessageId</code>表示开启这一段代码执行的调用方；<code>rootMessageId</code>表示这一段代码的调用方的最终源头。上图中，MessageTree2的<code>parentMessageId</code>和<code>rootMessageId</code>皆为<code>MessageTree1</code>的messageId。这两个属性在之后CAT的调用链分析与分布式调用链分析中发挥了关键作用。</p>
 <h2 id="CAT设计"><a href="#CAT设计" class="headerlink" title="CAT设计"></a>CAT设计</h2><p>CAT系统划分为三个模块，分别是客户端、服务端、以及portal。在实际部署时，会分为<code>cat-client.jar</code>和<code>cat-home.war</code>。其中，<code>cat-client.jar</code>为客户端jar包，服务端与portal的功能都集成在<code>cat-home.war</code>中。</p>
 <h3 id="CAT客户端设计"><a href="#CAT客户端设计" class="headerlink" title="CAT客户端设计"></a>CAT客户端设计</h3><p>CAT的客户端主要用作监控埋点，可简单分为埋点、上报两部分。<br>其设计图如下：<br><img src="/2018/07/16/20180716/CATclientDesign.png" alt="CATclientDesign"></p>
 <p>由于<code>Conext</code>维护在ThreadLocal中，因此每一个thread都会拥有一份自己的<code>Context</code>，<code>Context</code>中会维护一个stack用来存储transaction，当新transaction开启时入栈，结束时出栈。当栈内压入第一个transaction时开始构造<code>MessageTree</code>；栈空时认为一个<code>MessageTree</code>结束，此时将该<code>MessageTree</code>发送给待发送队列。</p>

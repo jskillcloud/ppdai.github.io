@@ -86,19 +86,17 @@
 
 
 
-<meta name="description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta name="description" content="革故鼎新 追求卓越 简单靠谱 彼此成就">
 <meta property="og:type" content="website">
 <meta property="og:title" content="拍拍贷基础框架团队博客">
-<meta property="og:url" content="http://techblog.ppdai.com/about/index.html">
+<meta property="og:url" content="http://techblog.ppdai.com/categories/index.html">
 <meta property="og:site_name" content="拍拍贷基础框架团队博客">
-<meta property="og:description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
+<meta property="og:description" content="革故鼎新 追求卓越 简单靠谱 彼此成就">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://techblog.ppdai.com/about/platform.png">
-<meta property="og:updated_time" content="2018-02-09T13:16:46.653Z">
+<meta property="og:updated_time" content="2018-04-25T02:55:48.920Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="拍拍贷基础框架团队博客">
-<meta name="twitter:description" content="拍拍贷基础框架团队介绍拍拍贷（NYSE:PPDF）成立于2007年6月，总部位于国际金融中心上海，是中国领先的金融科技公司，拥有超过6000名员工。自创立以来，拍拍贷始终肩负“金融触手可及，信用改变中国”的历史使命，为中国游离于传统金融服务体系之外的人群提供个人信贷服务，并提出“共益经济”的理念，致力于提高社会的资源配置效率，助力普惠金融在中国的发展。2017年11月10日，拍拍贷成功在美国纽交所">
-<meta name="twitter:image" content="http://techblog.ppdai.com/about/platform.png">
+<meta name="twitter:description" content="革故鼎新 追求卓越 简单靠谱 彼此成就">
 
 
 
@@ -126,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://techblog.ppdai.com/about/"/>
+  <link rel="canonical" href="http://techblog.ppdai.com/categories/"/>
 
 
 
@@ -438,8 +436,8 @@
 <h2 id="CAT数据结构设计"><a href="#CAT数据结构设计" class="headerlink" title="CAT数据结构设计"></a>CAT数据结构设计</h2><h3 id="Mesaage"><a href="#Mesaage" class="headerlink" title="Mesaage"></a>Mesaage</h3><p>CAT中的消息上报时的基本单位抽象类称为消息(Message)，<code>Message</code>可分为四大类，实现代码分别继承自<code>Message</code>抽象类。分别是<code>Event</code>、<code>Transaction</code>、<code>Heartbeat</code>、<code>Metric</code>。关于<code>Message</code>类的各子类含义，官方有个领域建模图可表示：<br><img src="/2018/07/16/20180716/domainModel.png" alt="domainModel"></p>
 <h3 id="消息树"><a href="#消息树" class="headerlink" title="消息树"></a>消息树</h3><p>所有消息都可被组织进消息树（MessageTree），<code>Transaction</code>类型的消息可作为消息树节点，而其他消息只可作为消息树的叶子节点。也就是<code>Transaction</code>是一个可嵌套的递归结构。结构可表示如下图：<br><img src="/2018/07/16/20180716/MessageTreeStruct.png" alt="MessageTreeStruct"></p>
 <p>有时候以时序图的方式来表示也许会更清晰：<br><img src="/2018/07/16/20180716/MessageTreeTimeline.png" alt="MessageTreeTimeline"></p>
-<p>我们可以简单理解，若消息B为<code>Transaction</code>消息A的子节点，那么消息B就发生在A的执行期间。</p>
-<p><code>MessageTree</code>类中的属性<code>messageId</code>表示<code>MessageTree</code>所持有的根节点<code>transaction</code>编号；上图中MessageTree1的<code>messageId</code>为TransactionA，MessageTree2的<code>messageId</code>为TransactionD。另外还有两个属性，分别是<code>parentMessageId</code>, <code>rootMessageId</code>。<code>parentMessageId</code>表示开启这一段代码执行的调用方；<code>rootMessageId</code>表示这一段代码的调用方的最终源头。上图中，MessageTree2的<code>parentMessageId</code>和<code>rootMessageId</code>皆为TransactionA。这两个属性在之后CAT的调用链分析与分布式调用链分析中发挥了关键作用。</p>
+<p>我们可以简单理解为，若消息B为<code>Transaction</code>消息A的子节点，那么消息B就发生在A的执行期间。</p>
+<p><code>MessageTree</code>类中的属性<code>messageId</code>表示<code>MessageTree</code>本身，其构成为：{domain}-{ip}-{timestamp}-{自增index}；另外还有两个属性，分别是<code>parentMessageId</code>, <code>rootMessageId</code>。<code>parentMessageId</code>表示开启这一段代码执行的调用方；<code>rootMessageId</code>表示这一段代码的调用方的最终源头。上图中，MessageTree2的<code>parentMessageId</code>和<code>rootMessageId</code>皆为<code>MessageTree1</code>的messageId。这两个属性在之后CAT的调用链分析与分布式调用链分析中发挥了关键作用。</p>
 <h2 id="CAT设计"><a href="#CAT设计" class="headerlink" title="CAT设计"></a>CAT设计</h2><p>CAT系统划分为三个模块，分别是客户端、服务端、以及portal。在实际部署时，会分为<code>cat-client.jar</code>和<code>cat-home.war</code>。其中，<code>cat-client.jar</code>为客户端jar包，服务端与portal的功能都集成在<code>cat-home.war</code>中。</p>
 <h3 id="CAT客户端设计"><a href="#CAT客户端设计" class="headerlink" title="CAT客户端设计"></a>CAT客户端设计</h3><p>CAT的客户端主要用作监控埋点，可简单分为埋点、上报两部分。<br>其设计图如下：<br><img src="/2018/07/16/20180716/CATclientDesign.png" alt="CATclientDesign"></p>
 <p>由于<code>Conext</code>维护在ThreadLocal中，因此每一个thread都会拥有一份自己的<code>Context</code>，<code>Context</code>中会维护一个stack用来存储transaction，当新transaction开启时入栈，结束时出栈。当栈内压入第一个transaction时开始构造<code>MessageTree</code>；栈空时认为一个<code>MessageTree</code>结束，此时将该<code>MessageTree</code>发送给待发送队列。</p>
@@ -596,7 +594,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
