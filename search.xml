@@ -3,6 +3,117 @@
   
     
     <entry>
+      <title><![CDATA[拍拍贷开源微服务注册中心Radar]]></title>
+      <url>/2018/08/13/20180813/</url>
+      <content type="html"><![CDATA[<p><img src="/2018/08/13/20180813/radar-512.png" width="250px" height="250px"></p>
+<h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><p>服务发现(Service Discovery)是微服务架构的一个根本性问题。假设有两个服务A和B，且A需要调用B，那么A该如何发现B呢？这就是服务发现所要解决的问题。传统的做法是通过运维静态配置，一种常用方式是通过配域名+负载均衡器(常用硬件如F5或软件如nginx)上配ip。但是随着企业对CD持续交付能力要求的不断提高，同时随着容器云等动态交付技术在企业的不断推广应用，传统静态配置做法面临如下挑战：</p>
+<a id="more"></a>
+<ul>
+<li>服务部署在容器云等环境中，服务实例有可能会挂，服务消费方需要有自动发现和自动剔除的能力，否则就会调不通出错。</li>
+<li>容器一般不固定ip，每次发布容器都可能会漂移，而且有些高级的容器调度平台(例如k8s/mesos)具有故障转移能力，也就是说故障发生时服务的ip也可能会漂移。</li>
+<li>为了提升交付效率同时降低发布风险，现代微服务提倡使用灰度和蓝绿等高级发布技术，同时提倡DevOps研发自助部署，研发人员能够自助拉入和拉出服务实例。</li>
+</ul>
+<p>服务注册中心(Service Registry)是业界微服务实践沉淀下来的一个架构模式，简化架构和原理如下图所示：</p>
+<p><img src="/2018/08/13/20180813/service_registry.png" alt="service registry"></p>
+<ol>
+<li>服务提供方(Provider)启动时自动注册到服务注册中心，并定期报保活(Keep Alive)心跳。</li>
+<li>服务消费方(Consumer)定期从注册中心拉取服务实例地址列表，并做本地缓存，然后根据某种负载均衡策略(例如Round Robin或随机)对目标服务实例发起调用。</li>
+</ol>
+<p>服务注册中心的经典案例是Netflix的<a href="https://github.com/Netflix/eureka" target="_blank" rel="noopener">Eureka</a>，在Netflix经过大规模生产验证，是Netflix微服务架构的两大核心基础设施之一(另外一个是Zuul网关)。Pivotal近年也直接将Eureka纳入其Spring Cloud微服务技术栈体系，在社区有比较成功的推广和应用。社区另外一个比较成熟的服务注册中心是Hashicorp公司开源的<a href="https://github.com/hashicorp/consul" target="_blank" rel="noopener">Consul</a>。</p>
+<p>经过对Eureka和Consul这两款产品进行了深入的调研和分析之后，我们最终决定自研服务注册中心，主要原因如下：</p>
+<ol>
+<li>开源产品实现过于复杂，Eureka/Consul等内部实现都是基于内存的最终一致模式，节点之间状态同步逻辑尤其复杂，一般研发难以理解，整个产品基本上是黑盒，出了问题很难hold住。</li>
+<li>开源产品无法满足DevOps研发自助部署，灵活拉入拉出，实现高级灰度或蓝绿部署等需求，定制扩展可行但是工作量巨大。</li>
+</ol>
+<p>基于上述原因，我们根据团队现状和实际业务需求，定制研发了轻量级的微服务注册中心产品<a href="https://github.com/ppdai-incubator/radar" target="_blank" rel="noopener">Radar</a>。</p>
+<h3 id="功能亮点"><a href="#功能亮点" class="headerlink" title="功能亮点"></a>功能亮点</h3><p>我们研发的Radar注册中心具有如下功能亮点：</p>
+<ol>
+<li>实现简单，没有采用复杂的Paxos/Raft等分布式一致性算法，节点间状态同步仅通过mysql数据库实现。</li>
+<li>服务端和客户端轻量，依赖少，服务端仅依赖mysql数据库。</li>
+<li>高性能，一个服务节点即可支撑上千个服务实例的注册发现。</li>
+<li>支持集群模式和HA，可以水平扩容。</li>
+<li>提供完善服务治理界面，用户通过UI即可对服务实例执行拉入拉出等操作。</li>
+<li>提供完善API，方便其它系统例如发布系统对接。</li>
+<li>支持同一服务通过集群(cluster)名进行逻辑隔离。</li>
+<li>支持对接Spring/Ribbon客户端软负载。</li>
+<li>支持容器漂移，通过设置canInstanceId标识，应用实例启动时可以保持上次的状态信息。</li>
+</ol>
+<p>下面是Radar治理中心的一个截图，用户通过该界面即可对服务实例执行拉入拉出等操作。</p>
+<p><img src="/2018/08/13/20180813/radar.png" alt="radar"></p>
+<h3 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h3><h4 id="核心领域模型"><a href="#核心领域模型" class="headerlink" title="核心领域模型"></a>核心领域模型</h4><p><img src="/2018/08/13/20180813/model.png" alt="domain model"></p>
+<p>Radar的领域模型比较简单，核心只有三个概念：</p>
+<ul>
+<li><strong>App</strong>：应用，是一个抽象概念，也是一个发布单位，比如某个web服务可以称为一个应用。canAppId是应用的唯一标识，canAppId和appName一一对应，都必须唯一。</li>
+<li><strong>Cluster</strong>：集群，是应用在某个环境下的一种逻辑隔离机制，比如在测试环境中，测试人员需要对某个服务做多套部署，这时可以使用集群名Cluster进行区分。</li>
+<li><strong>Instance</strong>：实例，是指某个App在某个集群下的具体实例，比如一个应用可以部署多个实例同时对外提供服务。canInstanceId是应用实例的唯一标识。</li>
+</ul>
+<p>一个App可以对应有多个Cluster，一个Cluster里头可以有多个Instance，实际大部分场景中一个App一般只有一个Default缺省集群。</p>
+<h4 id="组件和交互"><a href="#组件和交互" class="headerlink" title="组件和交互"></a>组件和交互</h4><p><img src="/2018/08/13/20180813/interactive_design.png" alt="interactive design"></p>
+<p>Radar注册中心整体有6个组件组成，职责和交互如下：</p>
+<ol>
+<li><strong>注册中心Broker</strong>，在内存中维护服务提供方的实时状态，发生变更时实时通知到服务消费方，通过数据库持久化状态和实现节点间状态的最终一致性。</li>
+<li><strong>服务提供方(Provider)客户端</strong>，服务启动时自动注册，并定期报保活心跳，下线时也可以主动拉出(例如通过shutdown hook)。</li>
+<li><strong>服务消费方(Consumer)客户端</strong>，通过长连接连到注册中心，接收实时变更推送，并在本地缓存服务实例信息。</li>
+<li><strong>管理界面Portal</strong>，服务治理中心，查看应用和实例状态信息，拉入拉出实例。</li>
+<li><strong>数据库存储Mysql</strong>，应用、集群和服务实例信息最终落地到mysql数据库存储，同时mysql充当中间消息队列，协助注册中心节点之间同步状态实现最终一致。</li>
+<li><strong>定时检查器</strong>，定期扫描数据库，检查心跳信息，清理过期数据。</li>
+</ol>
+<p>上面2和3只是一个逻辑划分，实际只提供一个客户端包，同时支持服务提供方和消费方。上面6实际是注册中心能力的一部分，其中一个注册中心节点经过选举会独立承担定期检查清理职责。</p>
+<h4 id="状态变更同步机制"><a href="#状态变更同步机制" class="headerlink" title="状态变更同步机制"></a>状态变更同步机制</h4><p>状态变更同步是注册中心设计的要点和难点，Radar使用MySql数据库表充当中间消息队列+应用版本号机制实现状态同步和最终一致。</p>
+<p><img src="/2018/08/13/20180813/notify.png" alt="notify"></p>
+<p>首先，系统中应用和应用实例信息的变更主要由三种触发方式：</p>
+<ul>
+<li>客户端注册到Radar注册中心会产生应用实例的变更信息。</li>
+<li>用户通过管理界面Portal对应用和应用实例进行操作会产生变更信息。</li>
+<li>第三方应用(例如发布系统)通过API接口访问注册中心会产生实例变更信息。</li>
+</ul>
+<p>上述任何状态变更都会产生一条对应appId的变更信息，插入数据库应用任务消息表，同时更新应用的版本号。每个注册中心Broker节点启动时会同步系统中所有的应用信息，之后不断监控是否有新的变更信息产生，如有则将相应变更同步到Broker内存中。</p>
+<p>Radar客户端通过长连接+推拉结合方式实现近实时和最终一致通知。Consumer客户端定期向注册中心发送带有应用版本号的长连接请求，如果注册中心缓存没有更高版本号的数据，则保持一段时间连接；如有变更则立即将变更数据推送到客户端，完成更新通知。如果由于网络抖动等不确定因素，某次推送消息丢失没有到达客户端，则下次客户端还会定期重连接，最终获取更新通知。</p>
+<p>另外，在分布式系统中实时性、吞吐量和一致性之间一般难以兼顾，Radar设计理念是部分牺牲强一致性和实时性，追求吞吐量和最终一致性，为此Radar在注册和报心跳等环节做了批量数据库更新优化。</p>
+<h4 id="高可用设计"><a href="#高可用设计" class="headerlink" title="高可用设计"></a>高可用设计</h4><p>注册中心是微服务架构的关键基础设施，如果挂了可导致服务不可用，是严重生产事故，为此Radar的架构充分考虑了高可用性：</p>
+<ul>
+<li>数据库层高可用，主要依赖MySql主备机制，主数据库挂，自动切换到备库。另外如果数据库完全宕机，则注册中心仍然可以对外提供服务，只是不能接受新的注册等变更操作；在这种情况下客户端有缓存仍可正常工作，只是无法获得更新。</li>
+<li>注册中心部分实例挂，总体无影响，注册中心无状态以集群方式运行，如有实例下线或宕机，其它实例依然可以对外提供服务。如果是承担定期清理检查的节点挂，则会自动重新选举节点负责清理。</li>
+<li>注册中心全部实例挂，注册中心不可用，客户端数据无法更新，依赖本地缓存快照运行，现有服务调用不影响。</li>
+<li>管理界面挂，总体无影响，只是不能对实例进行拉入拉出操作，后续恢复即可。</li>
+</ul>
+<h3 id="Radar-PPD"><a href="#Radar-PPD" class="headerlink" title="Radar@PPD"></a>Radar@PPD</h3><p>下图展示拍拍贷下一代微服务架构和Radar在其中的位置，架构要点分析如下:</p>
+<p><img src="/2018/08/13/20180813/microservice.png" alt="microservice"></p>
+<ol>
+<li>拍怕贷内部微服务主要基于<a href="https://github.com/ppdai-incubator/raptor" target="_blank" rel="noopener">Raptor</a>微服务框架开发，服务注册发现通过Radar，服务之间调用可以走直连。Raptor主要基于Spring(Boot)实现，采用JSON over HTTP协议。</li>
+<li>对于非Raptor服务，例如一些前端Nodejs或Spring MVC应用，或者是其它多语言接入场景，我们提供内部Kong API网关统一接入内部微服务体系。Kong网关也是通过Radar发现服务实例信息，在该场景中，Kong网关相当于Radar的一个超级消费者客户。</li>
+<li>内部微服务根据需要可以通过Zuul网关对外暴露API，支持无线/H5应用和第三方接入等场景。Zuul网关通过内部Kong网关间接转发流量到内部微服务。这种两层网关结构可以简化边界上的Zuul网关，将复杂性和灵活性封装在内部微服务系统中。</li>
+</ol>
+<h3 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h3><p>Radar在github站点上有<a href="https://github.com/ppdai-incubator/radar/wiki/2.Radar%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2" target="_blank" rel="noopener">快速部署指南</a>文档，指导大家在本地环境快速部署Radar。其中还有包含一个服务生产者(基于spring boot)和服务消费者(通过spring boot + ribbon)的Demo演示程序，通过Radar Portal管理界面拉入拉入服务生产者，然后通过服务消费者Web界面验证效果。完成这个演示程序，大家对Radar的基本功能就可以说上手了。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ol>
+<li>服务注册中心是微服务架构核心支撑基础设施。目前社区开源注册中心产品都比较复杂，无法满足现代容器云环境动态部署的需求，也无法满足DevOps研发自助部署的需求。拍拍贷基础框架团队根据现状和需求，定制自研了微服务注册中心Radar。</li>
+<li>Radar注册中心设计简单轻量，依赖少，具备高性能、高吞吐和可扩展的架构特性，支持容器动态部署，同时提供灵活治理界面，方便研发人员实现灵活地服务拉入拉出操作。</li>
+<li>Radar目前在拍拍贷处于试点阶段，总体运行平稳。我们采用开源优先(Open Source First)策略，一方面是希望能够为社区输出价值，同时希望能够汲取社区的积极反馈，进一步改进和优化Radar。欢迎社区同行积极试用Radar并提出宝贵意见。</li>
+</ol>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><ol>
+<li><a href="https://github.com/ppdai-incubator/radar" target="_blank" rel="noopener">PPD Radar Github开源地址</a></li>
+<li><a href="https://github.com/ppdai-incubator/raptor" target="_blank" rel="noopener">PPD Raptor Github开源地址</a></li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术文章 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 微服务架构 </tag>
+            
+            <tag> 服务注册中心 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[CAT源码阅读 - 设计细节解读]]></title>
       <url>/2018/07/18/20180718/</url>
       <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>CAT作为一款开源监控平台已经被许多大小公司所采用，如携程、陆金所、拍拍贷等大中型公司，以及其他各种创业公司，CAT在各大小公司一直稳定运行。这源于其优秀的细节设计。故本文将会分析CAT的一些设计细节，这些设计实现了较高的可用性，且较为复杂，值得一说。CAT主要的组成部分有： 客户端、服务端、存储几部分，下面分别对这几部分的设计做一些分析。</p>
@@ -1107,9 +1218,9 @@
         
         <tags>
             
-            <tag> spring-cloud-openfeign </tag>
-            
             <tag> feign </tag>
+            
+            <tag> spring-cloud-openfeign </tag>
             
         </tags>
         
@@ -1193,11 +1304,11 @@
         
         <tags>
             
-            <tag> feign </tag>
-            
             <tag> http </tag>
             
             <tag> rest </tag>
+            
+            <tag> feign </tag>
             
         </tags>
         
@@ -1365,11 +1476,11 @@
         
         <tags>
             
-            <tag> feign </tag>
-            
             <tag> http </tag>
             
             <tag> rest </tag>
+            
+            <tag> feign </tag>
             
         </tags>
         
