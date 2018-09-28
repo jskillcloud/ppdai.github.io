@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://techblog.ppdai.com/"/>
-  <updated>2018-08-13T06:26:32.408Z</updated>
+  <updated>2018-09-28T02:59:56.314Z</updated>
   <id>http://techblog.ppdai.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>容器监控利器 - prometheus在生产落地过程中的思考</title>
+    <link href="http://techblog.ppdai.com/2018/09/28/20180928/"/>
+    <id>http://techblog.ppdai.com/2018/09/28/20180928/</id>
+    <published>2018-09-28T02:51:28.000Z</published>
+    <updated>2018-09-28T02:59:56.314Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>随着容器技术的不断推进，容器云也在同时不断发展，随之而来需要解决的问题便是容器及容器云的监控。</p><a id="more"></a><h2 id="prometheus"><a href="#prometheus" class="headerlink" title="prometheus"></a>prometheus</h2><h3 id="社区活跃"><a href="#社区活跃" class="headerlink" title="社区活跃"></a>社区活跃</h3><p>目前容器监控的主流方案为prometheus。作为CFCN社区的第二款产品（第一款为kubernets），prometheus在社区拥有极高的支持度，容器界主流成品几乎都做到了对prometheus的远程支持。并且由于prometheus采用了pull模式，对于其他产品来说，接入成本极低，只需为prometheus提供一个pull metrics的接口即可；由此我认为开源界接入prometheus会更高。</p><h3 id="功能丰富"><a href="#功能丰富" class="headerlink" title="功能丰富"></a>功能丰富</h3><h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><p>prometheus server端实际上是一个时间序列数据库，并且提供了查询引擎promQL，promQL本身提供的查询能力较为丰富。</p><p>PromQL定义了四种数据类型，分别是instance vector(可理解为时间序列上的某一个点)，range vector(可理解为时间序列上的一段)，scalar(浮点数)，string(字符串，目前尚未使用)。PromQL便是通过操作符以及聚合函数操作这四种数据类型构成了查询表达式。</p><p>PromQL所提供的操作符，一般用于操作instance vector。除了常规的加减乘除之外，promQL还提供了Aggregation operators，如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sum (calculate sum over dimensions)</span><br><span class="line">min (select minimum over dimensions)</span><br><span class="line">max (select maximum over dimensions)</span><br><span class="line">avg (calculate the average over dimensions)</span><br><span class="line">stddev (calculate population standard deviation over dimensions)</span><br><span class="line">stdvar (calculate population standard variance over dimensions)</span><br><span class="line">count (count number of elements in the vector)</span><br><span class="line">count_values (count number of elements with the same value)</span><br><span class="line">bottomk (smallest k elements by sample value)</span><br><span class="line">topk (largest k elements by sample value)</span><br><span class="line">quantile (calculate φ-quantile (0 ≤ φ ≤ 1) over dimensions)</span><br></pre></td></tr></table></figure></p><p>另外PromQL到目前为止(2.4版本)还提供了30余种function，可对数据进行花样查询和聚合。</p><h4 id="报警"><a href="#报警" class="headerlink" title="报警"></a>报警</h4><p>prometheus体系中包含了报警管理- Alertmanager，Alertmanager被作为独立组件发布，独立部署。在部署Alertmanager后，只需在prometheus配置文件中配置Alertmanager的ip、port即可完成对接。Alertmanager的报警配置，依赖于promQL，同时配置报警模板。以及notify通道即可使用。Alertermanager实现了报警的分组、抑制与安静功能，可以在配置之后，通过以上操作灵活的零时操作报警。目前已经集成的notify通道有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DingTalk</span><br><span class="line">IRC Bot</span><br><span class="line">JIRAlert</span><br><span class="line">Phabricator / Maniphest</span><br><span class="line">prom2teams: forwards notifications to Microsoft Teams</span><br><span class="line">SMS: supports multiple providers</span><br><span class="line">Telegram bot</span><br></pre></td></tr></table></figure></p><h4 id="采集"><a href="#采集" class="headerlink" title="采集"></a>采集</h4><p>prometheus在采集方面，充分发挥了其社区活跃的优势，在容器层面，google的容器信息采集器<code>cadvisor</code>对prometheus提供了非常好的支持，同时kubernets项目也原生提供了prometheus的采集接口。在机器层面的信息采集，prometheus提供了机器层面的采集器<code>node_exporter</code>。</p><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>对于prometheus的配置，是基于yml配置文件进行的，所以每当需要操作prometheus的时候需要操作大量yml文件，关于此可考虑自行开发一个配置文件管理系统即可，也有对于的开源方案可参考：<a href="https://github.com/line/promgen" target="_blank" rel="noopener">promgen</a></p><h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>每当有新的监控target上线时，若是使用静态抓取配置，则需要每次修改配置项，如此操作比较麻烦，比较幸运的是prometheus集成了对主流服务发现中心/注册中心的集成，配置上对应的服务发现中心即可。</p><p>然而如果使用的服务发现中心未被prometheus集成，也无需担心，prometheus支持基于文件的服务发现，即将target配置在json文件中。prometheus会定期读取json文件，更新target列表。那么基于此，我们只需针对所使用的服务发现中心，定期拉取服务列表，更新至json文件就可实现自定义的服务发现。</p><h3 id="高可用-长期存储"><a href="#高可用-长期存储" class="headerlink" title="高可用/长期存储"></a>高可用/长期存储</h3><p>Prometheus作为一款监控产品，其server的初始定位只是用于短期存储，默认存储时间为15天，可在启动时通过<code>--storage.tsdb.retention</code>进行设定。目前prometheus自身并没有过多地考虑如何进行长期存储，但是prometheus提供了remote read 和remote write的，通过该功能可实现长期存储。</p><p>关于prometheus的长期存储方案，我认为<a href="https://github.com/improbable-eng/thanos" target="_blank" rel="noopener">Thanos</a>项目是一个较为优秀的解决方案。</p><p>在长期存储备份方面，他采用了<a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar#solution" target="_blank" rel="noopener">slidecar</a>模式进行设计，通过与prometheus部署在一起的sidecar，将prometheus的存储文件备份到object storage（目前只支持gae, s3，可自行扩展）。另外Thanos可部署一个store组件， 可用来高效查询object storage。sidecar和store组件都会提供相同的store API，另外Thanos可部署一个query组件，通过store API查询sidecar或者store组件。另外query组件对外提供了与prometheus完全相同的查询dashboad与api，通过这一套方式Thanos实现了prometheus的长期存储，以及对长期存储数据和近期数据的相同查询。</p><p>另外结合Thanos，可达到prometheus的高可用部署，只需部署两台完全相同的prometheus server，便可基本达到高可用。两者唯一区别即在external_labels配置replica，那么在部署thanos query的时候添加 flag <code>--query.replica-label replica</code>即可实现在查询时候的dereplica。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;随着容器技术的不断推进，容器云也在同时不断发展，随之而来需要解决的问题便是容器及容器云的监控。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="技术文章" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"/>
+    
+    
+      <category term="容器监控" scheme="http://techblog.ppdai.com/tags/%E5%AE%B9%E5%99%A8%E7%9B%91%E6%8E%A7/"/>
+    
+      <category term="prometheus" scheme="http://techblog.ppdai.com/tags/prometheus/"/>
+    
+  </entry>
   
   <entry>
     <title>拍拍贷开源微服务注册中心Radar</title>
@@ -524,34 +548,6 @@
       <category term="微服务" scheme="http://techblog.ppdai.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
       <category term="devops" scheme="http://techblog.ppdai.com/tags/devops/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>第一届技术沙龙精彩回顾</title>
-    <link href="http://techblog.ppdai.com/2018/01/16/20180116/"/>
-    <id>http://techblog.ppdai.com/2018/01/16/20180116/</id>
-    <published>2018-01-16T06:44:30.000Z</published>
-    <updated>2018-03-27T03:08:12.396Z</updated>
-    
-    <content type="html"><![CDATA[<p>1月13日，第一届“拍拍贷技术沙龙”暨《亿级流量网站基础架构》沙龙，在拍拍贷和大家见面了。这次技术沙龙由拍拍贷基础框架部主办，邀请了拍拍贷基础框架部总监杨波、《RabbitMQ实战指南》作者朱忠华、点融网资深架构师刘石明、饿了么框架工具部高级研发经理黄杰四位业内大咖给大家分享了基础架构方面的经验和思考。</p><a id="more"></a><p>首先为大家带来分享的是拍拍贷基础框架部的总监杨波，演讲题目是《拍拍贷贷基础架构的演进之路》。</p><p><img src="/2018/01/16/20180116/1.jpg" alt="image"></p><p>对一个拥有10年发展历史的拍拍贷公司，在过去的一年经历了巨大的技术挑战和升级，杨波带来了其对拍拍贷公司业务和技术背景的思考，及其对未来几年内整个公司技术架构的发展规划，整个分享内容包括如下五个部分：</p><ul><li>业务和技术背景</li><li>2017技术挑战和升级</li><li>新的挑战和思考</li><li>2018技术架构和规划</li><li>团队和文化</li></ul><p>在分享中，杨波详细为大家介绍了在2017年拍拍贷基础框架所面临的挑战，整个基础框架团队怎样在一年内一方面抗住业务压力，一方面快速创新，逐步打造好一个相对完整的基础架构产品生态，一分耕耘，一分收获，在新的2018年，站在新的起点上，杨波对2018年面临的新挑战做了深入的思考，对2018年的技术规划升级提出了四个关键字：“标准化”、“平台化”、“赋能创新”、“闭环反馈”，分别对研发的核心产品进行了介绍和描述，提出了打造基础架构体系2.0版本，这是新的一年，拍拍贷基础框架团队在应对新挑战所肩负的责任。</p><p><img src="/2018/01/16/20180116/2.jpg" alt="image"></p><p><img src="/2018/01/16/20180116/3.jpg" alt="image"></p><p>第二场是朱忠华给大家带来的《RabbitMQ大型电商网站实践》，演讲者朱忠华对RabbitMQ和Kafka有深入的研究，其著有《RabbitMQ实战指南》。</p><p><img src="/2018/01/16/20180116/4.jpg" alt="image"></p><p>消息中间件作为目前分布式系统架构的核心之一，有着举足轻重的地位。起源于金融系统的RabbitMQ作为当前流行的一款消息中间件，素以消息可靠和功能多样性著称。朱忠华围绕着RabbitMQ在大型电商网站使用过程中的一些注意要点、优化手段以及解决方案，比如：消息堆积、网络分区等，做了深入浅出的讲解。</p><p>整个分享主要分为四个部分：</p><ul><li>RabbitMQ简介</li><li>性能优化</li><li>消息堆积应对</li><li>故障处理</li></ul><p>更多详细内容见PPT。</p><p><img src="/2018/01/16/20180116/5.jpg" alt="image"></p><p><img src="/2018/01/16/20180116/6.jpg" alt="image"></p><p>在中场茶歇时间，同学们分享精美小吃、水果，大家面对面也不时地进行技术交流，有着共同的话题，一旦打开话匣子，总是有讲不完的事。</p><p><img src="/2018/01/16/20180116/7.jpg" alt="image"></p><p>第三场是由来自点融网资深架构师刘石明，为大家带来题为《gRpc微服务框架及分布式事务》的分享。</p><p>整个分享分为四个部分：</p><ul><li>Saluki框架概述</li><li>Saluki框架特性</li><li>Dts分布式事务概述</li><li>Dts分布式事务特性</li></ul><p>为大家详细介绍了基于gRpc的服务化框架Saluki的设计理念、详细特性，以及基于两阶段提交的DTS分布式事务的理念、实践经验等。</p><p><img src="/2018/01/16/20180116/8.jpg" alt="image"></p><p><img src="/2018/01/16/20180116/9.jpg" alt="image"></p><p><img src="/2018/01/16/20180116/10.jpg" alt="image"></p><p>第四场由饿了么框架工具部高级研发经理黄杰，为大家带来题为《全链路监控那些事》的分享，分享主要分为五个部分：</p><ul><li>介绍</li><li>整体架构</li><li>计算框架</li><li>存储方案</li><li>Demo</li></ul><p>详细为大家分享了饿了么内部全链路监控体系的应用场景和需求，架构设计，计算框架，存储方面的各种探索和思考。</p><p><img src="/2018/01/16/20180116/11.jpg" alt="image"></p><p><img src="/2018/01/16/20180116/12.jpg" alt="image"></p><p><img src="/2018/01/16/20180116/13.jpg" alt="image"></p><p>在大咖们分享后的问答阶段，同学们和大咖热烈交互，几次因为时间关系不得不转入线下沟通。</p><p><img src="/2018/01/16/20180116/14.jpg" alt="image"></p><p>本次活动的互动奖品是由拍拍贷资深架构师刘璟宇和蚂蚁金服、新浪微博、京东等一线专家合著的《深入分布式缓存》一书，深受到场同学和嘉宾的欢迎：</p><p><img src="/2018/01/16/20180116/15.jpg" alt="image"></p><p>两场抽书环节，各位同学专注的表情：</p><p><img src="/2018/01/16/20180116/16.jpg" alt="image"></p><p>获赠图书同学和作者合影时欢乐的氛围：</p><p><img src="/2018/01/16/20180116/17.jpg" alt="image"></p><p>最后为大家奉上各位嘉宾分享的PPT：<br><a href="https://github.com/ppdai/salon/tree/master/201801" target="_blank" rel="noopener">https://github.com/ppdai/salon/tree/master/201801</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1月13日，第一届“拍拍贷技术沙龙”暨《亿级流量网站基础架构》沙龙，在拍拍贷和大家见面了。这次技术沙龙由拍拍贷基础框架部主办，邀请了拍拍贷基础框架部总监杨波、《RabbitMQ实战指南》作者朱忠华、点融网资深架构师刘石明、饿了么框架工具部高级研发经理黄杰四位业内大咖给大家分享了基础架构方面的经验和思考。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="技术沙龙" scheme="http://techblog.ppdai.com/categories/%E6%8A%80%E6%9C%AF%E6%B2%99%E9%BE%99/"/>
-    
-    
-      <category term="基础架构" scheme="http://techblog.ppdai.com/tags/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
-    
-      <category term="RabbitMQ" scheme="http://techblog.ppdai.com/tags/RabbitMQ/"/>
-    
-      <category term="gRpc" scheme="http://techblog.ppdai.com/tags/gRpc/"/>
-    
-      <category term="监控" scheme="http://techblog.ppdai.com/tags/%E7%9B%91%E6%8E%A7/"/>
     
   </entry>
   
